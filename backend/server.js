@@ -231,4 +231,29 @@ app.get("/api/admin/students",auth,admin,(req,res)=>{
  res.json(out);
 });
 
+function ensureProductionAdmin(){
+  const name=String(process.env.ADMIN_NAME||"").trim();
+  const email=String(process.env.ADMIN_EMAIL||"").trim().toLowerCase();
+  const password=String(process.env.ADMIN_PASSWORD||"");
+  if(!name||!email||!password){
+    console.log("Admin bootstrap skipped: ADMIN_NAME, ADMIN_EMAIL or ADMIN_PASSWORD is missing");
+    return;
+  }
+  if(password.length<8){
+    console.error("Admin bootstrap skipped: ADMIN_PASSWORD must be at least 8 characters");
+    return;
+  }
+  const hash=bcrypt.hashSync(password,12);
+  const existing=db.prepare("SELECT id FROM users WHERE email=?").get(email);
+  if(existing){
+    db.prepare("UPDATE users SET name=?,password_hash=?,role='admin' WHERE id=?").run(name,hash,existing.id);
+    console.log("Configured admin account updated:",email);
+  }else{
+    const result=db.prepare("INSERT INTO users(name,email,password_hash,role) VALUES(?,?,?,'admin')").run(name,email,hash);
+    console.log("Configured admin account created:",email,"id:",result.lastInsertRowid);
+  }
+}
+
+ensureProductionAdmin();
+
 app.listen(PORT,()=>console.log(`Settlem Academy API running on http://localhost:${PORT}`));
