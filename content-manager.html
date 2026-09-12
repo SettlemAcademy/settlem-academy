@@ -41,6 +41,13 @@ footer{margin-top:45px;background:var(--navy);color:#cbd5e1;text-align:center;pa
 <script>
 const API='https://settlem-academy-api.onrender.com/api';let type='video',currentTestId=null;
 const $=id=>document.getElementById(id);const token=()=>localStorage.getItem('settlemAuthToken');
+async function verifyAdmin(){
+  if(!token()){ location.href='admin-login.html'; return false; }
+  try{ const r=await fetch(API+'/me',{headers:{Authorization:'Bearer '+token()}}); const d=await r.json().catch(()=>({}));
+    if(!r.ok || d.role!=='admin'){ localStorage.removeItem('settlemAuthToken'); localStorage.removeItem('settlemAcademyUser'); location.href='admin-login.html'; return false; }
+    return true;
+  }catch(e){ notice('Unable to verify admin session. Please sign in again.'); return false; }
+}
 const COURSE_MODULES={
   'B.Tech Mathematics':['Mathematical Foundations','Core Concepts','Problem Solving','Revision & Preparation'],
   'Intermediate Mathematics':['Algebra & Functions','Calculus','Coordinate Geometry','Probability & Statistics'],
@@ -75,6 +82,6 @@ $('form').addEventListener('submit',async e=>{e.preventDefault();const btn=$('sa
 $('addQuestion').onclick=async()=>{if(!currentTestId)return notice('Create a practice test first.');try{const body={question:$('qText').value.trim(),option_a:$('a').value.trim(),option_b:$('b').value.trim(),option_c:$('c').value.trim(),option_d:$('d').value.trim(),correct_index:Number($('correct').value)};await api('/tests/'+currentTestId+'/questions',{method:'POST',body:JSON.stringify(body)});['qText','a','b','c','d'].forEach(id=>$(id).value='');notice('Question added successfully.',true);await loadLibrary()}catch(x){notice(x.message)}};
 async function loadLibrary(){try{const rows=await api('/admin/content');$('library').innerHTML=rows.length?rows.map(x=>`<div class="item"><div><strong>${esc(x.title)}</strong><div class="meta">${esc(x.type)} · ${esc(x.course)} · ${esc(x.module||'General')}</div></div><div class="item-actions"><span class="badge ${x.published?'':'draft'}">${x.published?'PUBLISHED':'DRAFT'}</span><button class="btn danger" onclick="removeContent('${x.type}',${x.id})">Delete</button></div></div>`).join(''):'<p class="muted">No content created yet.</p>'}catch(x){$('library').innerHTML='<p class="muted">Unable to load library: '+esc(x.message)+'</p>'}}
 async function removeContent(t,id){if(!confirm('Delete this content permanently?'))return;try{await api('/'+(t==='video'?'videos':t==='material'?'materials':'tests')+'/'+id,{method:'DELETE'});notice('Content deleted.',true);loadLibrary()}catch(x){notice(x.message)}}
-if(!token())location.href='admin-login.html';else{populateModules();renderPreview();loadLibrary()}
+verifyAdmin().then(ok=>{if(ok){populateModules();renderPreview();loadLibrary();}});
 </script>
 </body></html>
