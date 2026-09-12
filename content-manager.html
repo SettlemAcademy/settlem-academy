@@ -1,52 +1,56 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Content Manager | Settlem Academy</title><style>
-:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--ink:#18233f;--muted:#64748b;--line:#e5eaf3;--bg:#f6f8fc}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:var(--bg)}a{text-decoration:none;color:inherit}
-header{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center}.wrap{width:min(1160px,92%);margin:auto}.nav{display:flex;align-items:center;justify-content:space-between}.brand{font-weight:900;letter-spacing:.08em}.brand b{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;margin-right:10px}
-main{padding:40px 0 65px}.eyebrow{font-size:12px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--blue)}h1{font-size:38px;margin:7px 0}.lead,.muted{color:var(--muted)}
-.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0}.tabs button{border:1px solid var(--line);background:#fff;padding:11px 16px;border-radius:10px;font-weight:800;color:#475569;cursor:pointer}.tabs button.active{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;border-color:transparent}
-.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px;box-shadow:0 9px 28px rgba(16,26,67,.05)}.card h2{margin:0 0 18px;font-size:21px}
-.field{margin-bottom:14px}.field label{display:block;font-size:12px;font-weight:900;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #dce3ee;border-radius:10px;font:inherit}.field textarea{min-height:100px;resize:vertical}
-.btn{border:0;padding:12px 16px;border-radius:10px;font-weight:900;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}
-.list{margin-top:20px}.item{display:flex;justify-content:space-between;gap:15px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:10px}.item strong{display:block}.badge{font-size:11px;font-weight:900;padding:5px 8px;border-radius:99px;background:#e7faf7;color:#0f806f}
-.preview{border-radius:14px;padding:22px;color:#fff;background:linear-gradient(135deg,#101a43,#293e87)}.preview h3{font-size:24px;margin:8px 0}.preview .mini{display:inline-block;padding:5px 8px;background:rgba(255,255,255,.13);border-radius:99px;font-size:11px;font-weight:800}
-footer{background:var(--navy);color:#cbd5e1;text-align:center;padding:25px;font-size:12px}@media(max-width:800px){.grid{grid-template-columns:1fr}}
-</style><script src="settlem-api.js"></script></head>
-<body onload="requireAdminPage()">><header><div class="wrap nav"><a class="brand" href="index.html"><b>SA</b>SETTLEM ACADEMY</a><a class="muted" href="admin-dashboard.html">← Admin Dashboard</a></div></header>
-<main><div class="wrap"><div class="eyebrow">Content Management</div><h1>Build your learning library.</h1><p class="lead">Add courses, video lessons, study resources and practice questions from one simple workspace.</p>
-<div class="tabs"><button class="active" onclick="setType('course',this)">Courses</button><button onclick="setType('video',this)">Video Lessons</button><button onclick="setType('material',this)">Study Materials</button><button onclick="setType('question',this)">Questions</button></div>
-<div class="grid"><section class="card"><h2 id="formTitle">Add Course</h2><form id="contentForm" onsubmit="addContent(event)">
-<div class="field"><label>Title</label><input id="title" required placeholder="e.g. B.Tech Mathematics"></div>
-<div class="field"><label>Learning Level</label><select id="level"><option>B.Tech</option><option>Intermediate</option><option>Class 10</option><option>Classes 5–7</option></select></div>
-<div class="field" id="linkField" style="display:none"><label>Video / Resource Link</label><input id="link" placeholder="Paste YouTube or resource URL"></div>
-<div class="field"><label>Description</label><textarea id="description" placeholder="Short description for students"></textarea></div>
-<button class="btn primary" id="saveBtn">＋ Add to Library</button></form>
-<div class="list" id="list"></div></section>
-<aside class="card"><h2>Student Preview</h2><div class="preview"><span class="mini" id="previewLevel">B.Tech</span><h3 id="previewTitle">Your new content</h3><p id="previewDesc">Students will see your content here after you publish it.</p></div>
-<p class="muted" style="margin-top:18px">This is a front-end content manager. Entries are saved in this browser for now. The next backend stage can store them securely online for all students.</p></aside></div></div></main>
-<footer>Settlem Academy • Content Management</footer>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Content Manager | Settlem Academy</title>
+<style>
+:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--ink:#17233f;--muted:#64748b;--line:#e3e8f2;--bg:#f6f8ff;--card:#fff;--danger:#b42318;--ok:#166534}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}a{text-decoration:none;color:inherit}
+.top{background:linear-gradient(135deg,var(--navy),#293f96);color:#fff;padding:15px 4%;display:flex;justify-content:space-between;align-items:center;gap:15px}.brand{font-weight:900;letter-spacing:.05em}.top a{border:1px solid #ffffff44;padding:8px 12px;border-radius:10px;font-size:13px}
+.wrap{width:min(1200px,94%);margin:auto}.hero{padding:38px 0 22px}.eyebrow{font-size:11px;font-weight:900;letter-spacing:1.5px;color:var(--violet);text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,46px);margin:7px 0}.hero p{color:var(--muted);max-width:780px}
+.notice{padding:12px 15px;border-radius:12px;margin:0 0 18px;font-weight:800;font-size:13px;display:none}.notice.show{display:block}.success{background:#ecfdf3;border:1px solid #bbf7d0;color:var(--ok)}.error{background:#fff1f2;border:1px solid #fecdd3;color:var(--danger)}
+.tabs{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}.tabs button{border:1px solid var(--line);background:#fff;color:#475569;border-radius:11px;padding:11px 15px;font-weight:900;cursor:pointer}.tabs button.active{background:linear-gradient(135deg,var(--blue),var(--violet));border-color:transparent;color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:23px;box-shadow:0 12px 34px #101a4308}.card h2{margin:0 0 16px;font-size:20px}.field{margin-bottom:13px}.field label{display:block;font-size:12px;font-weight:900;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1px solid #d8e0ec;border-radius:10px;font:inherit;color:var(--ink);background:#fff}.field textarea{min-height:85px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.check{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:800;margin:8px 0 15px}.btn{border:0;border-radius:10px;padding:12px 15px;font-weight:900;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:#3155c8}.danger{background:#fff1f2;color:#b42318;border:1px solid #fecdd3}.muted{color:var(--muted)}.hint{font-size:12px;color:var(--muted);line-height:1.5}
+.preview{background:linear-gradient(135deg,var(--navy),#2b438f);color:#fff;border-radius:15px;padding:20px}.preview .pill{display:inline-block;background:#ffffff18;border:1px solid #ffffff24;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:900}.preview h3{margin:10px 0 6px;font-size:22px}.preview p{color:#d8e2ff;font-size:13px;line-height:1.55}.list{margin-top:16px}.item{display:flex;justify-content:space-between;align-items:center;gap:14px;border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:9px}.item strong{display:block}.meta{font-size:12px;color:var(--muted);margin-top:4px}.badge{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;background:#ecfdf3;color:#166534;white-space:nowrap}.badge.draft{background:#f1f5f9;color:#475569}.item-actions{display:flex;gap:6px}.item-actions button{padding:7px 9px;font-size:11px}
+.question-builder{border-top:1px solid var(--line);margin-top:20px;padding-top:20px}.qitem{padding:12px;border:1px solid var(--line);border-radius:11px;margin:8px 0;background:#fbfcff}.qitem b{font-size:13px}.qitem small{display:block;color:var(--muted);margin-top:4px}
+footer{margin-top:45px;background:var(--navy);color:#cbd5e1;text-align:center;padding:24px;font-size:12px}@media(max-width:850px){.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">SETTLEM ACADEMY · CONTENT MANAGER</div><div><a href="admin-dashboard.html">Admin Dashboard</a></div></header>
+<main class="wrap">
+<section class="hero"><div class="eyebrow">Secure admin workspace</div><h1>Publish learning content.</h1><p>Add videos, study materials and practice tests for your students. Content is stored in the Settlem Academy backend and becomes available to students only when published.</p></section>
+<div id="notice" class="notice"></div>
+<div class="tabs"><button class="active" data-type="video">🎥 Video Lesson</button><button data-type="material">📄 Study Material</button><button data-type="test">📝 Practice Test</button></div>
+<div class="grid">
+<section class="card">
+<h2 id="formTitle">Add Video Lesson</h2>
+<form id="form">
+<div class="field"><label>Title</label><input id="title" required placeholder="e.g. Mathematical Language & Notation"></div>
+<div class="row"><div class="field"><label>Course</label><select id="course"><option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option></select></div><div class="field"><label>Module</label><select id="module"><option>Mathematical Foundations</option><option>Core Concepts</option><option>Problem Solving</option><option>Revision & Preparation</option></select></div></div>
+<div class="field" id="urlField"><label id="urlLabel">YouTube URL</label><input id="url" placeholder="https://www.youtube.com/watch?v=..."></div>
+<div class="field"><label>Description / Instructions</label><textarea id="description" placeholder="What should students know about this content?"></textarea></div>
+<label class="check"><input id="published" type="checkbox" checked> Publish immediately</label>
+<button class="btn primary" id="saveBtn">＋ Publish Video Lesson</button>
+</form>
+<div id="questionBuilder" class="question-builder" style="display:none"><h2>Add Questions to This Test</h2><p class="hint">Create the test first. Then add as many questions as you need.</p><div class="field"><label>Question</label><textarea id="qText" placeholder="Enter the question"></textarea></div><div class="row"><div class="field"><label>Option A</label><input id="a"></div><div class="field"><label>Option B</label><input id="b"></div><div class="field"><label>Option C</label><input id="c"></div><div class="field"><label>Option D</label><input id="d"></div></div><div class="row"><div class="field"><label>Correct option</label><select id="correct"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div><div class="field"><label>&nbsp;</label><button type="button" class="btn secondary" id="addQuestion">＋ Add Question</button></div></div><div id="questions"></div></div>
+</section>
+<aside class="card"><h2>Student Preview</h2><div class="preview"><span class="pill" id="previewModule">Mathematical Foundations</span><h3 id="previewTitle">Your new lesson</h3><p id="previewDesc">Students will see this content after it is published.</p></div><div style="margin-top:22px"><h2>Published Library</h2><div id="library" class="list"><p class="muted">Loading content…</p></div></div></aside>
+</div></main><footer>Settlem Academy • Secure Content Management</footer>
 <script>
-let type='course';
-const names={course:'Course',video:'Video Lesson',material:'Study Material',question:'Question'};
-function setType(t,btn){
- type=t;document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
- formTitle.textContent='Add '+names[t];
- linkField.style.display=(t==='video'||t==='material')?'block':'none';
- saveBtn.textContent='＋ Add '+names[t];render();
-}
-function getData(){return JSON.parse(localStorage.getItem('settlemContent')||'[]')}
-function addContent(e){
- e.preventDefault();const arr=getData();
- arr.unshift({type:type,title:title.value.trim(),level:level.value,link:link.value.trim(),description:description.value.trim(),created:new Date().toLocaleDateString()});
- localStorage.setItem('settlemContent',JSON.stringify(arr));contentForm.reset();
- linkField.style.display=(type==='video'||type==='material')?'block':'none';render();
-}
-function render(){
- const arr=getData().filter(x=>x.type===type);
- list.innerHTML=arr.length?arr.map(x=>'<div class="item"><div><strong>'+escapeHtml(x.title)+'</strong><span class="muted">'+escapeHtml(x.level)+' • '+escapeHtml(x.created)+'</span></div><span class="badge">SAVED</span></div>').join(''):'<div style="padding:28px;text-align:center;color:#64748b;border:1px dashed #ccd5e5;border-radius:12px">No '+names[type].toLowerCase()+' added yet. Use the form above to create one.</div>';
-}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]})}
-[title,level,description].forEach(el=>el.addEventListener('input',function(){
- previewTitle.textContent=title.value||'Your new content';previewLevel.textContent=level.value;previewDesc.textContent=description.value||'Students will see your content here after you publish it.';
-}));
-render();
-</script></body></html>
+const API='https://settlem-academy.onrender.com/api';let type='video',currentTestId=null;
+const $=id=>document.getElementById(id);const token=()=>localStorage.getItem('settlemAuthToken');
+function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function notice(msg,ok=false){$('notice').textContent=msg;$('notice').className='notice show '+(ok?'success':'error')}
+async function api(path,opt={}){if(!token()){location.href='admin-login.html';throw new Error('Please sign in as administrator.')}const h={'Content-Type':'application/json',...(opt.headers||{}),Authorization:'Bearer '+token()};const r=await fetch(API+path,{...opt,headers:h});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'Request failed');return d}
+function setType(t){type=t;document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.type===t));$('form').reset();$('published').checked=t!=='test';currentTestId=null;$('questionBuilder').style.display=t==='test'?'block':'none';$('urlField').style.display=t==='test'?'none':'block';$('urlLabel').textContent=t==='video'?'YouTube URL':'Resource URL';$('url').placeholder=t==='video'?'https://www.youtube.com/watch?v=...':'https://...';$('formTitle').textContent=t==='video'?'Add Video Lesson':t==='material'?'Add Study Material':'Create Practice Test';$('saveBtn').textContent=t==='video'?'＋ Publish Video Lesson':t==='material'?'＋ Publish Study Material':'＋ Create Practice Test';renderPreview();}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>setType(b.dataset.type));
+['title','description','module'].forEach(id=>$(id).addEventListener('input',renderPreview));
+function renderPreview(){$('previewTitle').textContent=$('title').value||'Your new lesson';$('previewModule').textContent=$('module').value;$('previewDesc').textContent=$('description').value||'Students will see this content after it is published.'}
+$('form').addEventListener('submit',async e=>{e.preventDefault();const btn=$('saveBtn');btn.disabled=true;try{let body={title:$('title').value.trim(),course:$('course').value,module:$('module').value,description:$('description').value.trim(),published:$('published').checked};let data;if(type==='video'){body.youtube_url=$('url').value.trim();data=await api('/videos',{method:'POST',body:JSON.stringify(body)})}else if(type==='material'){body.type='PDF';body.url=$('url').value.trim();data=await api('/materials',{method:'POST',body:JSON.stringify(body)})}else{body.instructions=body.description;data=await api('/tests',{method:'POST',body:JSON.stringify(body)});currentTestId=data.id}notice(type==='test'?'Practice test created. Add questions below, then publish it when ready.':'Content published successfully. Students can now see it.',true);if(type!=='test'){$('form').reset();$('published').checked=true}renderPreview();await loadLibrary();}catch(x){notice(x.message)}finally{btn.disabled=false}});
+$('addQuestion').onclick=async()=>{if(!currentTestId)return notice('Create a practice test first.');try{const body={question:$('qText').value.trim(),option_a:$('a').value.trim(),option_b:$('b').value.trim(),option_c:$('c').value.trim(),option_d:$('d').value.trim(),correct_index:Number($('correct').value)};await api('/tests/'+currentTestId+'/questions',{method:'POST',body:JSON.stringify(body)});['qText','a','b','c','d'].forEach(id=>$(id).value='');notice('Question added successfully.',true);await loadLibrary()}catch(x){notice(x.message)}};
+async function loadLibrary(){try{const rows=await api('/admin/content');$('library').innerHTML=rows.length?rows.map(x=>`<div class="item"><div><strong>${esc(x.title)}</strong><div class="meta">${esc(x.type)} · ${esc(x.course)} · ${esc(x.module||'General')}</div></div><div class="item-actions"><span class="badge ${x.published?'':'draft'}">${x.published?'PUBLISHED':'DRAFT'}</span><button class="btn danger" onclick="removeContent('${x.type}',${x.id})">Delete</button></div></div>`).join(''):'<p class="muted">No content created yet.</p>'}catch(x){$('library').innerHTML='<p class="muted">Unable to load library: '+esc(x.message)+'</p>'}}
+async function removeContent(t,id){if(!confirm('Delete this content permanently?'))return;try{await api('/'+(t==='video'?'videos':t==='material'?'materials':'tests')+'/'+id,{method:'DELETE'});notice('Content deleted.',true);loadLibrary()}catch(x){notice(x.message)}}
+if(!token())location.href='admin-login.html';else{renderPreview();loadLibrary()}
+</script>
+</body></html>
