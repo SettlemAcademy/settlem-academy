@@ -57,9 +57,8 @@ const quizSets={
 '3-1':[['A self-test is most useful when you…',['Attempt without notes first','Copy answers immediately','Skip all questions','Guess every answer'],0],['Mistakes should be…',['Classified and corrected','Hidden','Ignored','Deleted'],0],['Timed practice develops…',['Exam readiness','Only handwriting','Nothing useful','Graphing only'],0],['After a wrong answer, you should…',['Redo it and find the first error','Memorise the final number only','Skip forever','Change the question'],0],['A low score can be useful because it…',['Shows areas to revise','Means learning is impossible','Has no meaning','Should be hidden'],0]],
 '3-2':[['A revision plan should prioritise…',['Weak areas','Only favourite topics','Random topics','No topics'],0],['A good study session can include…',['Recall, problems and checking','Only reading','No practice','Only memorisation'],0],['Clear mathematical presentation should show…',['Complete reasoning','Only an answer','No formulas','Unreadable steps'],0],['Focused revision helps…',['Reduce avoidable errors','Create confusion','Remove practice','Avoid understanding'],0],['Final preparation is strongest when it is…',['Structured and practice-based','Random','Last-minute only','Without checking'],0]]
 };
-let qs=quizSets[moduleIndex+'-'+lessonIndex]||quizSets['0-0'];
-
 let moduleIndex=Number(new URLSearchParams(location.search).get('module')||0), lessonIndex=Number(new URLSearchParams(location.search).get('lesson')||0);if(moduleIndex<0||moduleIndex>3)moduleIndex=0;if(lessonIndex<0||lessonIndex>2)lessonIndex=0;
+let qs=quizSets[moduleIndex+'-'+lessonIndex]||quizSets['0-0'];
 const token=()=>localStorage.getItem('settlemAuthToken');const lessonKey=()=>course+'|lesson|'+moduleIndex+'|'+lessonIndex;
 function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function setNotice(id,text,cls){const e=document.getElementById(id);e.textContent=text;e.className='notice show '+cls}
