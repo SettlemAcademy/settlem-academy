@@ -31,58 +31,38 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
 <button class="submit" id="submitBtn">Login to Dashboard</button>
 <div class="note" id="note"></div>
 </form><p style="text-align:center"><a href="course-enrollment.html">Choose Courses</a></p>
-<p class="muted" style="margin-top:20px;font-size:12px">Demo version: account details are stored only in this browser. A secure online database can be connected in the next development stage.</p>
+<p class="muted" style="margin-top:20px;font-size:12px">Your account is securely connected to the Settlem Academy online learning portal.</p>
 </section>
 </div></main><footer>© Settlem Academy • Mathematics Learning Platform</footer>
 <script src="settlem-api.js"></script><script>
 let mode='login';
 function showLogin(){
  mode='login'; nameField.style.display='none'; title.textContent='Welcome back'; subtitle.textContent='Sign in to continue your mathematics learning.';
- loginTab.classList.add('active'); registerTab.classList.remove('active'); submitBtn.textContent='Login to Dashboard';
+ loginTab.classList.add('active'); registerTab.classList.remove('active'); submitBtn.textContent='Login to Dashboard'; note.style.display='none';
 }
 function showRegister(){
  mode='register'; nameField.style.display='block'; title.textContent='Create your account'; subtitle.textContent='Join Settlem Academy and start learning.';
- registerTab.classList.add('active'); loginTab.classList.remove('active'); submitBtn.textContent='Create Account';
+ registerTab.classList.add('active'); loginTab.classList.remove('active'); submitBtn.textContent='Create Account'; note.style.display='none';
 }
-function submitForm(e){
+async function submitForm(e){
  e.preventDefault();
- const email=document.getElementById('email').value.trim().toLowerCase(), password=document.getElementById('password').value;
- const stored=JSON.parse(localStorage.getItem('settlemStudent')||'null');
- if(mode==='register'){
-   const student={name:document.getElementById('name').value.trim()||'Student',email,password};
-   localStorage.setItem('settlemStudent',JSON.stringify(student));
-   localStorage.setItem('settlemLoggedIn','true');
+ note.style.display='block'; note.textContent='Connecting to Settlem Academy…';
+ submitBtn.disabled=true;
+ try{
+   const email=document.getElementById('email').value.trim().toLowerCase();
+   const password=document.getElementById('password').value;
+   const name=document.getElementById('name').value.trim();
+   const data=mode==='register' ? await apiRegister(name,email,password) : await apiLogin(email,password);
+   localStorage.setItem('settlemAuthToken',data.token);
+   localStorage.setItem('settlemAcademyUser',JSON.stringify(data.user));
+   localStorage.removeItem('settlemStudent');
+   localStorage.removeItem('settlemLoggedIn');
    window.location.href='student-dashboard.html';
- }else{
-   if(!stored || stored.email!==email || stored.password!==password){
-     note.textContent='For this demo, register first or use the same details you registered with.';
-     note.style.display='block'; return;
-   }
-   localStorage.setItem('settlemLoggedIn','true'); window.location.href='student-dashboard.html';
+ }catch(err){
+   note.textContent=err.message || 'Unable to connect to the server.';
+ }finally{
+   submitBtn.disabled=false;
  }
 }
-</script>
-<script>
-(function(){
- const form=document.querySelector("form");
- if(!form)return;
- form.addEventListener("submit",async function(e){
-   e.preventDefault();
-   const inputs=form.querySelectorAll("input");
-   const values=[...inputs].map(x=>x.value.trim());
-   const email=values.find(v=>v.includes("@"))||"";
-   const password=[...inputs].map(x=>x.value).find(v=>v.length>=6&&!v.includes("@"))||"";
-   const name=values.find(v=>v && !v.includes("@") && v!==password)||"Student";
-   const isRegister=document.body.innerText.toLowerCase().includes("register") && (document.querySelector(".active")?.textContent||"").toLowerCase().includes("register");
-   try{
-     const data=isRegister?await apiRegister(name,email,password):await apiLogin(email,password);
-     localStorage.setItem("settlemAuthToken",data.token);
-     localStorage.setItem("settlemAcademyUser",JSON.stringify(data.user));
-     window.location.href="student-dashboard.html";
-   }catch(err){
-     alert("Backend connection: "+err.message+"\n\nIf the server is not running yet, use the existing demo flow or start backend/server.js.");
-   }
- });
-})();
 </script>
 </body></html>
