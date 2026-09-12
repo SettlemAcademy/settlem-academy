@@ -261,7 +261,26 @@ function refreshUserPoints(userId){const lessons=db.prepare("SELECT COUNT(*) n F
 app.get("/api/leaderboard",auth,(req,res)=>{const users=db.prepare("SELECT id FROM users WHERE role='student'").all();users.forEach(u=>refreshUserPoints(u.id));const rows=db.prepare("SELECT u.id,u.name,p.xp FROM user_points p JOIN users u ON u.id=p.user_id WHERE u.role='student' ORDER BY p.xp DESC,u.name ASC LIMIT 100").all();res.json(rows.map((r,i)=>({...r,rank:i+1,badge:r.xp>=500?'Math Champion':r.xp>=250?'Math Pro':r.xp>=100?'Rising Star':'Math Explorer'})));});
 app.get("/api/leaderboard/course",auth,(req,res)=>{const course=(req.query.course||'').trim();if(!course)return res.status(400).json({error:'Course is required'});const users=db.prepare("SELECT u.id,u.name FROM users u JOIN enrollments e ON e.user_id=u.id WHERE u.role='student' AND e.course=?").all(course);const out=users.map(u=>{const lessons=db.prepare("SELECT COUNT(*) n FROM lesson_progress WHERE user_id=? AND course=? AND completed=1").get(u.id,course).n;const tests=db.prepare("SELECT COALESCE(SUM(r.score),0) n FROM test_results r JOIN tests t ON t.id=r.test_id WHERE r.user_id=? AND t.course=?").get(u.id,course).n;const att=db.prepare("SELECT COUNT(*) n FROM attendance a JOIN live_classes c ON c.id=a.live_class_id WHERE a.user_id=? AND c.course=?").get(u.id,course).n;return {id:u.id,name:u.name,xp:lessons*10+tests+att*20};}).sort((a,b)=>b.xp-a.xp).slice(0,100);res.json(out.map((r,i)=>({...r,rank:i+1})));});
 app.get("/api/points/me",auth,(req,res)=>res.json({xp:refreshUserPoints(req.user.id)}));
-app.listen(PORT,()=>console.log(`Settlem Academy API running on http://localhost:${PORT}`));
+
+app.get("/api/live-classes",auth,(req,res)=>{
+ const rows=(req.user.role==="admin"||req.user.role==="teacher")
+  ?db.prepare(`SELECT c.*,u.name AS teacher_name FROM live_classes c JOIN users u ON u.id=c.teacher_id ORDER BY c.scheduled_at ASC`).all()
+  :db.prepare(`SELECT c.*,u.name AS teacher_name FROM live_classes c JOIN users u ON u.id=c.teacher_id JOIN enrollments e ON e.course=c.course AND e.user_id=? WHERE c.status!='cancelled' ORDER BY c.scheduled_at ASC`).all(req.user.id);
+ res.json(rows);
+});
+app.post("/api/live-classes",auth,(req,res)=>{
+ if(!["admin","teacher"].includes(req.user.role))return res.status(403).json({error:"Teacher/Admin access required"});
+ const {title,course,scheduled_at,duration_minutes=60,meeting_url,description=""}=req.body||{};
+ if(!title||!course||!scheduled_at||!meeting_url)return res.status(400).json({error:"Title, course, scheduled time and meeting URL are required"});
+ const info=db.prepare(`INSERT INTO live_classes(teacher_id,title,course,scheduled_at,duration_minutes,meeting_url,description) VALUES(?,?,?,?,?,?,?)`).run(req.user.id,title,course,scheduled_at,Number(duration_minutes)||60,meeting_url,description);
+ res.status(201).json(db.prepare(`SELECT * FROM live_classes WHERE id=?`).get(info.lastInsertRowid));
+});
+app.delete("/api/live-classes/:id",auth,(req,res)=>{
+ const row=db.prepare(`SELECT * FROM live_classes WHERE id=?`).get(req.params.id);
+ if(!row)return res.status(404).json({error:"Live class not found"});
+ if(req.user.role!=="admin"&&!(req.user.role==="teacher"&&row.teacher_id===req.user.id))return res.status(403).json({error:"Access denied"});
+ db.prepare(`DELETE FROM live_classes WHERE id=?`).run(req.params.id); res.json({ok:true});
+});
 app.post("/api/live-classes/:id/attendance",auth,(req,res)=>{const c=db.prepare("SELECT * FROM live_classes WHERE id=?").get(req.params.id);if(!c)return res.status(404).json({error:"Live class not found"});if(req.user.role==="student"&&!db.prepare("SELECT 1 FROM enrollments WHERE user_id=? AND course=?").get(req.user.id,c.course))return res.status(403).json({error:"Enroll in this course first"});db.prepare("INSERT OR IGNORE INTO attendance(live_class_id,user_id) VALUES(?,?)").run(c.id,req.user.id);res.json({ok:true});});
 app.get("/api/analytics/student",auth,(req,res)=>{if(req.user.role!=="student")return res.status(403).json({error:"Student access required"});const courses=db.prepare("SELECT course FROM enrollments WHERE user_id=?").all(req.user.id);const expected=courses.length*4,completed=db.prepare("SELECT COUNT(*) n FROM lesson_progress WHERE user_id=? AND completed=1").get(req.user.id).n,attended=db.prepare("SELECT COUNT(*) n FROM attendance WHERE user_id=?").get(req.user.id).n,tests=db.prepare("SELECT COUNT(*) n,COALESCE(AVG(score),0) avg_score FROM test_results WHERE user_id=?").get(req.user.id);res.json({courses:courses.map(x=>x.course),completed_modules:completed,expected_modules:expected,overall_progress:expected?Math.round(completed/expected*100):0,classes_attended:attended,tests_taken:tests.n,average_test_score:Math.round(tests.avg_score||0)});});
 app.get("/api/analytics/admin",auth,(req,res)=>{if(!["admin","teacher"].includes(req.user.role))return res.status(403).json({error:"Teacher/Admin access required"});const students=db.prepare("SELECT COUNT(*) n FROM users WHERE role='student'").get().n,enrollments=db.prepare("SELECT COUNT(*) n FROM enrollments").get().n,classes_attended=db.prepare("SELECT COUNT(*) n FROM attendance").get().n,lessons_completed=db.prepare("SELECT COUNT(*) n FROM lesson_progress WHERE completed=1").get().n,tests=db.prepare("SELECT COUNT(*) n,COALESCE(AVG(score),0) avg_score FROM test_results").get();res.json({students,enrollments,classes_attended,lessons_completed,tests_taken:tests.n,average_test_score:Math.round(tests.avg_score||0)});});app.get("/api/announcements",auth,(req,res)=>{
@@ -282,3 +301,4 @@ app.delete("/api/announcements/:id",auth,(req,res)=>{
  db.prepare("DELETE FROM announcements WHERE id=?").run(req.params.id); res.json({ok:true});
 });
 
+app.listen(PORT,()=>console.log(`Settlem Academy API running on http://localhost:${PORT}`));
