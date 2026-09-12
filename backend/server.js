@@ -11,7 +11,7 @@ const PORT=process.env.PORT||4000;
 const JWT_SECRET=process.env.JWT_SECRET||"CHANGE_THIS_SECRET";
 
 app.use(cors({origin:process.env.FRONTEND_ORIGIN||true}));
-app.use(express.json());
+app.use(express.json({limit:"1mb"}));
 
 db.pragma("foreign_keys=ON");
 db.exec(`
@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS tests(
  id INTEGER PRIMARY KEY AUTOINCREMENT,
  title TEXT NOT NULL,
  course TEXT NOT NULL,
+ module TEXT DEFAULT '',
  instructions TEXT DEFAULT '',
  published INTEGER NOT NULL DEFAULT 0,
  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -88,7 +89,15 @@ CREATE TABLE IF NOT EXISTS test_results(
  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS live_classes(
- id INTEGER PRIMARY KEY AUTOINCREMENT, teacher_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, title TEXT NOT NULL, course TEXT NOT NULL, scheduled_at TEXT NOT NULL, duration_minutes INTEGER NOT NULL DEFAULT 60, meeting_url TEXT NOT NULL, description TEXT DEFAULT '', status TEXT NOT NULL DEFAULT 'scheduled', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ title TEXT NOT NULL,
+ course TEXT NOT NULL,
+ scheduled_at TEXT NOT NULL,
+ duration_minutes INTEGER NOT NULL DEFAULT 60,
+ meeting_url TEXT NOT NULL,
+ teacher_id INTEGER,
+ status TEXT NOT NULL DEFAULT 'scheduled',
+ created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS attendance(
  id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -98,34 +107,48 @@ CREATE TABLE IF NOT EXISTS attendance(
  UNIQUE(live_class_id,user_id)
 );
 CREATE TABLE IF NOT EXISTS user_points(
- user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, xp INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+ user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+ points INTEGER NOT NULL DEFAULT 0,
+ updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS announcements(
  id INTEGER PRIMARY KEY AUTOINCREMENT,
- author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
  title TEXT NOT NULL,
  message TEXT NOT NULL,
  course TEXT,
+ author_id INTEGER REFERENCES users(id),
  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 `);
 
-try{db.exec("ALTER TABLE users ADD COLUMN phone TEXT DEFAULT ''");}catch(e){}
-try{db.exec("ALTER TABLE users ADD COLUMN avatar_url TEXT DEFAULT ''");}catch(e){}
-try{db.exec("ALTER TABLE users ADD COLUMN bio TEXT DEFAULT ''");}catch(e){}
+// Backward-compatible schema upgrades for databases created by earlier versions.
+const materialCols=db.prepare("PRAGMA table_info(materials)").all().map(x=>x.name);
+if(!materialCols.includes("module")) db.exec("ALTER TABLE materials ADD COLUMN module TEXT DEFAULT ''");
+const testCols=db.prepare("PRAGMA table_info(tests)").all().map(x=>x.name);
+if(!testCols.includes("module")) db.exec("ALTER TABLE tests ADD COLUMN module TEXT DEFAULT ''");
+const userCols=db.prepare("PRAGMA table_info(users)").all().map(x=>x.name);
+if(!userCols.includes("phone")) db.exec("ALTER TABLE users ADD COLUMN phone TEXT DEFAULT ''");
+if(!userCols.includes("avatar_url")) db.exec("ALTER TABLE users ADD COLUMN avatar_url TEXT DEFAULT ''");
+if(!userCols.includes("bio")) db.exec("ALTER TABLE users ADD COLUMN bio TEXT DEFAULT ''");
 
 function tokenFor(user){return jwt.sign({id:user.id,role:user.role},JWT_SECRET,{expiresIn:"7d"})}
 function auth(req,res,next){
  const h=req.headers.authorization||"";
- if(!h.startsWith("Bearer "))return res.status(401).json({error:"Authentication required"});
+ if(!h.startsWith("Bearer ")) return res.status(401).json({error:"Authentication required"});
  try{
-  req.user=jwt.verify(h.slice(7),JWT_SECRET);
-  const exists=db.prepare("SELECT id FROM users WHERE id=?").get(req.user.id);
-  if(!exists)return res.status(401).json({error:"Session expired. Please log in again."});
+  const payload=jwt.verify(h.slice(7),JWT_SECRET);
+  const u=db.prepare("SELECT id,name,email,role FROM users WHERE id=?").get(payload.id);
+  if(!u) return res.status(401).json({error:"Session expired. Please sign in again."});
+  req.user=u;
   next();
- }catch(e){return res.status(401).json({error:"Invalid or expired token"})}
+ }catch(e){return res.status(401).json({error:"Invalid or expired token. Please sign in again."})}
 }
 function admin(req,res,next){if(req.user.role!=="admin")return res.status(403).json({error:"Admin access required"});next()}
+function safeVideoId(value=""){
+ const s=String(value).trim();
+ const m=s.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{6,})/);
+ return m?m[1]:s;
+}
 
 app.get("/api/health",(req,res)=>res.json({ok:true,service:"Settlem Academy API"}));
 
@@ -148,108 +171,122 @@ app.post("/api/auth/login",(req,res)=>{
  res.json({token:tokenFor(user),user});
 });
 
-app.get("/api/me",auth,(req,res)=>{
- const u=db.prepare("SELECT id,name,email,role,created_at FROM users WHERE id=?").get(req.user.id);
- res.json(u||{});
-});
+app.get("/api/me",auth,(req,res)=>res.json(req.user));
 
 app.get("/api/profile",auth,(req,res)=>{
- const u=db.prepare("SELECT id,name,email,role,phone,avatar_url,bio,created_at FROM users WHERE id=?").get(req.user.id);
- res.json(u||{});
+ const u=db.prepare("SELECT id,name,email,role,phone,avatar_url,bio,created_at FROM users WHERE id=?").get(req.user.id);res.json(u||{});
 });
 app.put("/api/profile",auth,(req,res)=>{
  const {name,phone,avatar_url,bio}=req.body||{};
- if(!name||name.trim().length<2)return res.status(400).json({error:"Name is required"});
- db.prepare("UPDATE users SET name=?,phone=?,avatar_url=?,bio=? WHERE id=?").run(name.trim(),(phone||"").trim(),(avatar_url||"").trim(),(bio||"").trim(),req.user.id);
+ db.prepare("UPDATE users SET name=COALESCE(?,name),phone=COALESCE(?,phone),avatar_url=COALESCE(?,avatar_url),bio=COALESCE(?,bio) WHERE id=?").run(name?.trim()||null,phone??null,avatar_url??null,bio??null,req.user.id);
  res.json(db.prepare("SELECT id,name,email,role,phone,avatar_url,bio,created_at FROM users WHERE id=?").get(req.user.id));
 });
 app.put("/api/profile/password",auth,(req,res)=>{
- const {current_password,new_password}=req.body||{};
- if(!current_password||!new_password||new_password.length<8)return res.status(400).json({error:"Current password and a new 8+ character password are required"});
+ const {currentPassword,newPassword}=req.body||{};
  const u=db.prepare("SELECT password_hash FROM users WHERE id=?").get(req.user.id);
- if(!u||!bcrypt.compareSync(current_password,u.password_hash))return res.status(401).json({error:"Current password is incorrect"});
- db.prepare("UPDATE users SET password_hash=? WHERE id=?").run(bcrypt.hashSync(new_password,12),req.user.id);
- res.json({ok:true});
+ if(!u||!bcrypt.compareSync(currentPassword||"",u.password_hash))return res.status(400).json({error:"Current password is incorrect"});
+ if(!newPassword||newPassword.length<6)return res.status(400).json({error:"New password must be at least 6 characters"});
+ db.prepare("UPDATE users SET password_hash=? WHERE id=?").run(bcrypt.hashSync(newPassword,12),req.user.id);res.json({ok:true});
 });
 
-app.get("/api/courses",auth,(req,res)=>{
- const rows=db.prepare("SELECT course,created_at FROM enrollments WHERE user_id=? ORDER BY created_at DESC").all(req.user.id);
- res.json(rows);
-});
-
+app.get("/api/courses",auth,(req,res)=>res.json(db.prepare("SELECT course,created_at FROM enrollments WHERE user_id=? ORDER BY created_at DESC").all(req.user.id)));
 app.post("/api/courses/enroll",auth,(req,res)=>{
  const {course}=req.body||{};
  if(!course)return res.status(400).json({error:"Course is required"});
- const allowed=["B.Tech Mathematics","Intermediate Mathematics","Class 10 Mathematics","Classes 5–7 Mathematics"];
- if(!allowed.includes(course))return res.status(400).json({error:"Invalid course selected"});
- try{
-  db.prepare("INSERT OR IGNORE INTO enrollments(user_id,course) VALUES(?,?)").run(req.user.id,course);
-  res.json({ok:true,course});
- }catch(e){
-  console.error("Enrollment error:",e);
-  res.status(500).json({error:"Unable to save enrollment. Please try logging in again."});
- }
+ try{db.prepare("INSERT OR IGNORE INTO enrollments(user_id,course) VALUES(?,?)").run(req.user.id,course);res.json({ok:true,course})}
+ catch(e){console.error(e);res.status(500).json({error:"Unable to save enrollment. Please try again."})}
 });
 
+// Student-facing published content.
 app.get("/api/videos",auth,(req,res)=>{
- const course=req.query.course;
- const rows=course?db.prepare("SELECT id,title,course,module,youtube_url,video_id,description FROM videos WHERE published=1 AND course=? ORDER BY id DESC").all(course)
- :db.prepare("SELECT id,title,course,module,youtube_url,video_id,description FROM videos WHERE published=1 ORDER BY id DESC").all();
- res.json(rows);
-});
-
-app.post("/api/videos",auth,admin,(req,res)=>{
- const {title,course,module,youtube_url,video_id,description=""}=req.body||{};
- if(!title||!course||!module||!youtube_url||!video_id)return res.status(400).json({error:"Missing video fields"});
- const info=db.prepare("INSERT INTO videos(title,course,module,youtube_url,video_id,description) VALUES(?,?,?,?,?,?)").run(title,course,module,youtube_url,video_id,description);
- res.status(201).json({id:info.lastInsertRowid});
-});
-
-app.get("/api/materials",auth,(req,res)=>{
- const course=req.query.course,type=req.query.type;
- let sql="SELECT id,title,course,type,url,description FROM materials WHERE published=1",p=[];
- if(course){sql+=" AND course=?";p.push(course)} if(type){sql+=" AND type=?";p.push(type)}
+ const course=req.query.course,module=req.query.module;
+ let sql="SELECT id,title,course,module,youtube_url,video_id,description FROM videos WHERE published=1",p=[];
+ if(course){sql+=" AND course=?";p.push(course)} if(module){sql+=" AND module=?";p.push(module)}
  res.json(db.prepare(sql+" ORDER BY id DESC").all(...p));
 });
-
-app.post("/api/materials",auth,admin,(req,res)=>{
- const {title,course,type,url,description=""}=req.body||{};
- if(!title||!course||!type||!url)return res.status(400).json({error:"Missing material fields"});
- const info=db.prepare("INSERT INTO materials(title,course,type,url,description) VALUES(?,?,?,?,?)").run(title,course,type,url,description);
- res.status(201).json({id:info.lastInsertRowid});
+app.get("/api/materials",auth,(req,res)=>{
+ const course=req.query.course,module=req.query.module,type=req.query.type;
+ let sql="SELECT id,title,course,module,type,url,description FROM materials WHERE published=1",p=[];
+ if(course){sql+=" AND course=?";p.push(course)} if(module){sql+=" AND module=?";p.push(module)} if(type){sql+=" AND type=?";p.push(type)}
+ res.json(db.prepare(sql+" ORDER BY id DESC").all(...p));
 });
-
 app.get("/api/tests",auth,(req,res)=>{
- res.json(db.prepare("SELECT id,title,course,instructions FROM tests WHERE published=1 ORDER BY id DESC").all());
+ const course=req.query.course,module=req.query.module;
+ let sql="SELECT id,title,course,module,instructions FROM tests WHERE published=1",p=[];
+ if(course){sql+=" AND course=?";p.push(course)} if(module){sql+=" AND module=?";p.push(module)}
+ res.json(db.prepare(sql+" ORDER BY id DESC").all(...p));
 });
-
 app.get("/api/tests/:id",auth,(req,res)=>{
- const t=db.prepare("SELECT id,title,course,instructions FROM tests WHERE id=? AND published=1").get(req.params.id);
+ const t=db.prepare("SELECT id,title,course,module,instructions FROM tests WHERE id=? AND published=1").get(req.params.id);
  if(!t)return res.status(404).json({error:"Test not found"});
- t.questions=db.prepare("SELECT id,question,option_a,option_b,option_c,option_d FROM questions WHERE test_id=?").all(t.id);
- res.json(t);
+ t.questions=db.prepare("SELECT id,question,option_a,option_b,option_c,option_d FROM questions WHERE test_id=? ORDER BY id").all(t.id);res.json(t);
 });
-
 app.post("/api/tests/:id/submit",auth,(req,res)=>{
- const t=db.prepare("SELECT id FROM tests WHERE id=? AND published=1").get(req.params.id);
- if(!t)return res.status(404).json({error:"Test not found"});
- const answers=req.body?.answers||[];
+ const t=db.prepare("SELECT id FROM tests WHERE id=? AND published=1").get(req.params.id);if(!t)return res.status(404).json({error:"Test not found"});
+ const answers=Array.isArray(req.body?.answers)?req.body.answers:[];
  const qs=db.prepare("SELECT id,correct_index FROM questions WHERE test_id=? ORDER BY id").all(t.id);
- let correct=0; qs.forEach((q,i)=>{if(Number(answers[i])===q.correct_index)correct++});
+ let correct=0;qs.forEach((q,i)=>{if(Number(answers[i])===q.correct_index)correct++});
  const score=Math.round(correct/(qs.length||1)*100);
  db.prepare("INSERT INTO test_results(user_id,test_id,score,correct,total) VALUES(?,?,?,?,?)").run(req.user.id,t.id,score,correct,qs.length);
  res.json({score,correct,total:qs.length});
 });
 
-app.post("/api/progress",auth,(req,res)=>{
- const {course,module_index,completed}=req.body||{};
- if(!course||module_index===undefined)return res.status(400).json({error:"Course and module_index are required"});
- db.prepare(`INSERT INTO lesson_progress(user_id,course,module_index,completed) VALUES(?,?,?,?)
- ON CONFLICT(user_id,course,module_index) DO UPDATE SET completed=excluded.completed,updated_at=CURRENT_TIMESTAMP`)
- .run(req.user.id,course,Number(module_index),completed?1:0);
+// Admin content management.
+app.get("/api/admin/content",auth,admin,(req,res)=>{
+ const videos=db.prepare("SELECT id,'video' AS type,title,course,module,description,published,created_at,youtube_url AS url FROM videos ORDER BY id DESC").all();
+ const materials=db.prepare("SELECT id,'material' AS type,title,course,module,description,published,created_at,url FROM materials ORDER BY id DESC").all();
+ const tests=db.prepare("SELECT id,'test' AS type,title,course,module,instructions AS description,published,created_at,'' AS url FROM tests ORDER BY id DESC").all();
+ res.json([...videos,...materials,...tests].sort((a,b)=>b.id-a.id));
+});
+app.post("/api/videos",auth,admin,(req,res)=>{
+ const {title,course,module,youtube_url,video_id,description="",published=true}=req.body||{};
+ const vid=safeVideoId(video_id||youtube_url);
+ if(!title||!course||!module||!youtube_url||!vid)return res.status(400).json({error:"Title, course, module and YouTube URL are required"});
+ const info=db.prepare("INSERT INTO videos(title,course,module,youtube_url,video_id,description,published) VALUES(?,?,?,?,?,?,?)").run(title.trim(),course,module,youtube_url.trim(),vid,description||"",published?1:0);
+ res.status(201).json(db.prepare("SELECT * FROM videos WHERE id=?").get(info.lastInsertRowid));
+});
+app.put("/api/videos/:id",auth,admin,(req,res)=>{
+ const v=db.prepare("SELECT * FROM videos WHERE id=?").get(req.params.id);if(!v)return res.status(404).json({error:"Video not found"});
+ const b=req.body||{},vid=safeVideoId(b.video_id||b.youtube_url||v.video_id);
+ db.prepare("UPDATE videos SET title=?,course=?,module=?,youtube_url=?,video_id=?,description=?,published=? WHERE id=?").run(b.title??v.title,b.course??v.course,b.module??v.module,b.youtube_url??v.youtube_url,vid,b.description??v.description,b.published===undefined?v.published:(b.published?1:0),v.id);
  res.json({ok:true});
 });
+app.delete("/api/videos/:id",auth,admin,(req,res)=>{db.prepare("DELETE FROM videos WHERE id=?").run(req.params.id);res.json({ok:true})});
 
+app.post("/api/materials",auth,admin,(req,res)=>{
+ const {title,course,module="",type="PDF",url,description="",published=true}=req.body||{};
+ if(!title||!course||!url)return res.status(400).json({error:"Title, course and resource URL are required"});
+ const info=db.prepare("INSERT INTO materials(title,course,module,type,url,description,published) VALUES(?,?,?,?,?,?,?)").run(title.trim(),course,module,type,url.trim(),description||"",published?1:0);
+ res.status(201).json(db.prepare("SELECT * FROM materials WHERE id=?").get(info.lastInsertRowid));
+});
+app.put("/api/materials/:id",auth,admin,(req,res)=>{
+ const m=db.prepare("SELECT * FROM materials WHERE id=?").get(req.params.id);if(!m)return res.status(404).json({error:"Material not found"});const b=req.body||{};
+ db.prepare("UPDATE materials SET title=?,course=?,module=?,type=?,url=?,description=?,published=? WHERE id=?").run(b.title??m.title,b.course??m.course,b.module??m.module,b.type??m.type,b.url??m.url,b.description??m.description,b.published===undefined?m.published:(b.published?1:0),m.id);res.json({ok:true});
+});
+app.delete("/api/materials/:id",auth,admin,(req,res)=>{db.prepare("DELETE FROM materials WHERE id=?").run(req.params.id);res.json({ok:true})});
+
+app.post("/api/tests",auth,admin,(req,res)=>{
+ const {title,course,module="",instructions="",published=false}=req.body||{};
+ if(!title||!course)return res.status(400).json({error:"Test title and course are required"});
+ const info=db.prepare("INSERT INTO tests(title,course,module,instructions,published) VALUES(?,?,?,?,?)").run(title.trim(),course,module,instructions||"",published?1:0);
+ res.status(201).json(db.prepare("SELECT * FROM tests WHERE id=?").get(info.lastInsertRowid));
+});
+app.post("/api/tests/:id/questions",auth,admin,(req,res)=>{
+ const t=db.prepare("SELECT id FROM tests WHERE id=?").get(req.params.id);if(!t)return res.status(404).json({error:"Test not found"});
+ const {question,option_a,option_b,option_c,option_d,correct_index}=req.body||{};
+ if(!question||![option_a,option_b,option_c,option_d].every(Boolean)||![0,1,2,3].includes(Number(correct_index)))return res.status(400).json({error:"Complete question and four options, then choose the correct answer"});
+ const info=db.prepare("INSERT INTO questions(test_id,question,option_a,option_b,option_c,option_d,correct_index) VALUES(?,?,?,?,?,?,?)").run(t.id,question,option_a,option_b,option_c,option_d,Number(correct_index));res.status(201).json({id:info.lastInsertRowid});
+});
+app.put("/api/tests/:id",auth,admin,(req,res)=>{
+ const t=db.prepare("SELECT * FROM tests WHERE id=?").get(req.params.id);if(!t)return res.status(404).json({error:"Test not found"});const b=req.body||{};
+ db.prepare("UPDATE tests SET title=?,course=?,module=?,instructions=?,published=? WHERE id=?").run(b.title??t.title,b.course??t.course,b.module??t.module,b.instructions??t.instructions,b.published===undefined?t.published:(b.published?1:0),t.id);res.json({ok:true});
+});
+app.delete("/api/tests/:id",auth,admin,(req,res)=>{db.prepare("DELETE FROM tests WHERE id=?").run(req.params.id);res.json({ok:true})});
+
+app.post("/api/progress",auth,(req,res)=>{
+ const {course,module_index,completed}=req.body||{};if(!course||module_index===undefined)return res.status(400).json({error:"Course and module_index are required"});
+ db.prepare(`INSERT INTO lesson_progress(user_id,course,module_index,completed) VALUES(?,?,?,?) ON CONFLICT(user_id,course,module_index) DO UPDATE SET completed=excluded.completed,updated_at=CURRENT_TIMESTAMP`).run(req.user.id,course,Number(module_index),completed?1:0);res.json({ok:true});
+});
 app.get("/api/dashboard",auth,(req,res)=>{
  const user=db.prepare("SELECT id,name,email,role FROM users WHERE id=?").get(req.user.id);
  const courses=db.prepare("SELECT course FROM enrollments WHERE user_id=? ORDER BY id").all(req.user.id).map(x=>x.course);
@@ -260,57 +297,30 @@ app.get("/api/dashboard",auth,(req,res)=>{
 
 app.get("/api/admin/students",auth,admin,(req,res)=>{
  const users=db.prepare("SELECT id,name,email,role,created_at FROM users WHERE role='student' ORDER BY id DESC").all();
- const out=users.map(u=>{
-  const courses=db.prepare("SELECT course FROM enrollments WHERE user_id=?").all(u.id).map(x=>x.course);
-  const done=db.prepare("SELECT COUNT(*) n FROM lesson_progress WHERE user_id=? AND completed=1").get(u.id).n;
-  const latest=db.prepare(`SELECT score,created_at FROM test_results WHERE user_id=? ORDER BY id DESC LIMIT 1`).get(u.id)||null;
-  return {...u,courses,completedModules:done,latestTest:latest};
- });
- res.json(out);
+ res.json(users.map(u=>{const courses=db.prepare("SELECT course FROM enrollments WHERE user_id=?").all(u.id).map(x=>x.course);const done=db.prepare("SELECT COUNT(*) n FROM lesson_progress WHERE user_id=? AND completed=1").get(u.id).n;const latest=db.prepare("SELECT score,created_at FROM test_results WHERE user_id=? ORDER BY id DESC LIMIT 1").get(u.id)||null;return {...u,courses,completedModules:done,latestTest:latest}}));
 });
-
-function refreshUserPoints(userId){const lessons=db.prepare("SELECT COUNT(*) n FROM lesson_progress WHERE user_id=? AND completed=1").get(userId).n;const attendance=db.prepare("SELECT COUNT(*) n FROM attendance WHERE user_id=?").get(userId).n;const tests=db.prepare("SELECT COALESCE(SUM(score),0) n FROM test_results WHERE user_id=?").get(userId).n;const xp=lessons*10+attendance*20+tests;db.prepare("INSERT INTO user_points(user_id,xp) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET xp=excluded.xp,updated_at=CURRENT_TIMESTAMP").run(userId,xp);return xp;}
-app.get("/api/leaderboard",auth,(req,res)=>{const users=db.prepare("SELECT id FROM users WHERE role='student'").all();users.forEach(u=>refreshUserPoints(u.id));const rows=db.prepare("SELECT u.id,u.name,p.xp FROM user_points p JOIN users u ON u.id=p.user_id WHERE u.role='student' ORDER BY p.xp DESC,u.name ASC LIMIT 100").all();res.json(rows.map((r,i)=>({...r,rank:i+1,badge:r.xp>=500?'Math Champion':r.xp>=250?'Math Pro':r.xp>=100?'Rising Star':'Math Explorer'})));});
-app.get("/api/leaderboard/course",auth,(req,res)=>{const course=(req.query.course||'').trim();if(!course)return res.status(400).json({error:'Course is required'});const users=db.prepare("SELECT u.id,u.name FROM users u JOIN enrollments e ON e.user_id=u.id WHERE u.role='student' AND e.course=?").all(course);const out=users.map(u=>{const lessons=db.prepare("SELECT COUNT(*) n FROM lesson_progress WHERE user_id=? AND course=? AND completed=1").get(u.id,course).n;const tests=db.prepare("SELECT COALESCE(SUM(r.score),0) n FROM test_results r JOIN tests t ON t.id=r.test_id WHERE r.user_id=? AND t.course=?").get(u.id,course).n;const att=db.prepare("SELECT COUNT(*) n FROM attendance a JOIN live_classes c ON c.id=a.live_class_id WHERE a.user_id=? AND c.course=?").get(u.id,course).n;return {id:u.id,name:u.name,xp:lessons*10+tests+att*20};}).sort((a,b)=>b.xp-a.xp).slice(0,100);res.json(out.map((r,i)=>({...r,rank:i+1})));});
-app.get("/api/points/me",auth,(req,res)=>res.json({xp:refreshUserPoints(req.user.id)}));
 
 app.get("/api/live-classes",auth,(req,res)=>{
- const rows=(req.user.role==="admin"||req.user.role==="teacher")
-  ?db.prepare(`SELECT c.*,u.name AS teacher_name FROM live_classes c JOIN users u ON u.id=c.teacher_id ORDER BY c.scheduled_at ASC`).all()
-  :db.prepare(`SELECT c.*,u.name AS teacher_name FROM live_classes c JOIN users u ON u.id=c.teacher_id JOIN enrollments e ON e.course=c.course AND e.user_id=? WHERE c.status!='cancelled' ORDER BY c.scheduled_at ASC`).all(req.user.id);
- res.json(rows);
+ const rows=db.prepare(`SELECT c.*,u.name AS teacher_name FROM live_classes c LEFT JOIN users u ON u.id=c.teacher_id WHERE c.status!='cancelled' ORDER BY c.scheduled_at ASC`).all();res.json(rows);
 });
 app.post("/api/live-classes",auth,(req,res)=>{
- if(!["admin","teacher"].includes(req.user.role))return res.status(403).json({error:"Teacher/Admin access required"});
- const {title,course,scheduled_at,duration_minutes=60,meeting_url,description=""}=req.body||{};
- if(!title||!course||!scheduled_at||!meeting_url)return res.status(400).json({error:"Title, course, scheduled time and meeting URL are required"});
- const info=db.prepare(`INSERT INTO live_classes(teacher_id,title,course,scheduled_at,duration_minutes,meeting_url,description) VALUES(?,?,?,?,?,?,?)`).run(req.user.id,title,course,scheduled_at,Number(duration_minutes)||60,meeting_url,description);
- res.status(201).json(db.prepare(`SELECT * FROM live_classes WHERE id=?`).get(info.lastInsertRowid));
+ if(!["admin","teacher"].includes(req.user.role))return res.status(403).json({error:"Teacher/Admin access required"});const {title,course,scheduled_at,meeting_url,duration_minutes=60,teacher_id=null}=req.body||{};
+ if(!title||!course||!scheduled_at||!meeting_url)return res.status(400).json({error:"Title, course, scheduled time and meeting URL are required"});const info=db.prepare("INSERT INTO live_classes(title,course,scheduled_at,duration_minutes,meeting_url,teacher_id) VALUES(?,?,?,?,?,?)").run(title,course,scheduled_at,Number(duration_minutes)||60,meeting_url,teacher_id||req.user.id);res.status(201).json({id:info.lastInsertRowid});
 });
-app.delete("/api/live-classes/:id",auth,(req,res)=>{
- const row=db.prepare(`SELECT * FROM live_classes WHERE id=?`).get(req.params.id);
- if(!row)return res.status(404).json({error:"Live class not found"});
- if(req.user.role!=="admin"&&!(req.user.role==="teacher"&&row.teacher_id===req.user.id))return res.status(403).json({error:"Access denied"});
- db.prepare(`DELETE FROM live_classes WHERE id=?`).run(req.params.id); res.json({ok:true});
+app.delete("/api/live-classes/:id",auth,(req,res)=>{const c=db.prepare("SELECT * FROM live_classes WHERE id=?").get(req.params.id);if(!c)return res.status(404).json({error:"Live class not found"});if(req.user.role!=="admin"&&c.teacher_id!==req.user.id)return res.status(403).json({error:"Access denied"});db.prepare("UPDATE live_classes SET status='cancelled' WHERE id=?").run(c.id);res.json({ok:true});});
+app.post("/api/live-classes/:id/attendance",auth,(req,res)=>{const c=db.prepare("SELECT id FROM live_classes WHERE id=?").get(req.params.id);if(!c)return res.status(404).json({error:"Live class not found"});db.prepare("INSERT OR IGNORE INTO attendance(live_class_id,user_id) VALUES(?,?)").run(c.id,req.user.id);res.json({ok:true});});
+
+app.get("/api/analytics/student",auth,(req,res)=>{
+ const tests=db.prepare("SELECT COUNT(*) n FROM test_results WHERE user_id=?").get(req.user.id).n;const avg=db.prepare("SELECT COALESCE(AVG(score),0) n FROM test_results WHERE user_id=?").get(req.user.id).n;const done=db.prepare("SELECT COUNT(*) n FROM lesson_progress WHERE user_id=? AND completed=1").get(req.user.id).n;res.json({testsTaken:tests,averageScore:Math.round(avg),completedModules:done});
 });
-app.post("/api/live-classes/:id/attendance",auth,(req,res)=>{const c=db.prepare("SELECT * FROM live_classes WHERE id=?").get(req.params.id);if(!c)return res.status(404).json({error:"Live class not found"});if(req.user.role==="student"&&!db.prepare("SELECT 1 FROM enrollments WHERE user_id=? AND course=?").get(req.user.id,c.course))return res.status(403).json({error:"Enroll in this course first"});db.prepare("INSERT OR IGNORE INTO attendance(live_class_id,user_id) VALUES(?,?)").run(c.id,req.user.id);res.json({ok:true});});
-app.get("/api/analytics/student",auth,(req,res)=>{if(req.user.role!=="student")return res.status(403).json({error:"Student access required"});const courses=db.prepare("SELECT course FROM enrollments WHERE user_id=?").all(req.user.id);const expected=courses.length*4,completed=db.prepare("SELECT COUNT(*) n FROM lesson_progress WHERE user_id=? AND completed=1").get(req.user.id).n,attended=db.prepare("SELECT COUNT(*) n FROM attendance WHERE user_id=?").get(req.user.id).n,tests=db.prepare("SELECT COUNT(*) n,COALESCE(AVG(score),0) avg_score FROM test_results WHERE user_id=?").get(req.user.id);res.json({courses:courses.map(x=>x.course),completed_modules:completed,expected_modules:expected,overall_progress:expected?Math.round(completed/expected*100):0,classes_attended:attended,tests_taken:tests.n,average_test_score:Math.round(tests.avg_score||0)});});
-app.get("/api/analytics/admin",auth,(req,res)=>{if(!["admin","teacher"].includes(req.user.role))return res.status(403).json({error:"Teacher/Admin access required"});const students=db.prepare("SELECT COUNT(*) n FROM users WHERE role='student'").get().n,enrollments=db.prepare("SELECT COUNT(*) n FROM enrollments").get().n,classes_attended=db.prepare("SELECT COUNT(*) n FROM attendance").get().n,lessons_completed=db.prepare("SELECT COUNT(*) n FROM lesson_progress WHERE completed=1").get().n,tests=db.prepare("SELECT COUNT(*) n,COALESCE(AVG(score),0) avg_score FROM test_results").get();res.json({students,enrollments,classes_attended,lessons_completed,tests_taken:tests.n,average_test_score:Math.round(tests.avg_score||0)});});app.get("/api/announcements",auth,(req,res)=>{
- let rows;
- if(req.user.role==="admin"||req.user.role==="teacher") rows=db.prepare("SELECT a.*,u.name AS author_name FROM announcements a JOIN users u ON u.id=a.author_id ORDER BY a.id DESC").all();
- else rows=db.prepare("SELECT DISTINCT a.*,u.name AS author_name FROM announcements a JOIN users u ON u.id=a.author_id LEFT JOIN enrollments e ON e.course=a.course AND e.user_id=? WHERE a.course IS NULL OR e.user_id IS NOT NULL ORDER BY a.id DESC").all(req.user.id);
- res.json(rows);
-});
-app.post("/api/announcements",auth,(req,res)=>{
- if(!["admin","teacher"].includes(req.user.role))return res.status(403).json({error:"Teacher/Admin access required"});
- const {title,message,course}=req.body||{}; if(!title||!message)return res.status(400).json({error:"Title and message are required"});
- const info=db.prepare("INSERT INTO announcements(author_id,title,message,course) VALUES(?,?,?,?)").run(req.user.id,title,message,course||null);
- res.status(201).json(db.prepare("SELECT * FROM announcements WHERE id=?").get(info.lastInsertRowid));
-});
-app.delete("/api/announcements/:id",auth,(req,res)=>{
- const row=db.prepare("SELECT * FROM announcements WHERE id=?").get(req.params.id); if(!row)return res.status(404).json({error:"Announcement not found"});
- if(req.user.role!=="admin"&&!(req.user.role==="teacher"&&row.author_id===req.user.id))return res.status(403).json({error:"Access denied"});
- db.prepare("DELETE FROM announcements WHERE id=?").run(req.params.id); res.json({ok:true});
-});
+app.get("/api/analytics/admin",auth,admin,(req,res)=>{const students=db.prepare("SELECT COUNT(*) n FROM users WHERE role='student'").get().n;const enrollments=db.prepare("SELECT COUNT(*) n FROM enrollments").get().n;const videos=db.prepare("SELECT COUNT(*) n FROM videos").get().n;const materials=db.prepare("SELECT COUNT(*) n FROM materials").get().n;const tests=db.prepare("SELECT COUNT(*) n FROM tests").get().n;res.json({students,enrollments,videos,materials,tests});});
+
+app.get("/api/announcements",auth,(req,res)=>res.json(db.prepare("SELECT id,title,message,course,created_at FROM announcements ORDER BY id DESC LIMIT 50").all()));
+app.post("/api/announcements",auth,admin,(req,res)=>{const {title,message,course=null}=req.body||{};if(!title||!message)return res.status(400).json({error:"Title and message are required"});const info=db.prepare("INSERT INTO announcements(title,message,course,author_id) VALUES(?,?,?,?)").run(title,message,course,req.user.id);res.status(201).json({id:info.lastInsertRowid});});
+app.delete("/api/announcements/:id",auth,admin,(req,res)=>{db.prepare("DELETE FROM announcements WHERE id=?").run(req.params.id);res.json({ok:true});});
+
+app.get("/api/leaderboard",auth,(req,res)=>{const rows=db.prepare(`SELECT u.id,u.name,COALESCE(up.points,0) points FROM users u LEFT JOIN user_points up ON up.user_id=u.id WHERE u.role='student' ORDER BY points DESC,u.name ASC LIMIT 100`).all();res.json(rows);});
+app.get("/api/leaderboard/course",auth,(req,res)=>res.json(db.prepare(`SELECT u.id,u.name,COALESCE(up.points,0) points FROM users u LEFT JOIN user_points up ON up.user_id=u.id WHERE u.role='student' ORDER BY points DESC,u.name ASC LIMIT 100`).all()));
+app.get("/api/points/me",auth,(req,res)=>res.json(db.prepare("SELECT COALESCE(points,0) points FROM user_points WHERE user_id=?").get(req.user.id)||{points:0}));
 
 app.listen(PORT,()=>console.log(`Settlem Academy API running on http://localhost:${PORT}`));
