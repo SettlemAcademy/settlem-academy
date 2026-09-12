@@ -118,7 +118,12 @@ function tokenFor(user){return jwt.sign({id:user.id,role:user.role},JWT_SECRET,{
 function auth(req,res,next){
  const h=req.headers.authorization||"";
  if(!h.startsWith("Bearer "))return res.status(401).json({error:"Authentication required"});
- try{req.user=jwt.verify(h.slice(7),JWT_SECRET);next()}catch(e){return res.status(401).json({error:"Invalid or expired token"})}
+ try{
+  req.user=jwt.verify(h.slice(7),JWT_SECRET);
+  const exists=db.prepare("SELECT id FROM users WHERE id=?").get(req.user.id);
+  if(!exists)return res.status(401).json({error:"Session expired. Please log in again."});
+  next();
+ }catch(e){return res.status(401).json({error:"Invalid or expired token"})}
 }
 function admin(req,res,next){if(req.user.role!=="admin")return res.status(403).json({error:"Admin access required"});next()}
 
@@ -175,8 +180,15 @@ app.get("/api/courses",auth,(req,res)=>{
 app.post("/api/courses/enroll",auth,(req,res)=>{
  const {course}=req.body||{};
  if(!course)return res.status(400).json({error:"Course is required"});
- db.prepare("INSERT OR IGNORE INTO enrollments(user_id,course) VALUES(?,?)").run(req.user.id,course);
- res.json({ok:true});
+ const allowed=["B.Tech Mathematics","Intermediate Mathematics","Class 10 Mathematics","Classes 5–7 Mathematics"];
+ if(!allowed.includes(course))return res.status(400).json({error:"Invalid course selected"});
+ try{
+  db.prepare("INSERT OR IGNORE INTO enrollments(user_id,course) VALUES(?,?)").run(req.user.id,course);
+  res.json({ok:true,course});
+ }catch(e){
+  console.error("Enrollment error:",e);
+  res.status(500).json({error:"Unable to save enrollment. Please try logging in again."});
+ }
 });
 
 app.get("/api/videos",auth,(req,res)=>{
