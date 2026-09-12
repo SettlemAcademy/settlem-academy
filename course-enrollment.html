@@ -12,32 +12,59 @@
 <div class="top"><div class="brand">SETTLEM <span>ACADEMY</span></div><a href="student-dashboard.html">Student Dashboard →</a></div>
 <div class="wrap"><section class="hero"><div class="eyebrow">Personalised Learning</div><h1>Choose your mathematics course.</h1><p>Select the courses you want to learn. Your choices are saved in this browser and shown on your Student Dashboard.</p></section><div id="courses" class="courses"></div><div class="bottom">You can add more courses anytime.</div></div>
 <script>
-const KEY='settlemEnrolledCourses', names=['B.Tech Mathematics','Intermediate Mathematics','Class 10 Mathematics','Classes 5–7 Mathematics'];
+const names=['B.Tech Mathematics','Intermediate Mathematics','Class 10 Mathematics','Classes 5–7 Mathematics'];
 const info={
 'B.Tech Mathematics':'Build strong university-level mathematical foundations with clear concepts and problem solving.',
 'Intermediate Mathematics':'Learn important concepts systematically with exam-focused explanations and practice.',
 'Class 10 Mathematics':'Strengthen Class 10 concepts with step-by-step explanations and targeted practice.',
 'Classes 5–7 Mathematics':'Make mathematics simple and enjoyable through fundamentals, examples and practice.'
 };
-let selected=JSON.parse(localStorage.getItem(KEY)||'[]');
-function toggle(c){if(selected.includes(c))selected=selected.filter(x=>x!==c);else selected.push(c);localStorage.setItem(KEY,JSON.stringify(selected));render()}
-function render(){courses.innerHTML=names.map(c=>`<article class="card ${selected.includes(c)?'selected':''}"><div class="eyebrow">Settlem Academy</div><h2>${c}</h2><p>${info[c]}</p><button class="btn" onclick="toggle(${JSON.stringify(c)})">${selected.includes(c)?'✓ Enrolled':'Enroll in Course'}</button>${selected.includes(c)?'<div class="status">Added to your dashboard</div>':''}</article>`).join('')}
-render()
+let selected=[];
+
+function esc(v){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+async function loadEnrollments(){
+  if(!getToken()){
+    location.href='student-login.html';
+    return;
+  }
+  try{
+    const rows=await apiCourses();
+    selected=rows.map(x=>x.course);
+  }catch(e){
+    console.error('Could not load enrollments:',e);
+    selected=[];
+  }
+  render();
+}
+
+async function toggle(c){
+  if(selected.includes(c)){
+    alert('You are already enrolled in this course.');
+    return;
+  }
+  const btn=document.querySelector(`[data-course="${CSS.escape(c)}"]`);
+  if(btn){btn.disabled=true;btn.textContent='Enrolling…'}
+  try{
+    await apiEnroll(c);
+    selected.push(c);
+    render();
+    alert(c+' enrolled successfully!');
+  }catch(e){
+    if(btn){btn.disabled=false;btn.textContent='Enroll in Course'}
+    alert('Enrollment failed: '+e.message);
+    console.error(e);
+  }
+}
+
+function render(){
+  document.getElementById('courses').innerHTML=names.map(c=>{
+    const enrolled=selected.includes(c);
+    return `<article class="card ${enrolled?'selected':''}"><div class="eyebrow">Settlem Academy</div><h2>${esc(c)}</h2><p>${esc(info[c])}</p><button class="btn" data-course="${esc(c)}" onclick="toggle(${JSON.stringify(c)})">${enrolled?'✓ Enrolled':'Enroll in Course'}</button>${enrolled?'<div class="status">Enrolled successfully — available on your dashboard</div>':''}</article>`;
+  }).join('');
+}
+
+loadEnrollments();
 </script>
-<script>
-document.addEventListener("DOMContentLoaded",async()=>{
- try{
-  const courses=await apiStoreCourses();
-  const cards=[...document.querySelectorAll("article,.course-card,.card")];
-  courses.forEach(c=>{
-   const card=cards.find(x=>x.textContent.includes(c.course));
-   if(card&&!card.querySelector(".buy-course")){
-    const a=document.createElement("a");a.className="buy-course";a.href="course-payment.html?course="+encodeURIComponent(c.course);
-    a.textContent="Buy for ₹"+c.price.toLocaleString("en-IN");a.style="display:inline-block;margin-top:10px;padding:10px 14px;border-radius:10px;background:#2563eb;color:#fff;text-decoration:none;font-weight:800";
-    card.appendChild(a);
-   }
-  });
- }catch(e){console.warn("Store unavailable",e.message)}
-});
-</script></body>
+</body>
 </html>
