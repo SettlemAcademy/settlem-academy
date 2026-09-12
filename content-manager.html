@@ -38,7 +38,7 @@ footer{margin-top:45px;background:var(--navy);color:#cbd5e1;text-align:center;pa
 <aside class="card"><h2>Student Preview</h2><div class="preview"><span class="pill" id="previewModule">Mathematical Foundations</span><h3 id="previewTitle">Your new lesson</h3><p id="previewDesc">Students will see this content after it is published.</p></div><div style="margin-top:22px"><h2>Published Library</h2><div id="library" class="list"><p class="muted">Loading content…</p></div></div></aside>
 </div></main><footer>Settlem Academy • Secure Content Management</footer>
 <script>
-const API='https://settlem-academy.onrender.com/api';let type='video',currentTestId=null;
+const API='https://settlem-academy-api.onrender.com/api';let type='video',currentTestId=null;
 const $=id=>document.getElementById(id);const token=()=>localStorage.getItem('settlemAuthToken');
 function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function notice(msg,ok=false){$('notice').textContent=msg;$('notice').className='notice show '+(ok?'success':'error')}
