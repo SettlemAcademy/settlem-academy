@@ -131,6 +131,32 @@ if(!userCols.includes("phone")) db.exec("ALTER TABLE users ADD COLUMN phone TEXT
 if(!userCols.includes("avatar_url")) db.exec("ALTER TABLE users ADD COLUMN avatar_url TEXT DEFAULT ''");
 if(!userCols.includes("bio")) db.exec("ALTER TABLE users ADD COLUMN bio TEXT DEFAULT ''");
 
+// Optional production admin bootstrap. When ADMIN_NAME, ADMIN_EMAIL and
+// ADMIN_PASSWORD are configured in Render, ensure that account exists and
+// has admin access. This is especially useful when SQLite is recreated on a
+// new Render instance. If the variables are not configured, no admin is
+// created automatically.
+function ensureConfiguredAdmin(){
+ const name=(process.env.ADMIN_NAME||"").trim();
+ const email=(process.env.ADMIN_EMAIL||"").trim().toLowerCase();
+ const password=process.env.ADMIN_PASSWORD||"";
+ if(!name || !email || !password) return;
+ if(password.length<8){
+  console.warn("ADMIN_PASSWORD is configured but is shorter than 8 characters; admin bootstrap skipped.");
+  return;
+ }
+ const hash=bcrypt.hashSync(password,12);
+ const existing=db.prepare("SELECT id FROM users WHERE email=?").get(email);
+ if(existing){
+  db.prepare("UPDATE users SET name=?,password_hash=?,role='admin' WHERE id=?").run(name,hash,existing.id);
+  console.log("Configured admin account ready:",email);
+ }else{
+  const result=db.prepare("INSERT INTO users (name,email,password_hash,role) VALUES (?,?,?,'admin')").run(name,email,hash);
+  console.log("Configured admin account created:",email,"id:",result.lastInsertRowid);
+ }
+}
+ensureConfiguredAdmin();
+
 function tokenFor(user){return jwt.sign({id:user.id,role:user.role},JWT_SECRET,{expiresIn:"7d"})}
 function auth(req,res,next){
  const h=req.headers.authorization||"";
