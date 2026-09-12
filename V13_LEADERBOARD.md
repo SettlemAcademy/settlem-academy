@@ -1,0 +1,1 @@
+XP: lesson completion 10, live attendance 20, test score points. Badges: 100 Rising Star, 250 Math Pro, 500 Math Champion.

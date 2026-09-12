@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Student Login | Settlem Academy</title><style>
+:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--ink:#18233f;--muted:#64748b;--line:#e5eaf3;--bg:#f6f8fc}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+a{text-decoration:none;color:inherit}.wrap{width:min(1120px,92%);margin:auto}
+header{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center}.nav{display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:900;letter-spacing:.08em}.brand b{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;margin-right:10px}
+main{min-height:calc(100vh - 74px);display:grid;place-items:center;padding:50px 0;background:radial-gradient(circle at 15% 15%,#e7f0ff 0,transparent 28%),radial-gradient(circle at 85% 80%,#eee6ff 0,transparent 30%),var(--bg)}
+.shell{width:min(960px,100%);display:grid;grid-template-columns:1fr 1fr;background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(16,26,67,.10)}
+.visual{padding:50px;background:linear-gradient(145deg,#101a43,#263b82);color:#fff;position:relative}.visual h1{font-size:42px;line-height:1.08;margin:15px 0}.visual p{color:#d7def2}.formula{font-size:38px;font-weight:900;letter-spacing:.05em;margin-top:55px;opacity:.9}.pill{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:7px 11px;border-radius:99px;font-size:12px;font-weight:800}
+.form{padding:44px}.eyebrow{font-size:12px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--blue)}h2{font-size:30px;margin:7px 0}.muted{color:var(--muted);font-size:14px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:#f1f4fa;padding:4px;border-radius:11px;margin:25px 0}.tabs button{border:0;background:transparent;padding:11px;border-radius:8px;font-weight:800;color:var(--muted);cursor:pointer}.tabs button.active{background:#fff;color:var(--blue);box-shadow:0 2px 7px rgba(0,0,0,.06)}
+label{display:block;font-size:13px;font-weight:800;margin:14px 0 7px}input{width:100%;padding:13px 14px;border:1px solid #dce2ec;border-radius:10px;font-size:15px;outline:none}input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #e9efff}
+.submit{width:100%;border:0;padding:14px;border-radius:10px;margin-top:20px;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;font-weight:900;font-size:15px;cursor:pointer}
+.note{margin-top:14px;padding:10px 12px;border-radius:10px;background:#eef8f6;color:#14786c;font-size:12px;display:none}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+@media(max-width:760px){.shell{grid-template-columns:1fr}.visual{display:none}.form{padding:32px}}
+</style></head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="index.html"><b>SA</b>SETTLEM ACADEMY</a><a href="index.html" class="muted">← Back to website</a></div></header>
+<main><div class="shell">
+<section class="visual"><span class="pill">STUDENT LEARNING PORTAL</span><h1>Learn smarter.<br>Grow stronger.</h1><p>Access your courses, video lessons, study materials and practice tests from one place.</p><div class="formula">∑  ∫  π  √x  Δ</div></section>
+<section class="form">
+<div class="eyebrow">Student Portal</div><h2 id="title">Welcome back</h2><p class="muted" id="subtitle">Sign in to continue your mathematics learning.</p>
+<div class="tabs"><button class="active" id="loginTab" onclick="showLogin()">Login</button><button id="registerTab" onclick="showRegister()">Register</button></div>
+<form id="form" onsubmit="submitForm(event)">
+<div id="nameField" style="display:none"><label>Student Name</label><input id="name" type="text" placeholder="Enter your name"></div>
+<label>Email Address</label><input id="email" type="email" placeholder="student@example.com" required>
+<label>Password</label><input id="password" type="password" placeholder="Enter your password" required minlength="4">
+<button class="submit" id="submitBtn">Login to Dashboard</button>
+<div class="note" id="note"></div>
+</form><p style="text-align:center"><a href="course-enrollment.html">Choose Courses</a></p>
+<p class="muted" style="margin-top:20px;font-size:12px">Demo version: account details are stored only in this browser. A secure online database can be connected in the next development stage.</p>
+</section>
+</div></main><footer>© Settlem Academy • Mathematics Learning Platform</footer>
+<script src="settlem-api.js"></script><script>
+let mode='login';
+function showLogin(){
+ mode='login'; nameField.style.display='none'; title.textContent='Welcome back'; subtitle.textContent='Sign in to continue your mathematics learning.';
+ loginTab.classList.add('active'); registerTab.classList.remove('active'); submitBtn.textContent='Login to Dashboard';
+}
+function showRegister(){
+ mode='register'; nameField.style.display='block'; title.textContent='Create your account'; subtitle.textContent='Join Settlem Academy and start learning.';
+ registerTab.classList.add('active'); loginTab.classList.remove('active'); submitBtn.textContent='Create Account';
+}
+function submitForm(e){
+ e.preventDefault();
+ const email=document.getElementById('email').value.trim().toLowerCase(), password=document.getElementById('password').value;
+ const stored=JSON.parse(localStorage.getItem('settlemStudent')||'null');
+ if(mode==='register'){
+   const student={name:document.getElementById('name').value.trim()||'Student',email,password};
+   localStorage.setItem('settlemStudent',JSON.stringify(student));
+   localStorage.setItem('settlemLoggedIn','true');
+   window.location.href='student-dashboard.html';
+ }else{
+   if(!stored || stored.email!==email || stored.password!==password){
+     note.textContent='For this demo, register first or use the same details you registered with.';
+     note.style.display='block'; return;
+   }
+   localStorage.setItem('settlemLoggedIn','true'); window.location.href='student-dashboard.html';
+ }
+}
+</script>
+<script>
+(function(){
+ const form=document.querySelector("form");
+ if(!form)return;
+ form.addEventListener("submit",async function(e){
+   e.preventDefault();
+   const inputs=form.querySelectorAll("input");
+   const values=[...inputs].map(x=>x.value.trim());
+   const email=values.find(v=>v.includes("@"))||"";
+   const password=[...inputs].map(x=>x.value).find(v=>v.length>=6&&!v.includes("@"))||"";
+   const name=values.find(v=>v && !v.includes("@") && v!==password)||"Student";
+   const isRegister=document.body.innerText.toLowerCase().includes("register") && (document.querySelector(".active")?.textContent||"").toLowerCase().includes("register");
+   try{
+     const data=isRegister?await apiRegister(name,email,password):await apiLogin(email,password);
+     localStorage.setItem("settlemAuthToken",data.token);
+     localStorage.setItem("settlemAcademyUser",JSON.stringify(data.user));
+     window.location.href="student-dashboard.html";
+   }catch(err){
+     alert("Backend connection: "+err.message+"\n\nIf the server is not running yet, use the existing demo flow or start backend/server.js.");
+   }
+ });
+})();
+</script>
+</body></html>

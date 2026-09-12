@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Content Manager | Settlem Academy</title><style>
+:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--ink:#18233f;--muted:#64748b;--line:#e5eaf3;--bg:#f6f8fc}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:var(--bg)}a{text-decoration:none;color:inherit}
+header{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center}.wrap{width:min(1160px,92%);margin:auto}.nav{display:flex;align-items:center;justify-content:space-between}.brand{font-weight:900;letter-spacing:.08em}.brand b{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;margin-right:10px}
+main{padding:40px 0 65px}.eyebrow{font-size:12px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--blue)}h1{font-size:38px;margin:7px 0}.lead,.muted{color:var(--muted)}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0}.tabs button{border:1px solid var(--line);background:#fff;padding:11px 16px;border-radius:10px;font-weight:800;color:#475569;cursor:pointer}.tabs button.active{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;border-color:transparent}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px;box-shadow:0 9px 28px rgba(16,26,67,.05)}.card h2{margin:0 0 18px;font-size:21px}
+.field{margin-bottom:14px}.field label{display:block;font-size:12px;font-weight:900;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #dce3ee;border-radius:10px;font:inherit}.field textarea{min-height:100px;resize:vertical}
+.btn{border:0;padding:12px 16px;border-radius:10px;font-weight:900;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}
+.list{margin-top:20px}.item{display:flex;justify-content:space-between;gap:15px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:10px}.item strong{display:block}.badge{font-size:11px;font-weight:900;padding:5px 8px;border-radius:99px;background:#e7faf7;color:#0f806f}
+.preview{border-radius:14px;padding:22px;color:#fff;background:linear-gradient(135deg,#101a43,#293e87)}.preview h3{font-size:24px;margin:8px 0}.preview .mini{display:inline-block;padding:5px 8px;background:rgba(255,255,255,.13);border-radius:99px;font-size:11px;font-weight:800}
+footer{background:var(--navy);color:#cbd5e1;text-align:center;padding:25px;font-size:12px}@media(max-width:800px){.grid{grid-template-columns:1fr}}
+</style><script src="settlem-api.js"></script></head>
+<body onload="requireAdminPage()">><header><div class="wrap nav"><a class="brand" href="index.html"><b>SA</b>SETTLEM ACADEMY</a><a class="muted" href="admin-dashboard.html">← Admin Dashboard</a></div></header>
+<main><div class="wrap"><div class="eyebrow">Content Management</div><h1>Build your learning library.</h1><p class="lead">Add courses, video lessons, study resources and practice questions from one simple workspace.</p>
+<div class="tabs"><button class="active" onclick="setType('course',this)">Courses</button><button onclick="setType('video',this)">Video Lessons</button><button onclick="setType('material',this)">Study Materials</button><button onclick="setType('question',this)">Questions</button></div>
+<div class="grid"><section class="card"><h2 id="formTitle">Add Course</h2><form id="contentForm" onsubmit="addContent(event)">
+<div class="field"><label>Title</label><input id="title" required placeholder="e.g. B.Tech Mathematics"></div>
+<div class="field"><label>Learning Level</label><select id="level"><option>B.Tech</option><option>Intermediate</option><option>Class 10</option><option>Classes 5–7</option></select></div>
+<div class="field" id="linkField" style="display:none"><label>Video / Resource Link</label><input id="link" placeholder="Paste YouTube or resource URL"></div>
+<div class="field"><label>Description</label><textarea id="description" placeholder="Short description for students"></textarea></div>
+<button class="btn primary" id="saveBtn">＋ Add to Library</button></form>
+<div class="list" id="list"></div></section>
+<aside class="card"><h2>Student Preview</h2><div class="preview"><span class="mini" id="previewLevel">B.Tech</span><h3 id="previewTitle">Your new content</h3><p id="previewDesc">Students will see your content here after you publish it.</p></div>
+<p class="muted" style="margin-top:18px">This is a front-end content manager. Entries are saved in this browser for now. The next backend stage can store them securely online for all students.</p></aside></div></div></main>
+<footer>Settlem Academy • Content Management</footer>
+<script>
+let type='course';
+const names={course:'Course',video:'Video Lesson',material:'Study Material',question:'Question'};
+function setType(t,btn){
+ type=t;document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
+ formTitle.textContent='Add '+names[t];
+ linkField.style.display=(t==='video'||t==='material')?'block':'none';
+ saveBtn.textContent='＋ Add '+names[t];render();
+}
+function getData(){return JSON.parse(localStorage.getItem('settlemContent')||'[]')}
+function addContent(e){
+ e.preventDefault();const arr=getData();
+ arr.unshift({type:type,title:title.value.trim(),level:level.value,link:link.value.trim(),description:description.value.trim(),created:new Date().toLocaleDateString()});
+ localStorage.setItem('settlemContent',JSON.stringify(arr));contentForm.reset();
+ linkField.style.display=(type==='video'||type==='material')?'block':'none';render();
+}
+function render(){
+ const arr=getData().filter(x=>x.type===type);
+ list.innerHTML=arr.length?arr.map(x=>'<div class="item"><div><strong>'+escapeHtml(x.title)+'</strong><span class="muted">'+escapeHtml(x.level)+' • '+escapeHtml(x.created)+'</span></div><span class="badge">SAVED</span></div>').join(''):'<div style="padding:28px;text-align:center;color:#64748b;border:1px dashed #ccd5e5;border-radius:12px">No '+names[type].toLowerCase()+' added yet. Use the form above to create one.</div>';
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]})}
+[title,level,description].forEach(el=>el.addEventListener('input',function(){
+ previewTitle.textContent=title.value||'Your new content';previewLevel.textContent=level.value;previewDesc.textContent=description.value||'Students will see your content here after you publish it.';
+}));
+render();
+</script></body></html>

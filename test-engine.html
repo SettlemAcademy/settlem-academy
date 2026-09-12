@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Online Test Engine | Settlem Academy</title>
+<style>
+:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--pink:#ec4899;--bg:#f5f7ff;--muted:#64748b;--line:#e2e8f0}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}.top{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:17px 5%;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900}.brand span{color:#8fe8ff}.top a{color:#fff;text-decoration:none;border:1px solid #ffffff55;padding:9px 13px;border-radius:10px}.wrap{max-width:1180px;margin:auto;padding:30px 20px}.hero{background:linear-gradient(135deg,#fff,#eef2ff);border:1px solid #dbe3ff;border-radius:24px;padding:28px}.eyebrow{font-size:11px;color:var(--violet);font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:42px;margin:7px 0}.hero p{color:var(--muted);line-height:1.6}.tabs{display:flex;gap:8px;margin:20px 0;flex-wrap:wrap}.tab{border:0;border-radius:10px;padding:11px 15px;font-weight:800;background:#e8edff;color:var(--blue);cursor:pointer}.tab.active{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 10px 30px #1725540a}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;font:inherit}.field textarea{min-height:80px}.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:var(--blue)}.danger{background:#fff0f3;color:#be123c}.question{border:1px solid var(--line);padding:16px;border-radius:14px;margin:10px 0}.option{display:block;padding:10px;margin:7px 0;background:#f8faff;border-radius:9px}.list{display:grid;gap:10px}.testitem{padding:15px;border:1px solid var(--line);border-radius:14px}.pill{font-size:11px;padding:5px 8px;background:#ede9fe;color:#6d28d9;border-radius:99px;font-weight:800}.notice{padding:12px;border-radius:10px;background:#fffbeb;color:#92400e;font-size:13px;line-height:1.5}.success{color:#047857;font-weight:800}
+</style><script src="settlem-api.js"></script></head>
+<body onload="requireAdminPage()">><div class="top"><div class="brand">SETTLEM <span>ACADEMY</span> · TEST ENGINE</div><a href="admin-dashboard.html">← Admin Dashboard</a></div>
+<div class="wrap"><section class="hero"><div class="eyebrow">Assessment System</div><h1>Create tests. Measure progress.</h1><p>Admin can create multiple-choice tests. Students can take the published tests, receive instant scores, and the result is saved to the Student Dashboard.</p></section>
+<div class="tabs"><button class="tab active" onclick="show('create',this)">Create Test</button><button class="tab" onclick="show('tests',this)">Test Library</button></div>
+<section id="create" class="grid"><div class="card"><h2>Test Details</h2><div class="field"><label>Test title</label><input id="title" placeholder="e.g. Mathematics Unit Test 1"></div><div class="field"><label>Course</label><select id="course"><option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option></select></div><div class="field"><label>Instructions</label><textarea id="instructions" placeholder="Choose the correct answer for each question."></textarea></div><button class="btn primary" onclick="createTest()">Create Test</button><p id="msg"></p></div><div class="card"><h2>Add Questions</h2><div class="field"><label>Question</label><textarea id="qtext" placeholder="Enter your question"></textarea></div><div class="field"><label>Option A</label><input id="a"></div><div class="field"><label>Option B</label><input id="b"></div><div class="field"><label>Option C</label><input id="c"></div><div class="field"><label>Option D</label><input id="d"></div><div class="field"><label>Correct answer</label><select id="correct"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div><button class="btn secondary" onclick="addQuestion()">＋ Add Question</button><div id="draft" style="margin-top:14px"></div><button class="btn primary" style="margin-top:12px" onclick="publish()">Publish Test</button></div></section>
+<section id="tests" style="display:none"><div class="card"><h2>Test Library</h2><div id="library" class="list"></div></div></section>
+</div>
+<script>
+const KEY='settlemAcademyTests';let current=null,draft=[];
+function get(){return JSON.parse(localStorage.getItem(KEY)||'[]')}function save(a){localStorage.setItem(KEY,JSON.stringify(a))}
+function createTest(){let t=title.value.trim();if(!t){msg.textContent='Enter a test title.';return}current={id:crypto.randomUUID(),title:t,course:course.value,instructions:instructions.value.trim(),questions:[],published:false,createdAt:new Date().toISOString()};draft=[];renderDraft();msg.className='success';msg.textContent='Test created. Add questions and publish it.'}
+function addQuestion(){if(!current){msg.textContent='Create the test details first.';return}let q=qtext.value.trim(),opts=[a.value.trim(),b.value.trim(),c.value.trim(),d.value.trim()];if(!q||opts.some(x=>!x)){alert('Complete the question and all four options.');return}current.questions.push({q,opts,correct:Number(correct.value)});draft=current.questions;qtext.value='';a.value=b.value=c.value=d.value='';renderDraft()}
+function renderDraft(){draftEl=draft;draft.innerHTML='';const box=document.getElementById('draft');box.innerHTML=draft.length?draft.map((x,i)=>`<div class="question"><strong>${i+1}. ${esc(x.q)}</strong><div>${x.opts.map((o,j)=>`<div class="option">${String.fromCharCode(65+j)}. ${esc(o)} ${j===x.correct?'✓':''}</div>`).join('')}</div></div>`).join(''):'<div style="color:#64748b">No questions added yet.</div>'}
+function publish(){if(!current||!current.questions.length){alert('Create a test and add at least one question.');return}current.published=true;let arr=get();arr.push(current);save(arr);alert('Test published successfully.');current=null;draft=[];renderLibrary()}
+function renderLibrary(){let arr=get();library.innerHTML=arr.length?arr.map(t=>`<div class="testitem"><span class="pill">${esc(t.course)}</span><h3>${esc(t.title)}</h3><p>${t.questions.length} question(s) · ${t.published?'Published':'Draft'}</p><button class="btn secondary" onclick="openTest('${t.id}')">Preview</button> <button class="btn danger" onclick="removeTest('${t.id}')">Delete</button></div>`).join(''):'<p style="color:#64748b">No tests created yet.</p>'}
+function openTest(id){let t=get().find(x=>x.id===id);if(!t)return;localStorage.setItem('settlemSelectedTest',id);window.location.href='practice-tests.html'}
+function removeTest(id){if(confirm('Delete this test?')){save(get().filter(t=>t.id!==id));renderLibrary()}}
+function show(id,el){document.getElementById('create').style.display=id==='create'?'grid':'none';document.getElementById('tests').style.display=id==='tests'?'block':'none';document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));el.classList.add('active');if(id==='tests')renderLibrary()}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+renderDraft();renderLibrary();
+</script><script>
+async function loadCentralTests(){
+ if(!getToken())return;
+ try{
+  const d=await apiAdminTests(); window.__centralTests=d.tests||[];
+  const list=document.querySelector(".test-library")||document.querySelector(".library-list")||document.querySelector("#testLibrary");
+  if(!list)return;
+  if(!window.__centralTests.length){list.innerHTML="<div style='padding:16px;color:#64748b'>No tests in the central database yet.</div>";return;}
+  list.innerHTML=window.__centralTests.map(t=>`<div class="library-item" style="padding:14px;border:1px solid #e6eaf2;border-radius:12px;margin:8px 0"><strong>${escT(t.title||"Untitled")}</strong><div style="font-size:12px;color:#64748b">${escT(t.course||"")}</div></div>`).join("");
+ }catch(e){console.warn("Central test API unavailable:",e.message);}
+}
+function escT(v){return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+window.addEventListener("DOMContentLoaded",loadCentralTests);
+</script>
+<script id="centralCreateHook_test">
+(function(){
+ const form=document.querySelector("form");
+ if(!form)return;
+ form.addEventListener("submit",async function(e){
+   if(!getToken() || form.dataset.centralBusy==="1") return;
+   e.preventDefault(); form.dataset.centralBusy="1";
+   try{
+     const vals=[...form.querySelectorAll("input,select,textarea")].map(x=>x.value.trim());
+     const title=vals[0]||"Untitled Test", course=vals[1]||"";
+     const instructions=vals[2]||"";
+     const questions=window.__settlemTestQuestions||[];
+     await apiAdminCreateTest({title,course,instructions,questions});
+     alert("Test published to the central database.");
+     location.reload();
+   }catch(err){alert("Could not publish the test: "+err.message);form.dataset.centralBusy="0";}
+ });
+})();
+</script></body></html>
