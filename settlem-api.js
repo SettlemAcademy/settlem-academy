@@ -1,8 +1,7 @@
-const SETTLEM_API = (localStorage.getItem("settlemApiUrl") || "https://settlem-academy.onrender.com").replace(/\/$/, "") + "/api";
+const SETTLEM_API = (localStorage.getItem("settlemApiUrl") || "https://settlem-academy-api.onrender.com").replace(/\/$/, "") + "/api";
 
 function getToken(){ return localStorage.getItem("settlemAuthToken"); }
 function clearAuth(){ localStorage.removeItem("settlemAuthToken"); localStorage.removeItem("settlemAcademyUser"); }
-
 async function api(path, options={}){
   const headers = {"Content-Type":"application/json", ...(options.headers||{})};
   const token = getToken();
@@ -12,7 +11,6 @@ async function api(path, options={}){
   if(!response.ok) throw new Error(data.error || `Request failed (${response.status})`);
   return data;
 }
-
 async function apiStatus(){ return api("/health"); }
 async function apiMe(){ return api("/me"); }
 async function apiLogin(email,password){ return api("/auth/login",{method:"POST",body:JSON.stringify({email,password})}); }
@@ -26,33 +24,26 @@ async function apiTests(){ return api("/tests"); }
 async function apiTest(id){ return api("/tests/"+encodeURIComponent(id)); }
 async function apiSubmitTest(id,answers){ return api("/tests/"+encodeURIComponent(id)+"/submit",{method:"POST",body:JSON.stringify({answers})}); }
 async function apiProgress(payload){ return api("/progress",{method:"POST",body:JSON.stringify(payload)}); }
-
 async function apiAdminStudents(){ return api("/admin/students"); }
 async function apiAdminVideos(){ return apiVideos(); }
 async function apiAdminAddVideo(payload){ return api("/videos",{method:"POST",body:JSON.stringify(payload)}); }
 async function apiAdminMaterials(){ return apiMaterials(); }
 async function apiAdminAddMaterial(payload){ return api("/materials",{method:"POST",body:JSON.stringify(payload)}); }
-
 async function apiLiveClasses(){ return api("/live-classes"); }
 async function apiCreateLiveClass(payload){ return api("/live-classes",{method:"POST",body:JSON.stringify(payload)}); }
 async function apiDeleteLiveClass(id){ return api("/live-classes/"+encodeURIComponent(id),{method:"DELETE"}); }
 async function apiMarkAttendance(id){ return api("/live-classes/"+encodeURIComponent(id)+"/attendance",{method:"POST"}); }
 async function apiStudentAnalytics(){ return api("/analytics/student"); }
 async function apiAdminAnalytics(){ return api("/analytics/admin"); }
-
 async function apiAnnouncements(){ return api("/announcements"); }
 async function apiCreateAnnouncement(payload){ return api("/announcements",{method:"POST",body:JSON.stringify(payload)}); }
 async function apiDeleteAnnouncement(id){ return api("/announcements/"+encodeURIComponent(id),{method:"DELETE"}); }
-
 async function apiLeaderboard(){ return api("/leaderboard"); }
 async function apiCourseLeaderboard(course){ return api("/leaderboard/course?course="+encodeURIComponent(course)); }
 async function apiMyPoints(){ return api("/points/me"); }
-
 async function apiProfile(){ return api("/profile"); }
 async function apiUpdateProfile(payload){ return api("/profile",{method:"PUT",body:JSON.stringify(payload)}); }
 async function apiChangePassword(payload){ return api("/profile/password",{method:"PUT",body:JSON.stringify(payload)}); }
-
-// Compatibility helpers for pages from earlier LMS stages.
 async function apiStoreCourses(){ return api("/store/courses"); }
 async function apiCreatePaymentOrder(payload){ return api("/payments/order",{method:"POST",body:JSON.stringify(payload)}); }
 async function apiVerifyPayment(payload){ return api("/payments/verify",{method:"POST",body:JSON.stringify(payload)}); }
@@ -67,7 +58,6 @@ async function apiAdminDeleteTeacher(id){ return api("/admin/teachers/"+encodeUR
 async function apiTeacherDashboard(){ return api("/teacher/dashboard"); }
 async function apiAdminTests(){ return api("/tests"); }
 async function apiAdminCreateTest(payload){ return api("/tests",{method:"POST",body:JSON.stringify(payload)}); }
-
 function requireAdminPage(){
   if(!getToken()){ location.href="admin-login.html"; return false; }
   return true;
