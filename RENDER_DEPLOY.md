@@ -1,21 +1,16 @@
-# Settlem Academy API — Render deployment
+# Settlem Academy — Free Render Blueprint
 
-This package is prepared for Render as a Node.js web service. It uses SQLite with a persistent disk path so the development database survives service restarts. For a full production education platform, migrate to managed PostgreSQL before storing significant student data.
+This version uses PostgreSQL instead of SQLite, so the web service does not depend on a persistent disk. The `render.yaml` creates a Free Render Web Service and a Free Render Postgres database and wires `DATABASE_URL` automatically.
 
-## Render
-1. Put this backend folder in a Git repository.
-2. In Render, create a Web Service from the repository.
-3. Root directory: the backend folder (or repository root if this package is the repository).
-4. Build command: `npm install`
-5. Start command: `npm start`
-6. The included `render.yaml` sets HTTPS health checking, a generated JWT secret, the Netlify frontend origin, and a persistent SQLite disk.
+## Deploy
+1. Commit/push these backend files to the GitHub repository root.
+2. In Render choose **New → Blueprint** (or create from the repository's `render.yaml`).
+3. Select the GitHub repository and review the two resources: `settlem-academy-api` and `settlem-academy-db`.
+4. Keep the web service on **Free**.
+5. Deploy the Blueprint.
+6. After deployment, open the API URL and check `/api/health`. It should return `ok: true` and `database: postgres`.
 
-## Admin
-Do not commit an `.env` file or real credentials. If you need an initial admin, run the seed command in the service shell with secure environment variables:
-`npm run seed:admin`
+## Admin account
+Because Free Render web services do not provide dashboard shell access, this package includes a one-time bootstrap endpoint. In Render, add a secret environment variable named `ADMIN_BOOTSTRAP_SECRET` with a long random value. After deployment, send one POST request to `/api/admin/bootstrap` with header `x-bootstrap-secret` and JSON `{ "name": "...", "email": "...", "password": "..." }`. It will create the first admin only; after an admin exists the endpoint returns `409`. Remove the `ADMIN_BOOTSTRAP_SECRET` environment variable after creating the admin.
 
-## After deployment
-Copy the Render HTTPS service URL. The Netlify frontend must be configured to use that URL instead of the current localhost default.
-
-## Important
-This is not a claim of full production security. Add rate limiting, validation, password reset, email verification, monitoring, backups and a managed database before accepting sensitive or high-volume real-world data.
+For a production system, use a paid database with backups and a stronger operational setup. Render's Free Postgres databases currently expire after 30 days.

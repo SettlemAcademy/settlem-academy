@@ -2,6 +2,8 @@ services:
   - type: web
     name: settlem-academy-api
     runtime: node
+    plan: free
+    region: ohio
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health
@@ -12,9 +14,13 @@ services:
         generateValue: true
       - key: FRONTEND_ORIGIN
         value: "https://settlem-academy.netlify.app"
-      - key: DB_PATH
-        value: "/var/data/settlem-academy.db"
-    disk:
-      name: settlem-academy-data
-      mountPath: /var/data
-      sizeGB: 1
+      - key: DATABASE_URL
+        fromDatabase:
+          name: settlem-academy-db
+          property: connectionString
+
+databases:
+  - name: settlem-academy-db
+    plan: free
+    region: ohio
+    postgresMajorVersion: "18"

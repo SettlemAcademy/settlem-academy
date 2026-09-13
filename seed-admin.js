@@ -1,18 +1,15 @@
 require("dotenv").config();
-const bcrypt = require("bcryptjs");
-const Database = require("better-sqlite3");
-const db = new Database(process.env.DB_PATH||"settlem-academy.db");
-
-const name=process.env.ADMIN_NAME, email=process.env.ADMIN_EMAIL, password=process.env.ADMIN_PASSWORD;
-if(!name || !email || !password){console.error("Missing ADMIN_NAME, ADMIN_EMAIL or ADMIN_PASSWORD in .env");process.exit(1);}
-if(password.length<8){console.error("ADMIN_PASSWORD must be at least 8 characters.");process.exit(1);}
-const hash=bcrypt.hashSync(password,12);
-const existing=db.prepare("SELECT id FROM users WHERE email=?").get(email);
-if(existing){
-  db.prepare("UPDATE users SET name=?,password_hash=?,role='admin' WHERE id=?").run(name,hash,existing.id);
-  console.log("Admin account updated:",email);
-}else{
-  const result=db.prepare("INSERT INTO users (name,email,password_hash,role) VALUES (?,?,?,'admin')").run(name,email,hash);
-  console.log("Admin account created:",email,"id:",result.lastInsertRowid);
-}
-db.close();
+const bcrypt=require("bcryptjs");
+const {Pool}=require("pg");
+const pool=new Pool({connectionString:process.env.DATABASE_URL,ssl:process.env.DATABASE_URL?{rejectUnauthorized:false}:false});
+(async()=>{
+ const name=process.env.ADMIN_NAME||"Settlem Academy Admin";
+ const email=process.env.ADMIN_EMAIL;
+ const password=process.env.ADMIN_PASSWORD;
+ if(!process.env.DATABASE_URL||!email||!password)throw new Error("DATABASE_URL, ADMIN_EMAIL and ADMIN_PASSWORD are required");
+ const hash=bcrypt.hashSync(password,12);
+ await pool.query(`CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,name TEXT NOT NULL,email TEXT NOT NULL UNIQUE,password_hash TEXT NOT NULL,role TEXT NOT NULL DEFAULT 'student',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`);
+ await pool.query(`INSERT INTO users(name,email,password_hash,role) VALUES($1,$2,$3,'admin') ON CONFLICT(email) DO UPDATE SET name=EXCLUDED.name,password_hash=EXCLUDED.password_hash,role='admin'`,[name,email.toLowerCase(),hash]);
+ console.log(`Admin account ready: ${email}`);
+ await pool.end();
+})().catch(async err=>{console.error(err);await pool.end();process.exit(1)});
