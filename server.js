@@ -6,7 +6,7 @@ const jwt=require("jsonwebtoken");
 const Database=require("better-sqlite3");
 
 const app=express();
-const db=new Database("settlem-academy.db");
+const db=new Database(process.env.DB_PATH||"settlem-academy.db");
 const PORT=process.env.PORT||4000;
 const JWT_SECRET=process.env.JWT_SECRET||"CHANGE_THIS_SECRET";
 
@@ -135,24 +135,7 @@ app.post("/api/courses/enroll",auth,(req,res)=>{
  res.json({ok:true});
 });
 
-function extractYouTubeId(value){
- const raw=String(value||"").trim();
- if(!raw)return "";
- try{
-  const u=new URL(raw);
-  if(u.hostname.includes("youtu.be")) return u.pathname.replace(/^\//,"").split("/")[0];
-  if(u.hostname.includes("youtube.com")){
-   if(u.pathname==="/watch") return u.searchParams.get("v")||"";
-   const parts=u.pathname.split("/").filter(Boolean);
-   if(parts[0]==="shorts"||parts[0]==="embed"||parts[0]==="live") return parts[1]||"";
-  }
- }catch(e){}
- const m=raw.match(/(?:v=|youtu\.be\/|youtube\.com\/(?:embed|shorts|live)\/)([A-Za-z0-9_-]{6,})/);
- return m?m[1]:"";
-}
-
-// Published videos are safe to browse publicly; enrollment/auth is enforced by the learning actions.
-app.get("/api/videos",(req,res)=>{
+app.get("/api/videos",auth,(req,res)=>{
  const course=req.query.course;
  const rows=course?db.prepare("SELECT id,title,course,module,youtube_url,video_id,description FROM videos WHERE published=1 AND course=? ORDER BY id DESC").all(course)
  :db.prepare("SELECT id,title,course,module,youtube_url,video_id,description FROM videos WHERE published=1 ORDER BY id DESC").all();
@@ -160,11 +143,10 @@ app.get("/api/videos",(req,res)=>{
 });
 
 app.post("/api/videos",auth,admin,(req,res)=>{
- const {title,course,module,youtube_url,description=""}=req.body||{};
- const video_id=extractYouTubeId(youtube_url);
- if(!title||!course||!module||!youtube_url||!video_id)return res.status(400).json({error:"Please enter a valid YouTube video URL."});
+ const {title,course,module,youtube_url,video_id,description=""}=req.body||{};
+ if(!title||!course||!module||!youtube_url||!video_id)return res.status(400).json({error:"Missing video fields"});
  const info=db.prepare("INSERT INTO videos(title,course,module,youtube_url,video_id,description) VALUES(?,?,?,?,?,?)").run(title,course,module,youtube_url,video_id,description);
- res.status(201).json({id:info.lastInsertRowid,video_id});
+ res.status(201).json({id:info.lastInsertRowid});
 });
 
 app.get("/api/materials",auth,(req,res)=>{

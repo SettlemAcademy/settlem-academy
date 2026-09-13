@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: settlem-academy-api
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_ORIGIN
+        value: "https://settlem-academy.netlify.app"
+      - key: DB_PATH
+        value: "/var/data/settlem-academy.db"
+    disk:
+      name: settlem-academy-data
+      mountPath: /var/data
+      sizeGB: 1
