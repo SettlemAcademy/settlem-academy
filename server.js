@@ -217,5 +217,58 @@ app.get("/api/admin/students",auth,admin,async(req,res)=>{
  res.json(out);
 });
 
-initDb().then(()=>app.listen(PORT,()=>console.log(`Settlem Academy API running on port ${PORT}`))).catch(err=>{console.error("Database initialization failed",err);process.exit(1)});
+
+async function seedDefaultContent(){
+  const video = await query("SELECT id FROM videos WHERE video_id=$1 LIMIT 1",["SGokvzWeqvk"]);
+  if(!video.rows.length){
+    await query(`INSERT INTO videos(title,course,module,youtube_url,video_id,description,published)
+      VALUES($1,$2,$3,$4,$5,$6,1)`,[
+      "Random Variable in 10 Seconds! 🤯 | B.Tech Maths | Easy Explanation | Settlem Academy",
+      "B.Tech Mathematics","Probability & Random Variables",
+      "https://www.youtube.com/watch?v=SGokvzWeqvk","SGokvzWeqvk",
+      "A quick and simple introduction to random variables for B.Tech Mathematics students."
+    ]);
+  }
+
+  const test = await query("SELECT id FROM tests WHERE title=$1 LIMIT 1",["B.Tech Mathematics – Probability & Random Variables | Practice Test 1"]);
+  let testId=test.rows[0]?.id;
+  if(!testId){
+    const tr=await query(`INSERT INTO tests(title,course,instructions,published)
+      VALUES($1,$2,$3,1) RETURNING id`,[
+      "B.Tech Mathematics – Probability & Random Variables | Practice Test 1",
+      "B.Tech Mathematics",
+      "10 important multiple-choice questions. Choose the best answer. Your score is calculated instantly."
+    ]);
+    testId=tr.rows[0].id;
+    const qs=[
+      ["A random variable is best described as:","A numerical function assigning a value to each outcome","A sample space","A probability only","An event only",0],
+      ["If X is a discrete random variable, the sum of P(X=x) over all possible x is:","0","1","∞","Depends on X",1],
+      ["For a fair coin tossed once, if X=1 for Head and X=0 for Tail, E[X] is:","0","1/4","1/2","1",2],
+      ["The variance of a random variable X is:","E[X] + (E[X])²","E[X²] − (E[X])²","E[X²] + E[X]","(E[X])² − E[X²]",1],
+      ["If P(A)=0.4 and P(B)=0.5 and A,B are independent, P(A∩B) is:","0.1","0.2","0.4","0.9",1],
+      ["For a Bernoulli random variable with success probability p, its mean is:","1−p","p","p²","1/p",1],
+      ["For a binomial random variable X~Bin(n,p), E[X] equals:","np","n/p","p/n","n(1−p)",0],
+      ["For X~Bin(n,p), Var(X) equals:","np","np²","np(1−p)","n²p(1−p)",2],
+      ["A probability mass function is used for:","Continuous random variables only","Discrete random variables","Only normal distributions","Only uniform distributions",1],
+      ["If E[X]=3 and E[X²]=13, then Var(X) is:","4","9","10","16",0]
+    ]
+    for(const q of qs){
+      await query(`INSERT INTO questions(test_id,question,option_a,option_b,option_c,option_d,correct_index)
+        VALUES($1,$2,$3,$4,$5,$6,$7)`,[testId,...q]);
+    }
+  }
+
+  const materials=[
+    ["B.Tech Mathematics – Probability & Random Variables Quick Notes","Chapter Notes","https://settlem-academy.netlify.app/btech-study-notes.html#probability","Definitions, random variables, distributions and key concepts in one place."],
+    ["B.Tech Mathematics – Probability Formula Sheet","Formula Sheet","https://settlem-academy.netlify.app/btech-study-notes.html#formulas","Important probability and random-variable formulas for quick revision."],
+    ["B.Tech Mathematics – 20 Important Problems","Important Questions","https://settlem-academy.netlify.app/btech-study-notes.html#problems","A focused list of high-value problems for B.Tech exam preparation."],
+    ["B.Tech Mathematics – Test Preparation Pack","Test Preparation","https://settlem-academy.netlify.app/practice-tests.html","Use this resource with Practice Test 1 to check your preparation."]
+  ]
+  for(const [title,type,url,description] of materials){
+    const m=await query("SELECT id FROM materials WHERE title=$1 LIMIT 1",[title]);
+    if(!m.rows.length) await query(`INSERT INTO materials(title,course,type,url,description,published) VALUES($1,$2,$3,$4,$5,1)`,[title,"B.Tech Mathematics",type,url,description]);
+  }
+}
+
+initDb().then(()=>seedDefaultContent()).then(()=>app.listen(PORT,()=>console.log(`Settlem Academy API running on port ${PORT}`))).catch(err=>{console.error("Database initialization failed",err);process.exit(1)});
 process.on("SIGTERM",async()=>{await pool.end();process.exit(0)});
