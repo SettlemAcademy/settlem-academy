@@ -617,6 +617,29 @@ async function seedDefaultContent(){
         VALUES($1,$2,$3,$4,$5,$6,$7)`,[testId,...q]);
     }
   }
+  // Upgrade the seeded Probability test to the full 20-question version.
+  const questionCount = await query("SELECT COUNT(*)::int AS n FROM questions WHERE test_id=$1",[testId]);
+  if(Number(questionCount.rows[0]?.n||0) < 20){
+    const existing = Number(questionCount.rows[0]?.n||0);
+    const moreQs=[
+      ["If P(A)=0.6, P(B)=0.5 and P(A∩B)=0.3, then A and B are:","Independent","Mutually exclusive","Impossible","Complements",0],
+      ["Bayes’ theorem is mainly used to:","Find a sample space","Reverse conditional probabilities using prior information","Calculate only variance","Find a PDF directly",1],
+      ["For a continuous random variable X, P(X=a) is:","1","a","0","Depends on a",2],
+      ["If f(x) is a valid PDF, its total area over its support is:","0","1","∞","−1",1],
+      ["For a discrete random variable, E[X] is calculated by:","Σx/p(x)","Σxp(x)","∫f(x)dx only","Σp(x)/x",1],
+      ["If X~Poisson(λ), then E[X] and Var(X) are:","λ and λ","λ and λ²","λ² and λ","1 and λ",0],
+      ["For X~Bin(n,p), q is:","p+1","1+p","1−p","1/p",2],
+      ["If X~Bin(10,0.2), its mean is:","0.2","2","5","8",1],
+      ["If E[X]=4 and Var(X)=3, E[X²] equals:","7","12","19","25",2],
+      ["If X is uniform on (0,1), then P(0.2<X<0.6) is:","0.2","0.4","0.6","0.8",1]
+    ];
+    for(let i=existing;i<moreQs.length+existing && i<20;i++){
+      const q=moreQs[i-existing];
+      await query(`INSERT INTO questions(test_id,question,option_a,option_b,option_c,option_d,correct_index)
+        VALUES($1,$2,$3,$4,$5,$6,$7)`,[testId,...q]);
+    }
+    await query("UPDATE tests SET instructions=$1 WHERE id=$2",["20 important multiple-choice questions covering Probability & Random Variables. Choose the best answer. Your score is calculated instantly.",testId]);
+  }
 
   const materials=[
     ["B.Tech Mathematics – Probability & Random Variables Quick Notes","Chapter Notes","https://settlem-academy.netlify.app/btech-study-notes.html#probability","Definitions, random variables, distributions and key concepts in one place."],
