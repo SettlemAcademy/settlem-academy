@@ -4,6 +4,9 @@ const cors=require("cors");
 const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken");
 const {Pool}=require("pg");
+const {randomUUID}=require("crypto");
+const helmet=require("helmet");
+const rateLimit=require("express-rate-limit");
 
 const app=express();
 const PORT=process.env.PORT||4000;
@@ -16,8 +19,12 @@ const pool=new Pool({
   idleTimeoutMillis:30000
 });
 
+app.use(helmet({contentSecurityPolicy:false}));
 app.use(cors({origin:process.env.FRONTEND_ORIGIN||true}));
-app.use(express.json());
+app.use(express.json({limit:"200kb"}));
+const authLimiter=rateLimit({windowMs:15*60*1000,max:30,standardHeaders:true,legacyHeaders:false,message:{error:"Too many authentication attempts. Please try again later."}});
+app.use("/api/auth/login",authLimiter);
+app.use("/api/auth/register",authLimiter);
 
 async function query(text,params=[]){return pool.query(text,params)}
 async function initDb(){
@@ -85,6 +92,14 @@ async function initDb(){
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE(user_id,course,module_index)
  );
+ CREATE TABLE IF NOT EXISTS announcements(
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  message TEXT NOT NULL,
+  audience TEXT NOT NULL DEFAULT 'all',
+  published INTEGER NOT NULL DEFAULT 1,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+ );
  CREATE TABLE IF NOT EXISTS test_results(
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -93,7 +108,73 @@ async function initDb(){
   correct INTEGER NOT NULL,
   total INTEGER NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+ );
+ CREATE TABLE IF NOT EXISTS certificates(
+  id SERIAL PRIMARY KEY,
+  certificate_id TEXT NOT NULL UNIQUE,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  course TEXT NOT NULL,
+  issued_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(user_id,course)
+ );
+ CREATE TABLE IF NOT EXISTS feedback(
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  course TEXT NOT NULL,
+  rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  message TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+ );
+ CREATE TABLE IF NOT EXISTS academy_settings(
+  key TEXT PRIMARY KEY, value TEXT NOT NULL DEFAULT ''
+ );
+ CREATE TABLE IF NOT EXISTS contact_enquiries(
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT DEFAULT '',
+  level TEXT DEFAULT '',
+  message TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'new',
+  admin_note TEXT DEFAULT '',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+ );
+ CREATE TABLE IF NOT EXISTS faq_items(
+  id SERIAL PRIMARY KEY,
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  category TEXT NOT NULL DEFAULT 'General',
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  published BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+ );
+ CREATE TABLE IF NOT EXISTS support_requests(
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  course TEXT DEFAULT '',
+  category TEXT NOT NULL DEFAULT 'General',
+  subject TEXT NOT NULL,
+  message TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'open',
+  admin_note TEXT DEFAULT '',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
  );`);
+}
+
+async function seedFaqs(){
+ const r=await query("SELECT COUNT(*)::int AS n FROM faq_items");
+ if(Number(r.rows[0].n)>0)return;
+ const items=[
+  ['Who can learn at Settlem Academy?','We currently support B.Tech Mathematics, Intermediate Mathematics, Class 10 Mathematics and Classes 5–7.','Courses',1],
+  ['How do I start a course?','Create or sign in to your student account, choose a course and use the learning room to access available lessons and materials.','Courses',2],
+  ['Can I watch lessons on YouTube?','Yes. Selected Settlem Academy lessons are available through the Video Lessons section and YouTube.','Learning',3],
+  ['Are practice tests saved?','When you use a secure student account, submitted test scores can be saved to your Student Dashboard.','Tests',4],
+  ['How do I get course support?','Use the Student Help Center or Contact page to send a support request or enquiry.','Support',5]
+ ];
+ for(const x of items) await query("INSERT INTO faq_items(question,answer,category,sort_order,published) VALUES($1,$2,$3,$4,TRUE)",x);
 }
 
 function tokenFor(user){return jwt.sign({id:user.id,role:user.role},JWT_SECRET,{expiresIn:"7d"})}
@@ -165,6 +246,34 @@ app.post("/api/materials",auth,admin,async(req,res)=>{
 });
 
 app.get("/api/tests",auth,async(req,res)=>{const r=await query("SELECT id,title,course,instructions FROM tests WHERE published=1 ORDER BY id DESC");res.json(r.rows)});
+app.get("/api/admin/tests",auth,admin,async(req,res)=>{
+ const r=await query(`SELECT t.id,t.title,t.course,t.instructions,t.published,t.created_at,COUNT(q.id)::int AS question_count
+ FROM tests t LEFT JOIN questions q ON q.test_id=t.id GROUP BY t.id ORDER BY t.id DESC`);
+ res.json(r.rows);
+});
+app.post("/api/tests",auth,admin,async(req,res)=>{
+ const {title,course,instructions=""}=req.body||{};
+ if(!title||!course)return res.status(400).json({error:"Test title and course are required"});
+ const r=await query(`INSERT INTO tests(title,course,instructions,published) VALUES($1,$2,$3,0) RETURNING id,title,course,instructions,published,created_at`,[title.trim(),course,instructions.trim()]);
+ res.status(201).json(r.rows[0]);
+});
+app.post("/api/tests/:id/questions",auth,admin,async(req,res)=>{
+ const {question,option_a,option_b,option_c,option_d,correct_index}=req.body||{};
+ if(!question||![option_a,option_b,option_c,option_d].every(Boolean)||![0,1,2,3].includes(Number(correct_index))) return res.status(400).json({error:"Question, all four options and a valid correct answer are required"});
+ const t=await query("SELECT id FROM tests WHERE id=$1",[req.params.id]); if(!t.rows[0])return res.status(404).json({error:"Test not found"});
+ const r=await query(`INSERT INTO questions(test_id,question,option_a,option_b,option_c,option_d,correct_index) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING id,question,option_a,option_b,option_c,option_d,correct_index`,[req.params.id,question.trim(),option_a.trim(),option_b.trim(),option_c.trim(),option_d.trim(),Number(correct_index)]);
+ res.status(201).json(r.rows[0]);
+});
+app.patch("/api/tests/:id",auth,admin,async(req,res)=>{
+ const {published}=req.body||{};
+ if(typeof published!=="boolean")return res.status(400).json({error:"published must be true or false"});
+ if(published){const q=await query("SELECT COUNT(*)::int AS n FROM questions WHERE test_id=$1",[req.params.id]);if(!q.rows[0]||q.rows[0].n<1)return res.status(400).json({error:"Add at least one question before publishing"});}
+ const r=await query("UPDATE tests SET published=$1 WHERE id=$2 RETURNING id,title,course,instructions,published,created_at",[published?1:0,req.params.id]);
+ if(!r.rows[0])return res.status(404).json({error:"Test not found"});res.json(r.rows[0]);
+});
+app.delete("/api/tests/:id",auth,admin,async(req,res)=>{
+ const r=await query("DELETE FROM tests WHERE id=$1 RETURNING id",[req.params.id]); if(!r.rows[0])return res.status(404).json({error:"Test not found"});res.json({ok:true});
+});
 app.get("/api/tests/:id",auth,async(req,res)=>{
  const r=await query("SELECT id,title,course,instructions FROM tests WHERE id=$1 AND published=1",[req.params.id]);const t=r.rows[0];if(!t)return res.status(404).json({error:"Test not found"});
  const q=await query("SELECT id,question,option_a,option_b,option_c,option_d FROM questions WHERE test_id=$1",[t.id]);t.questions=q.rows;res.json(t);
@@ -175,6 +284,123 @@ app.post("/api/tests/:id/submit",auth,async(req,res)=>{
  let correct=0;qr.rows.forEach((q,i)=>{if(Number(answers[i])===q.correct_index)correct++});
  const total=qr.rows.length,score=Math.round(correct/(total||1)*100);
  await query("INSERT INTO test_results(user_id,test_id,score,correct,total) VALUES($1,$2,$3,$4,$5)",[req.user.id,t.rows[0].id,score,correct,total]);res.json({score,correct,total});
+});
+
+app.post("/api/contact",async(req,res)=>{
+ const {name,email,phone,level,message}=req.body||{};
+ if(!name||!email||!message)return res.status(400).json({error:"Name, email and message are required"});
+ if(String(message).trim().length>3000)return res.status(400).json({error:"Message is too long"});
+ try{
+  const r=await query(`INSERT INTO contact_enquiries(name,email,phone,level,message) VALUES($1,$2,$3,$4,$5) RETURNING id,name,email,phone,level,message,status,created_at`,[String(name).trim().slice(0,120),String(email).trim().toLowerCase().slice(0,180),String(phone||'').trim().slice(0,40),String(level||'').trim().slice(0,80),String(message).trim()]);
+  res.status(201).json(r.rows[0]);
+ }catch(e){res.status(500).json({error:"Unable to save enquiry"})}
+});
+app.get("/api/admin/contact-enquiries",auth,admin,async(req,res)=>{
+ const status=req.query.status; const params=[]; let where='';
+ if(status && ['new','in_progress','resolved'].includes(status)){params.push(status);where='WHERE c.status=$1'}
+ const r=await query(`SELECT c.id,c.name,c.email,c.phone,c.level,c.message,c.status,c.admin_note,c.created_at,c.updated_at FROM contact_enquiries c ${where} ORDER BY c.id DESC`,params);
+ res.json(r.rows);
+});
+app.patch("/api/admin/contact-enquiries/:id",auth,admin,async(req,res)=>{
+ const {status,admin_note}=req.body||{};
+ if(status!==undefined && !['new','in_progress','resolved'].includes(status))return res.status(400).json({error:"Invalid status"});
+ const r=await query(`UPDATE contact_enquiries SET status=COALESCE($1,status),admin_note=COALESCE($2,admin_note),updated_at=NOW() WHERE id=$3 RETURNING *`,[status??null,admin_note===undefined?null:String(admin_note).trim().slice(0,3000),req.params.id]);
+ if(!r.rows[0])return res.status(404).json({error:"Enquiry not found"}); res.json(r.rows[0]);
+});
+
+app.get("/api/announcements",auth,async(req,res)=>{
+ const course=(req.query.course||"").trim();
+ const r=await query(`SELECT id,title,message,audience,created_at FROM announcements WHERE published=1 AND (audience='all' OR audience=$1) ORDER BY id DESC LIMIT 20`,[course]);
+ res.json(r.rows);
+});
+app.get("/api/admin/announcements",auth,admin,async(req,res)=>{
+ const r=await query(`SELECT id,title,message,audience,published,created_at FROM announcements ORDER BY id DESC`);
+ res.json(r.rows);
+});
+app.post("/api/announcements",auth,admin,async(req,res)=>{
+ const {title,message,audience='all'}=req.body||{};
+ const allowed=['all','B.Tech Mathematics','Intermediate Mathematics','Class 10 Mathematics','Classes 5–7 Mathematics'];
+ if(!title||!message||!allowed.includes(audience))return res.status(400).json({error:'Title, message and a valid audience are required'});
+ const r=await query(`INSERT INTO announcements(title,message,audience,published) VALUES($1,$2,$3,1) RETURNING id,title,message,audience,published,created_at`,[title.trim(),message.trim(),audience]);
+ res.status(201).json(r.rows[0]);
+});
+app.patch("/api/announcements/:id",auth,admin,async(req,res)=>{
+ const {published}=req.body||{}; if(typeof published!=='boolean')return res.status(400).json({error:'published must be true or false'});
+ const r=await query(`UPDATE announcements SET published=$1 WHERE id=$2 RETURNING id,title,message,audience,published,created_at`,[published?1:0,req.params.id]);
+ if(!r.rows[0])return res.status(404).json({error:'Announcement not found'}); res.json(r.rows[0]);
+});
+app.delete("/api/announcements/:id",auth,admin,async(req,res)=>{
+ const r=await query('DELETE FROM announcements WHERE id=$1 RETURNING id',[req.params.id]); if(!r.rows[0])return res.status(404).json({error:'Announcement not found'}); res.json({ok:true});
+});
+
+app.get("/api/certificates",auth,async(req,res)=>{
+ const rows=(await query("SELECT certificate_id,course,issued_at FROM certificates WHERE user_id=$1 ORDER BY issued_at DESC",[req.user.id])).rows;
+ res.json(rows);
+});
+
+app.post("/api/certificates/issue",auth,async(req,res)=>{
+ const {course}=req.body||{};
+ if(!course)return res.status(400).json({error:"Course is required"});
+ const enrolled=await query("SELECT 1 FROM enrollments WHERE user_id=$1 AND course=$2 LIMIT 1",[req.user.id,course]);
+ if(!enrolled.rows.length)return res.status(403).json({error:"You are not enrolled in this course"});
+ const completed=(await query("SELECT COUNT(DISTINCT module_index)::int AS n FROM lesson_progress WHERE user_id=$1 AND course=$2 AND completed::text IN ('1','true')",[req.user.id,course])).rows[0].n;
+ if(completed<4)return res.status(400).json({error:"Complete all 4 learning modules to earn this certificate",completedModules:completed});
+ const existing=(await query("SELECT certificate_id,course,issued_at FROM certificates WHERE user_id=$1 AND course=$2 LIMIT 1",[req.user.id,course])).rows[0];
+ if(existing)return res.json(existing);
+ const certificate_id="SA-"+randomUUID().replace(/-/g,"").slice(0,12).toUpperCase();
+ const row=(await query("INSERT INTO certificates(certificate_id,user_id,course) VALUES($1,$2,$3) RETURNING certificate_id,course,issued_at",[certificate_id,req.user.id,course])).rows[0];
+ res.status(201).json(row);
+});
+
+app.get("/api/certificates/verify/:certificate_id",async(req,res)=>{
+ const row=(await query(`SELECT c.certificate_id,c.course,c.issued_at,u.name FROM certificates c JOIN users u ON u.id=c.user_id WHERE c.certificate_id=$1 LIMIT 1`,[req.params.certificate_id])).rows[0];
+ if(!row)return res.status(404).json({error:"Certificate not found"});
+ res.json({valid:true,...row});
+});
+
+app.get("/api/feedback",auth,async(req,res)=>{
+ const course=req.query.course;
+ const r=course?await query("SELECT id,course,rating,message,created_at FROM feedback WHERE user_id=$1 AND course=$2 ORDER BY id DESC",[req.user.id,course]):await query("SELECT id,course,rating,message,created_at FROM feedback WHERE user_id=$1 ORDER BY id DESC",[req.user.id]);
+ res.json(r.rows);
+});
+app.post("/api/feedback",auth,async(req,res)=>{
+ const {course,rating,message}=req.body||{};
+ const n=Number(rating);
+ if(!course||!Number.isInteger(n)||n<1||n>5||!message||String(message).trim().length<3)return res.status(400).json({error:"Course, a 1–5 rating and feedback are required"});
+ const enrolled=await query("SELECT 1 FROM enrollments WHERE user_id=$1 AND course=$2 LIMIT 1",[req.user.id,course]);
+ if(!enrolled.rows.length)return res.status(403).json({error:"You can submit feedback only for an enrolled course"});
+ const r=await query("INSERT INTO feedback(user_id,course,rating,message) VALUES($1,$2,$3,$4) RETURNING id,course,rating,message,created_at",[req.user.id,course,n,String(message).trim().slice(0,2000)]);
+ res.status(201).json(r.rows[0]);
+});
+app.get("/api/admin/feedback",auth,admin,async(req,res)=>{
+ const r=await query(`SELECT f.id,f.course,f.rating,f.message,f.created_at,u.id AS user_id,u.name,u.email FROM feedback f JOIN users u ON u.id=f.user_id ORDER BY f.id DESC`);
+ res.json(r.rows);
+});
+
+app.get("/api/support",auth,async(req,res)=>{
+ const r=await query(`SELECT id,course,category,subject,message,status,admin_note,created_at,updated_at FROM support_requests WHERE user_id=$1 ORDER BY id DESC LIMIT 50`,[req.user.id]);
+ res.json(r.rows);
+});
+app.post("/api/support",auth,async(req,res)=>{
+ const {course='',category='General',subject,message}=req.body||{};
+ const allowed=['General','Course Content','Technical Issue','Test / Assessment','Certificate','Enrollment / Payment'];
+ if(!allowed.includes(category)||!subject||String(subject).trim().length<3||!message||String(message).trim().length<5)return res.status(400).json({error:'Category, subject and message are required'});
+ const r=await query(`INSERT INTO support_requests(user_id,course,category,subject,message) VALUES($1,$2,$3,$4,$5) RETURNING id,course,category,subject,message,status,admin_note,created_at,updated_at`,[req.user.id,String(course||'').trim().slice(0,120),category,String(subject).trim().slice(0,160),String(message).trim().slice(0,3000)]);
+ res.status(201).json(r.rows[0]);
+});
+app.get("/api/admin/support",auth,admin,async(req,res)=>{
+ const status=String(req.query.status||'').trim();
+ const params=[]; let where='';
+ if(['open','in_progress','resolved'].includes(status)){params.push(status);where='WHERE s.status=$1';}
+ const r=await query(`SELECT s.id,s.course,s.category,s.subject,s.message,s.status,s.admin_note,s.created_at,s.updated_at,u.id AS user_id,u.name,u.email FROM support_requests s JOIN users u ON u.id=s.user_id ${where} ORDER BY s.id DESC`,params);
+ res.json(r.rows);
+});
+app.patch("/api/admin/support/:id",auth,admin,async(req,res)=>{
+ const {status,admin_note}=req.body||{};
+ if(status!==undefined&&!['open','in_progress','resolved'].includes(status))return res.status(400).json({error:'Invalid support status'});
+ if(admin_note!==undefined&&String(admin_note).length>3000)return res.status(400).json({error:'Admin note is too long'});
+ const r=await query(`UPDATE support_requests SET status=COALESCE($1,status),admin_note=COALESCE($2,admin_note),updated_at=NOW() WHERE id=$3 RETURNING id,course,category,subject,message,status,admin_note,created_at,updated_at`,[status??null,admin_note===undefined?null:String(admin_note).trim().slice(0,3000),req.params.id]);
+ if(!r.rows[0])return res.status(404).json({error:'Support request not found'}); res.json(r.rows[0]);
 });
 
 app.post("/api/progress",auth,async(req,res)=>{
@@ -207,6 +433,83 @@ app.post("/api/admin/bootstrap",async(req,res)=>{
  }catch(e){res.status(409).json({error:"An account with this email already exists"})}
 });
 
+
+app.get("/api/admin/users",auth,admin,async(req,res)=>{
+ const r=await query("SELECT id,name,email,role,created_at FROM users ORDER BY CASE WHEN role='admin' THEN 0 ELSE 1 END, id DESC");
+ res.json(r.rows);
+});
+app.patch("/api/admin/users/:id/role",auth,admin,async(req,res)=>{
+ const id=Number(req.params.id), role=String(req.body.role||'').trim();
+ if(!Number.isInteger(id)||!['admin','student'].includes(role)) return res.status(400).json({error:'Invalid user or role'});
+ if(id===req.user.id && role==='student'){ const n=Number((await query("SELECT COUNT(*)::int AS n FROM users WHERE role='admin'")).rows[0].n); if(n<=1) return res.status(400).json({error:'You cannot remove the last administrator.'}); }
+ const r=await query("UPDATE users SET role=$1 WHERE id=$2 RETURNING id,name,email,role,created_at",[role,id]);
+ if(!r.rows[0]) return res.status(404).json({error:'User not found'}); res.json(r.rows[0]);
+});
+app.get("/api/faq",async(req,res)=>{ const r=await query("SELECT id,question,answer,category,sort_order FROM faq_items WHERE published=TRUE ORDER BY sort_order,id"); res.json(r.rows); });
+app.get("/api/admin/faq",auth,admin,async(req,res)=>{ const r=await query("SELECT id,question,answer,category,sort_order,published,created_at,updated_at FROM faq_items ORDER BY sort_order,id"); res.json(r.rows); });
+app.post("/api/admin/faq",auth,admin,async(req,res)=>{ const q=String(req.body.question||'').trim(), a=String(req.body.answer||'').trim(), c=String(req.body.category||'General').trim().slice(0,80), o=Math.max(0,Number(req.body.sort_order)||0); if(!q||!a)return res.status(400).json({error:'Question and answer are required'}); const r=await query("INSERT INTO faq_items(question,answer,category,sort_order,published) VALUES($1,$2,$3,$4,$5) RETURNING *",[q,a,c,o,req.body.published!==false]); res.json(r.rows[0]); });
+app.patch("/api/admin/faq/:id",auth,admin,async(req,res)=>{ const id=Number(req.params.id); if(!Number.isInteger(id))return res.status(400).json({error:'Invalid FAQ id'}); const old=(await query("SELECT * FROM faq_items WHERE id=$1",[id])).rows[0]; if(!old)return res.status(404).json({error:'FAQ not found'}); const q=req.body.question!==undefined?String(req.body.question).trim():old.question, a=req.body.answer!==undefined?String(req.body.answer).trim():old.answer, c=req.body.category!==undefined?String(req.body.category).trim().slice(0,80):old.category, o=req.body.sort_order!==undefined?Math.max(0,Number(req.body.sort_order)||0):old.sort_order, pub=req.body.published!==undefined?!!req.body.published:old.published; if(!q||!a)return res.status(400).json({error:'Question and answer are required'}); const r=await query("UPDATE faq_items SET question=$1,answer=$2,category=$3,sort_order=$4,published=$5,updated_at=NOW() WHERE id=$6 RETURNING *",[q,a,c,o,pub,id]); res.json(r.rows[0]); });
+app.delete("/api/admin/faq/:id",auth,admin,async(req,res)=>{ const id=Number(req.params.id); if(!Number.isInteger(id))return res.status(400).json({error:'Invalid FAQ id'}); const r=await query("DELETE FROM faq_items WHERE id=$1 RETURNING id",[id]); if(!r.rows[0])return res.status(404).json({error:'FAQ not found'}); res.json({ok:true,id}); });
+app.get("/api/about",async(req,res)=>{
+ const keys=['about_hero_title','about_hero_text','about_mission_title','about_mission_text','about_who_title','about_who_text','about_card1_title','about_card1_text','about_card2_title','about_card2_text','about_card3_title','about_card3_text','about_cta_title','about_cta_text'];
+ const r=await query("SELECT key,value FROM academy_settings WHERE key=ANY($1::text[])",[keys]); const out={}; r.rows.forEach(x=>out[x.key]=x.value); res.json(out);
+});
+app.get("/api/settings",async(req,res)=>{
+ const keys=String(req.query.keys||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,50);
+ if(!keys.length)return res.json({});
+ const r=await query("SELECT key,value FROM academy_settings WHERE key=ANY($1::text[])",[keys]); const out={}; r.rows.forEach(x=>out[x.key]=x.value); res.json(out);
+});
+app.get("/api/admin/settings",auth,admin,async(req,res)=>{
+ const r=await query("SELECT key,value FROM academy_settings ORDER BY key"); const out={}; r.rows.forEach(x=>out[x.key]=x.value); res.json(out);
+});
+app.patch("/api/admin/settings",auth,admin,async(req,res)=>{
+ const allowed=['academy_name','tagline','support_email','youtube_url','maintenance_mode','brand_logo_url','brand_favicon_url','brand_primary_color','brand_secondary_color','instagram_url','facebook_url','linkedin_url','x_url','whatsapp_url',
+ 'about_hero_title','about_hero_text','about_mission_title','about_mission_text','about_who_title','about_who_text',
+ 'about_card1_title','about_card1_text','about_card2_title','about_card2_text','about_card3_title','about_card3_text',
+ 'about_cta_title','about_cta_text',
+ 'nav_home','nav_courses','nav_learning','nav_resources','nav_tests','nav_dashboard','nav_plans','nav_about','nav_contact','nav_cta_label','nav_home_url','nav_courses_url','nav_learning_url','nav_resources_url','nav_tests_url','nav_dashboard_url','nav_plans_url','nav_about_url','nav_contact_url','nav_cta_url','footer_tagline','footer_copyright',
+ 'legal_privacy_title','legal_privacy_text','legal_terms_title','legal_terms_text','legal_refund_title','legal_refund_text','legal_disclaimer_title','legal_disclaimer_text','home_eyebrow','home_hero_title','home_hero_text','home_primary_label','home_primary_url','home_secondary_label','home_secondary_url','home_learning_label','home_learning_url','home_panel_label','home_panel_formula','home_feature1_title','home_feature1_text','home_feature1_url','home_feature2_title','home_feature2_text','home_feature2_url', 'seo_title','seo_description','seo_keywords','seo_robots','seo_og_title','seo_og_description','seo_og_image','seo_canonical','seo_google_verification'];
+ for(const key of allowed){ if(req.body[key]!==undefined){ const value=String(req.body[key]).slice(0,500); await query("INSERT INTO academy_settings(key,value) VALUES($1,$2) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value",[key,value]); }}
+ const r=await query("SELECT key,value FROM academy_settings ORDER BY key"); const out={}; r.rows.forEach(x=>out[x.key]=x.value); res.json(out);
+});
+
+app.get("/api/admin/students/:id",auth,admin,async(req,res)=>{
+ const id=Number(req.params.id);
+ if(!Number.isInteger(id))return res.status(400).json({error:"Invalid student id"});
+ const user=(await query("SELECT id,name,email,created_at FROM users WHERE id=$1 AND role='student'",[id])).rows[0];
+ if(!user)return res.status(404).json({error:"Student not found"});
+ const courses=(await query("SELECT course,created_at FROM enrollments WHERE user_id=$1 ORDER BY created_at DESC",[id])).rows;
+ const progress=(await query("SELECT course,module_index,completed,updated_at FROM lesson_progress WHERE user_id=$1 ORDER BY course,module_index",[id])).rows;
+ const results=(await query(`SELECT r.id,r.score,r.correct,r.total,r.created_at,t.title,t.course FROM test_results r JOIN tests t ON t.id=r.test_id WHERE r.user_id=$1 ORDER BY r.id DESC`,[id])).rows;
+ const certificates=(await query("SELECT certificate_id,course,issued_at FROM certificates WHERE user_id=$1 ORDER BY issued_at DESC",[id])).rows;
+ res.json({user,courses,progress,testHistory:results,certificates});
+});
+app.get("/api/admin/overview",auth,admin,async(req,res)=>{
+ const students=Number((await query("SELECT COUNT(*)::int AS n FROM users WHERE role='student'")).rows[0].n);
+ const enrollments=Number((await query("SELECT COUNT(*)::int AS n FROM enrollments")).rows[0].n);
+ const tests=Number((await query("SELECT COUNT(*)::int AS n FROM tests WHERE published=1")).rows[0].n);
+ const feedbackCount=Number((await query("SELECT COUNT(*)::int AS n FROM feedback")).rows[0].n);
+ const avg=(await query("SELECT COALESCE(ROUND(AVG(rating),2),0) AS avg FROM feedback")).rows[0].avg;
+ const certificates=Number((await query("SELECT COUNT(*)::int AS n FROM certificates")).rows[0].n);
+ res.json({students,enrollments,tests,feedbackCount,averageRating:Number(avg),certificates});
+});
+app.get("/api/admin/analytics",auth,admin,async(req,res)=>{
+ try{
+  const [students,enrollments,tests,results,feedback,certificates,support,courseRows,monthlyRows]=await Promise.all([
+   query("SELECT COUNT(*)::int AS n FROM users WHERE role='student'"),
+   query("SELECT COUNT(*)::int AS n FROM enrollments"),
+   query("SELECT COUNT(*)::int AS n FROM tests WHERE published=1"),
+   query("SELECT COUNT(*)::int AS n, COALESCE(ROUND(AVG(score),2),0) AS avg FROM test_results"),
+   query("SELECT COUNT(*)::int AS n, COALESCE(ROUND(AVG(rating),2),0) AS avg FROM feedback"),
+   query("SELECT COUNT(*)::int AS n FROM certificates"),
+   query("SELECT COUNT(*)::int AS n, COUNT(*) FILTER (WHERE status='open')::int AS open, COUNT(*) FILTER (WHERE status='in_progress')::int AS in_progress, COUNT(*) FILTER (WHERE status='resolved')::int AS resolved FROM support_requests"),
+   query("SELECT course,COUNT(*)::int AS students FROM enrollments GROUP BY course ORDER BY students DESC,course"),
+   query(`SELECT TO_CHAR(d,'Mon') AS month, EXTRACT(MONTH FROM d)::int AS month_num, EXTRACT(YEAR FROM d)::int AS year_num, COUNT(u.id)::int AS registrations FROM generate_series(date_trunc('month',NOW())-interval '5 months',date_trunc('month',NOW()),interval '1 month') d LEFT JOIN users u ON u.role='student' AND u.created_at>=d AND u.created_at<d+interval '1 month' GROUP BY d ORDER BY d`)
+  ]);
+  const progressRows=await query("SELECT COUNT(DISTINCT user_id)::int AS learners, COUNT(DISTINCT user_id||'|'||course||'|'||module_index)::int AS completions FROM lesson_progress WHERE completed::text IN ('1','true')");
+  res.json({summary:{students:Number(students.rows[0].n),enrollments:Number(enrollments.rows[0].n),publishedTests:Number(tests.rows[0].n),testAttempts:Number(results.rows[0].n),averageTestScore:Number(results.rows[0].avg),feedbackCount:Number(feedback.rows[0].n),averageRating:Number(feedback.rows[0].avg),certificates:Number(certificates.rows[0].n),supportTickets:Number(support.rows[0].n),openSupport:Number(support.rows[0].open),inProgressSupport:Number(support.rows[0].in_progress),resolvedSupport:Number(support.rows[0].resolved),activeLearners:Number(progressRows.rows[0].learners),moduleCompletions:Number(progressRows.rows[0].completions)},courseEnrollments:courseRows.rows,monthlyRegistrations:monthlyRows.rows});
+ }catch(e){console.error(e);res.status(500).json({error:"Unable to load analytics"});}
+});
 app.get("/api/admin/students",auth,admin,async(req,res)=>{
  const users=(await query("SELECT id,name,email,role,created_at FROM users WHERE role='student' ORDER BY id DESC")).rows;
  const out=[];
@@ -269,6 +572,30 @@ async function seedDefaultContent(){
   for(const [title,type,url,description] of materials){
     const m=await query("SELECT id FROM materials WHERE title=$1 LIMIT 1",[title]);
     if(!m.rows.length) await query(`INSERT INTO materials(title,course,type,url,description,published) VALUES($1,$2,$3,$4,$5,1)`,[title,"B.Tech Mathematics",type,url,description]);
+  }
+
+  const brandDefaults={academy_name:'Settlem Academy',tagline:'Learn Mathematics • Build Confidence • Achieve Success',brand_logo_url:'settlem-academy-logo.png',brand_favicon_url:'settlem-academy-logo.png',brand_primary_color:'#3157d5',brand_secondary_color:'#4338ca',instagram_url:'',facebook_url:'',linkedin_url:'',x_url:'',whatsapp_url:''};
+  for(const [key,value] of Object.entries(brandDefaults)){ await query("INSERT INTO academy_settings(key,value) VALUES($1,$2) ON CONFLICT(key) DO NOTHING",[key,value]); }
+  const homeDefaults={home_eyebrow:'A MODERN MATHEMATICS LEARNING PLATFORM',home_hero_title:'Understand Maths. Achieve More.',home_hero_text:'Settlem Academy helps students learn mathematics through clear explanations, structured courses, useful resources and consistent practice.',home_primary_label:'Explore Courses →',home_primary_url:'#courses',home_secondary_label:'How We Teach',home_secondary_url:'#learning',home_learning_label:'Start Learning',home_learning_url:'course-enrollment.html',home_panel_label:'LEARNING • 01',home_panel_formula:'Concepts → Clarity\nClarity → Practice\nPractice → Confidence\nConfidence → Success',home_feature1_title:'Learn from Settlem Academy',home_feature1_text:'Discover mathematics lessons with step-by-step explanations and practical problem solving.',home_feature1_url:'video-lessons.html',home_feature2_title:'Revise with confidence',home_feature2_text:'Keep important notes, formulas, questions and revision resources organised in one place.',home_feature2_url:'#resources'};
+  for(const [key,value] of Object.entries(homeDefaults)){ await query("INSERT INTO academy_settings(key,value) VALUES($1,$2) ON CONFLICT(key) DO NOTHING",[key,value]); }
+
+  const navigationDefaults={nav_home:'Home',nav_courses:'Courses',nav_learning:'Learning',nav_resources:'Resources',nav_tests:'Tests',nav_dashboard:'Dashboard',nav_plans:'Plans',nav_about:'About',nav_contact:'Contact',nav_cta_label:'Start Learning',nav_home_url:'index.html#home',nav_courses_url:'index.html#courses',nav_learning_url:'video-lessons.html',nav_resources_url:'study-materials.html',nav_tests_url:'practice-tests.html',nav_dashboard_url:'student-dashboard.html',nav_plans_url:'subscriptions.html',nav_about_url:'about.html',nav_contact_url:'contact.html',nav_cta_url:'course-enrollment.html',footer_tagline:'Learn Mathematics • Build Confidence • Achieve Success',footer_copyright:'© 2026 Settlem Academy'};
+  for(const [key,value] of Object.entries(navigationDefaults)){ await query("INSERT INTO academy_settings(key,value) VALUES($1,$2) ON CONFLICT(key) DO NOTHING",[key,value]); }
+
+  const aboutDefaults={
+    about_hero_title:'Making mathematics easier to understand.',
+    about_hero_text:'Settlem Academy is a mathematics learning platform built around one simple idea: when students understand the concept clearly, practice it consistently and revise with purpose, confidence follows.',
+    about_mission_title:'Build stronger maths skills, one concept at a time.',
+    about_mission_text:'We want mathematics to feel approachable, structured and achievable. The goal is not simply to finish a chapter, but to help students develop understanding they can use in the next chapter, the next exam and beyond.',
+    about_who_title:'A focused learning space for students at every stage.',
+    about_who_text:'Settlem Academy brings structured mathematics learning into one place, from school foundations to higher-level B.Tech mathematics.',
+    about_card1_title:'Clear Concepts', about_card1_text:'Lessons are designed to explain the idea first, so students know why a method works before applying it.',
+    about_card2_title:'Guided Practice', about_card2_text:'Worked examples and carefully selected problems help students turn understanding into problem-solving ability.',
+    about_card3_title:'Exam Confidence', about_card3_text:'Revision-focused resources and important problems help learners prepare with a more organised approach.',
+    about_cta_title:'Ready to start learning?', about_cta_text:'Explore the courses, choose your learning path and take the next step with Settlem Academy.'
+  };
+  for(const [key,value] of Object.entries(aboutDefaults)){
+    await query("INSERT INTO academy_settings(key,value) VALUES($1,$2) ON CONFLICT(key) DO NOTHING",[key,value]);
   }
 }
 

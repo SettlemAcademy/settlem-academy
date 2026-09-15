@@ -1,34 +1,44 @@
-# Settlem Academy Backend
+# Settlem Academy Backend — Ready for Tomorrow
 
-This folder is the production-oriented backend foundation for the website.
+PostgreSQL + Node.js API for Settlem Academy.
 
-## What it provides
-- Central student accounts
-- Password hashing with bcrypt
-- JWT login sessions
-- Student course enrollments
-- Video lessons
-- Study materials
-- Tests and questions
-- Test result storage
-- Lesson progress
-- Student dashboard API
-- Admin student API
+## Included
+- Secure student registration/login with JWT
+- Course enrollment
+- Video lessons and study materials
+- Practice tests, questions and result storage
+- Learning module progress
+- Student dashboard data
+- Admin student management
+- Admin test management
+- Announcements
+- Course completion certificates + public verification
+- Student feedback and 1–5 ratings
+- Admin student detail reporting
+- Admin overview statistics
+- Helmet security headers
+- Rate limiting for login/register
+- JSON request size limit
 
-## Run locally
+## New endpoints in this build
+### Feedback
+- GET /api/feedback
+- POST /api/feedback
+- GET /api/admin/feedback
 
-1. Install Node.js 20+.
-2. Open a terminal in this `backend` folder.
-3. Run:
-   `npm install`
-4. Copy `.env.example` to `.env`.
-5. Change `JWT_SECRET` to a long random value.
-6. Run:
-   `npm start`
+### Reporting
+- GET /api/admin/students/:id
+- GET /api/admin/overview
 
-The API will run on `http://localhost:4000`.
+## Production environment
+Set:
+- DATABASE_URL
+- JWT_SECRET
+- FRONTEND_ORIGIN
+- PORT (optional)
+- ADMIN_BOOTSTRAP_SECRET (only during one-time admin setup)
 
-## Important
-The existing HTML pages still use browser localStorage. The next integration step is to replace those localStorage calls with these API endpoints. Do not treat the current browser-only login as production authentication until that integration is completed.
+## Deploy
+Run `npm install` and then `npm start` on the PostgreSQL-enabled Render service.
 
-For production hosting, use HTTPS and a managed database/backups, and keep secrets in environment variables.
+Do not commit real secrets. Do not deploy until the frontend batch is also finalized and tested.

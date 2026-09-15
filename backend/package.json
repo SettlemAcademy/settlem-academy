@@ -1,16 +1,21 @@
 {
-  "name":"settlem-academy-backend",
-  "version":"1.0.0",
-  "private":true,
-  "description":"Backend API for Settlem Academy",
-  "main":"server.js",
-  "scripts":{"start":"node server.js","dev":"node --watch server.js"},
-  "dependencies":{
-    "bcryptjs":"^3.0.2",
-    "better-sqlite3":"^11.10.0",
-    "cors":"^2.8.5",
-    "dotenv":"^16.5.0",
-    "express":"^5.1.0",
-    "jsonwebtoken":"^9.0.2"
+  "name": "settlem-academy-backend",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Settlem Academy PostgreSQL API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3",
+    "helmet": "^8.1.0",
+    "express-rate-limit": "^8.1.0"
   }
 }
