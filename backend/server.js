@@ -590,55 +590,49 @@ async function seedDefaultContent(){
     ]);
   }
 
-  const test = await query("SELECT id FROM tests WHERE title=$1 LIMIT 1",["B.Tech Mathematics – Probability & Random Variables | Practice Test 1"]);
-  let testId=test.rows[0]?.id;
+  // Ensure the seeded Probability test is always exactly 20 questions.
+  // This is intentionally idempotent so an existing 10-question test is upgraded
+  // reliably on every server restart without affecting submitted test_results.
+  const TEST_TITLE="B.Tech Mathematics – Probability & Random Variables | Practice Test 1";
+  const TEST_INSTRUCTIONS="20 important multiple-choice questions covering Probability & Random Variables. Choose the best answer. Your score is calculated instantly.";
+  const tr=await query("SELECT id FROM tests WHERE title=$1 LIMIT 1",[TEST_TITLE]);
+  let testId=tr.rows[0]?.id;
   if(!testId){
-    const tr=await query(`INSERT INTO tests(title,course,instructions,published)
-      VALUES($1,$2,$3,1) RETURNING id`,[
-      "B.Tech Mathematics – Probability & Random Variables | Practice Test 1",
-      "B.Tech Mathematics",
-      "10 important multiple-choice questions. Choose the best answer. Your score is calculated instantly."
+    const r=await query(`INSERT INTO tests(title,course,instructions,published) VALUES($1,$2,$3,1) RETURNING id`,[
+      TEST_TITLE,"B.Tech Mathematics",TEST_INSTRUCTIONS
     ]);
-    testId=tr.rows[0].id;
-    const qs=[
-      ["A random variable is best described as:","A numerical function assigning a value to each outcome","A sample space","A probability only","An event only",0],
-      ["If X is a discrete random variable, the sum of P(X=x) over all possible x is:","0","1","∞","Depends on X",1],
-      ["For a fair coin tossed once, if X=1 for Head and X=0 for Tail, E[X] is:","0","1/4","1/2","1",2],
-      ["The variance of a random variable X is:","E[X] + (E[X])²","E[X²] − (E[X])²","E[X²] + E[X]","(E[X])² − E[X²]",1],
-      ["If P(A)=0.4 and P(B)=0.5 and A,B are independent, P(A∩B) is:","0.1","0.2","0.4","0.9",1],
-      ["For a Bernoulli random variable with success probability p, its mean is:","1−p","p","p²","1/p",1],
-      ["For a binomial random variable X~Bin(n,p), E[X] equals:","np","n/p","p/n","n(1−p)",0],
-      ["For X~Bin(n,p), Var(X) equals:","np","np²","np(1−p)","n²p(1−p)",2],
-      ["A probability mass function is used for:","Continuous random variables only","Discrete random variables","Only normal distributions","Only uniform distributions",1],
-      ["If E[X]=3 and E[X²]=13, then Var(X) is:","4","9","10","16",0]
-    ]
-    for(const q of qs){
-      await query(`INSERT INTO questions(test_id,question,option_a,option_b,option_c,option_d,correct_index)
-        VALUES($1,$2,$3,$4,$5,$6,$7)`,[testId,...q]);
-    }
+    testId=r.rows[0].id;
+  } else {
+    await query("UPDATE tests SET instructions=$1,published=1 WHERE id=$2",[TEST_INSTRUCTIONS,testId]);
   }
-  // Upgrade the seeded Probability test to the full 20-question version.
-  const questionCount = await query("SELECT COUNT(*)::int AS n FROM questions WHERE test_id=$1",[testId]);
-  if(Number(questionCount.rows[0]?.n||0) < 20){
-    const existing = Number(questionCount.rows[0]?.n||0);
-    const moreQs=[
-      ["If P(A)=0.6, P(B)=0.5 and P(A∩B)=0.3, then A and B are:","Independent","Mutually exclusive","Impossible","Complements",0],
-      ["Bayes’ theorem is mainly used to:","Find a sample space","Reverse conditional probabilities using prior information","Calculate only variance","Find a PDF directly",1],
-      ["For a continuous random variable X, P(X=a) is:","1","a","0","Depends on a",2],
-      ["If f(x) is a valid PDF, its total area over its support is:","0","1","∞","−1",1],
-      ["For a discrete random variable, E[X] is calculated by:","Σx/p(x)","Σxp(x)","∫f(x)dx only","Σp(x)/x",1],
-      ["If X~Poisson(λ), then E[X] and Var(X) are:","λ and λ","λ and λ²","λ² and λ","1 and λ",0],
-      ["For X~Bin(n,p), q is:","p+1","1+p","1−p","1/p",2],
-      ["If X~Bin(10,0.2), its mean is:","0.2","2","5","8",1],
-      ["If E[X]=4 and Var(X)=3, E[X²] equals:","7","12","19","25",2],
-      ["If X is uniform on (0,1), then P(0.2<X<0.6) is:","0.2","0.4","0.6","0.8",1]
-    ];
-    for(let i=existing;i<moreQs.length+existing && i<20;i++){
-      const q=moreQs[i-existing];
-      await query(`INSERT INTO questions(test_id,question,option_a,option_b,option_c,option_d,correct_index)
-        VALUES($1,$2,$3,$4,$5,$6,$7)`,[testId,...q]);
-    }
-    await query("UPDATE tests SET instructions=$1 WHERE id=$2",["20 important multiple-choice questions covering Probability & Random Variables. Choose the best answer. Your score is calculated instantly.",testId]);
+  const qs=[
+    ["A random variable is best described as:","A numerical function assigning a value to each outcome","A sample space","A probability only","An event only",0],
+    ["If X is a discrete random variable, the sum of P(X=x) over all possible x is:","0","1","∞","Depends on X",1],
+    ["For a fair coin tossed once, if X=1 for Head and X=0 for Tail, E[X] is:","0","1/4","1/2","1",2],
+    ["The variance of a random variable X is:","E[X] + (E[X])²","E[X²] − (E[X])²","E[X²] + E[X]","(E[X])² − E[X²]",1],
+    ["If P(A)=0.4 and P(B)=0.5 and A,B are independent, P(A∩B) is:","0.1","0.2","0.4","0.9",1],
+    ["For a Bernoulli random variable with success probability p, its mean is:","1−p","p","p²","1/p",1],
+    ["For a binomial random variable X~Bin(n,p), E[X] equals:","np","n/p","p/n","n(1−p)",0],
+    ["For X~Bin(n,p), Var(X) equals:","np","np²","np(1−p)","n²p(1−p)",2],
+    ["A probability mass function is used for:","Continuous random variables only","Discrete random variables","Only normal distributions","Only uniform distributions",1],
+    ["If E[X]=3 and E[X²]=13, then Var(X) is:","4","9","10","16",0],
+    ["If P(A)=0.6, P(B)=0.5 and P(A∩B)=0.3, then A and B are:","Independent","Mutually exclusive","Impossible","Complements",0],
+    ["Bayes’ theorem is mainly used to:","Find a sample space","Reverse conditional probabilities using prior information","Calculate only variance","Find a PDF directly",1],
+    ["For a continuous random variable X, P(X=a) is:","1","a","0","Depends on a",2],
+    ["If f(x) is a valid PDF, its total area over its support is:","0","1","∞","−1",1],
+    ["For a discrete random variable, E[X] is calculated by:","Σx/p(x)","Σxp(x)","∫f(x)dx only","Σp(x)/x",1],
+    ["If X~Poisson(λ), then E[X] and Var(X) are:","λ and λ","λ and λ²","λ² and λ","1 and λ",0],
+    ["For X~Bin(n,p), q is:","p+1","1+p","1−p","1/p",2],
+    ["If X~Bin(10,0.2), its mean is:","0.2","2","5","8",1],
+    ["If E[X]=4 and Var(X)=3, E[X²] equals:","7","12","19","25",2],
+    ["If X is uniform on (0,1), then P(0.2<X<0.6) is:","0.2","0.4","0.6","0.8",1]
+  ];
+  // Rebuild only the seeded test's questions. Existing submitted results remain intact
+  // because test_results reference the test, not individual questions.
+  await query("DELETE FROM questions WHERE test_id=$1",[testId]);
+  for(const q of qs){
+    await query(`INSERT INTO questions(test_id,question,option_a,option_b,option_c,option_d,correct_index)
+      VALUES($1,$2,$3,$4,$5,$6,$7)`,[testId,...q]);
   }
 
   const materials=[
