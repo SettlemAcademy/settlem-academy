@@ -37,6 +37,26 @@ async function initDb(){
   role TEXT NOT NULL DEFAULT 'student',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
  );
+ CREATE TABLE IF NOT EXISTS courses(
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  slug TEXT NOT NULL UNIQUE,
+  description TEXT DEFAULT '',
+  level TEXT DEFAULT '',
+  published INTEGER NOT NULL DEFAULT 1,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+ );
+ CREATE TABLE IF NOT EXISTS course_modules(
+  id SERIAL PRIMARY KEY,
+  course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  description TEXT DEFAULT '',
+  module_index INTEGER NOT NULL,
+  published INTEGER NOT NULL DEFAULT 1,
+  UNIQUE(course_id,module_index),
+  UNIQUE(course_id,title)
+ );
  CREATE TABLE IF NOT EXISTS enrollments(
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -222,6 +242,30 @@ app.post("/api/courses/enroll",auth,async(req,res)=>{
  const {course}=req.body||{};if(!course)return res.status(400).json({error:"Course is required"});
  await query("INSERT INTO enrollments(user_id,course) VALUES($1,$2) ON CONFLICT(user_id,course) DO NOTHING",[req.user.id,course]);res.json({ok:true});
 });
+
+app.get("/api/admin/courses",auth,admin,async(req,res)=>{
+ const r=await query(`SELECT c.id,c.name,c.slug,c.description,c.level,c.published,c.created_at,c.updated_at,COUNT(m.id)::int AS module_count
+ FROM courses c LEFT JOIN course_modules m ON m.course_id=c.id GROUP BY c.id ORDER BY c.id`);
+ res.json(r.rows);
+});
+app.post("/api/admin/courses",auth,admin,async(req,res)=>{
+ const {name,slug,description="",level="",published=1}=req.body||{};
+ if(!name||!slug)return res.status(400).json({error:"Course name and slug are required"});
+ try{const r=await query(`INSERT INTO courses(name,slug,description,level,published) VALUES($1,$2,$3,$4,$5) RETURNING *`,[name.trim(),slug.trim().toLowerCase(),description.trim(),level.trim(),published?1:0]);res.status(201).json(r.rows[0]);}
+ catch(e){res.status(409).json({error:"A course with this name or slug already exists"})}
+});
+app.patch("/api/admin/courses/:id",auth,admin,async(req,res)=>{
+ const {name,slug,description,level,published}=req.body||{};
+ const r=await query(`UPDATE courses SET name=COALESCE($1,name),slug=COALESCE($2,slug),description=COALESCE($3,description),level=COALESCE($4,level),published=COALESCE($5,published),updated_at=NOW() WHERE id=$6 RETURNING *`,[name?.trim()||null,slug?.trim().toLowerCase()||null,description?.trim()??null,level?.trim()??null,published===undefined?null:(published?1:0),req.params.id]);
+ if(!r.rows.length)return res.status(404).json({error:"Course not found"});res.json(r.rows[0]);
+});
+app.delete("/api/admin/courses/:id",auth,admin,async(req,res)=>{
+ const r=await query("DELETE FROM courses WHERE id=$1 RETURNING id",[req.params.id]);if(!r.rows.length)return res.status(404).json({error:"Course not found"});res.json({ok:true});
+});
+app.get("/api/admin/courses/:id/modules",auth,admin,async(req,res)=>{const r=await query("SELECT * FROM course_modules WHERE course_id=$1 ORDER BY module_index",[req.params.id]);res.json(r.rows)});
+app.post("/api/admin/courses/:id/modules",auth,admin,async(req,res)=>{const {title,description="",module_index,published=1}=req.body||{};if(!title||module_index===undefined)return res.status(400).json({error:"Module title and index are required"});try{const r=await query(`INSERT INTO course_modules(course_id,title,description,module_index,published) VALUES($1,$2,$3,$4,$5) RETURNING *`,[req.params.id,title.trim(),description.trim(),Number(module_index),published?1:0]);res.status(201).json(r.rows[0])}catch(e){res.status(409).json({error:"Module index or title already exists for this course"})}});
+app.patch("/api/admin/modules/:id",auth,admin,async(req,res)=>{const {title,description,published,module_index}=req.body||{};const r=await query(`UPDATE course_modules SET title=COALESCE($1,title),description=COALESCE($2,description),published=COALESCE($3,published),module_index=COALESCE($4,module_index) WHERE id=$5 RETURNING *`,[title?.trim()||null,description?.trim()??null,published===undefined?null:(published?1:0),module_index===undefined?null:Number(module_index),req.params.id]);if(!r.rows.length)return res.status(404).json({error:"Module not found"});res.json(r.rows[0])});
+app.delete("/api/admin/modules/:id",auth,admin,async(req,res)=>{const r=await query("DELETE FROM course_modules WHERE id=$1 RETURNING id",[req.params.id]);if(!r.rows.length)return res.status(404).json({error:"Module not found"});res.json({ok:true})});
 
 app.get("/api/videos",auth,async(req,res)=>{
  const course=req.query.course;
@@ -524,6 +568,17 @@ app.get("/api/admin/students",auth,admin,async(req,res)=>{
 
 
 async function seedDefaultContent(){
+  const seedCourses=[
+  ["B.Tech Mathematics","btech-mathematics","Engineering Mathematics for B.Tech learners","B.Tech",["Differential Equations","Laplace Transforms","Vector Calculus","Probability & Random Variables"]],
+  ["Intermediate Mathematics","intermediate-mathematics","Concepts, problem solving and exam preparation","Intermediate",["Mathematical Foundations","Core Mathematics","Problem Solving","Revision & Preparation"]],
+  ["Class 10 Mathematics","class-10-mathematics","Strong fundamentals and board-focused practice","Class 10",["Foundations & Concepts","Core Mathematics","Problem Solving","Revision & Preparation"]],
+  ["Classes 5–7 Mathematics","classes-5-7-mathematics","Build confident number skills and core concepts","Classes 5–7",["Number Skills","Core Concepts","Problem Solving","Revision & Practice"]]
+ ];
+ for(const [name,slug,description,level,mods] of seedCourses){
+  const c=await query("SELECT id FROM courses WHERE slug=$1 LIMIT 1",[slug]);let cid=c.rows[0]?.id;
+  if(!cid){const r=await query("INSERT INTO courses(name,slug,description,level,published) VALUES($1,$2,$3,$4,1) RETURNING id",[name,slug,description,level]);cid=r.rows[0].id;}
+  for(let i=0;i<mods.length;i++) await query("INSERT INTO course_modules(course_id,title,module_index,published) VALUES($1,$2,$3,1) ON CONFLICT DO NOTHING",[cid,mods[i],i+1]);
+ }
   const video = await query("SELECT id FROM videos WHERE video_id=$1 LIMIT 1",["SGokvzWeqvk"]);
   if(!video.rows.length){
     await query(`INSERT INTO videos(title,course,module,youtube_url,video_id,description,published)
