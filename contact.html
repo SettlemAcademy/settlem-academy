@@ -24,14 +24,33 @@ footer{background:#061326;color:#aebbd0;padding:42px 0}.foot{display:flex;justif
 <div class="card"><div class="icon">03</div><h3>Learn on YouTube</h3><p>Explore Settlem Academy lessons and quick mathematics explanations on our YouTube channel.</p><a href="https://www.youtube.com/watch?v=SGokvzWeqvk" target="_blank" rel="noopener">Watch a lesson →</a></div>
 </div>
 <div class="formbox"><h2>Send an Enquiry</h2><p>Fill in the form below. Please include enough detail for us to understand your request.</p><div id="success" class="success">Thank you! Your enquiry has been submitted successfully.</div>
-<form name="settlem-enquiry" method="POST" data-netlify="true" action="contact.html?submitted=1"><input type="hidden" name="form-name" value="settlem-enquiry">
+<form id="enquiryForm">
 <div class="row"><div class="field"><label for="name">Student / Parent Name *</label><input id="name" name="name" required></div><div class="field"><label for="email">Email Address *</label><input id="email" name="email" type="email" required></div></div>
 <div class="row"><div class="field"><label for="phone">Phone Number</label><input id="phone" name="phone" type="tel"></div><div class="field"><label for="course">Learning Level</label><select id="course" name="course"><option value="">Select a level</option><option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option><option>General Enquiry</option></select></div></div>
 <div class="field"><label for="message">How can we help? *</label><textarea id="message" name="message" required placeholder="Tell us your question or the topic you need help with..."></textarea></div>
-<button class="submit" type="submit">Send Enquiry →</button><div class="note">Your enquiry is submitted securely through the website form. Please do not share passwords or other sensitive information.</div>
+<button class="submit" id="submitBtn" type="submit">Send Enquiry →</button><div id="formStatus" class="note" role="status" aria-live="polite">Your enquiry is submitted securely through the Settlem Academy website.</div>
 </form></div>
 </main>
 <section class="wrap"><div class="cta"><div><h2>Ready to start learning?</h2><p>Explore the courses and choose the mathematics path that fits you.</p></div><a href="index.html#courses">Explore Courses →</a></div></section>
 <footer><div class="wrap foot"><div><strong>SETTLEM ACADEMY</strong><p>Learn Mathematics • Build Confidence • Achieve Success</p></div><div class="flinks"><a href="index.html">Home</a><a href="index.html#courses">Courses</a><a href="study-materials.html">Resources</a><a href="about.html">About</a><a href="contact.html">Contact</a></div><p>© 2026 Settlem Academy</p></div></footer>
-<script>if(new URLSearchParams(location.search).get('submitted')==='1'){document.getElementById('success').classList.add('show');}</script>
+<script>
+const enquiryForm=document.getElementById('enquiryForm');
+const submitBtn=document.getElementById('submitBtn');
+const formStatus=document.getElementById('formStatus');
+enquiryForm.addEventListener('submit',async(e)=>{
+ e.preventDefault();
+ const payload={name:document.getElementById('name').value.trim(),email:document.getElementById('email').value.trim(),phone:document.getElementById('phone').value.trim(),level:document.getElementById('course').value,message:document.getElementById('message').value.trim()};
+ if(!payload.name||!payload.email||!payload.message){formStatus.textContent='Please complete the required fields.';return;}
+ submitBtn.disabled=true;submitBtn.textContent='Sending…';formStatus.textContent='Submitting your enquiry…';
+ try{
+  const r=await fetch('https://settlem-academy-1.onrender.com/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  let d={};try{d=await r.json()}catch(_){ }
+  if(!r.ok)throw new Error(d.error||'Unable to submit your enquiry.');
+  document.getElementById('success').classList.add('show');
+  enquiryForm.reset();
+  formStatus.textContent='We received your enquiry successfully.';
+ }catch(err){formStatus.textContent=err.message||'Unable to submit your enquiry. Please try again.';}
+ finally{submitBtn.disabled=false;submitBtn.textContent='Send Enquiry →';}
+});
+</script>
 <div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body></html>
