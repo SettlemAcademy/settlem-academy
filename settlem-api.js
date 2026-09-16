@@ -24,5 +24,5 @@
     return data;
   }
   async function apiLogin(email,password){return api('/auth/login',{method:'POST',body:JSON.stringify({email,password})});}
-  window.SettlemAPI={base:apiBase,request:api,login:apiLogin,hasSession,hasLocalSession};
+  window.SettlemAPI={base:apiBase,request:api,login:apiLogin,hasSession,hasLocalSession}; window.apiLogin=apiLogin;};
 })();
