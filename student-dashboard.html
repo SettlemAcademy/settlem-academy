@@ -8,58 +8,88 @@
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}.top{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;gap:15px;position:sticky;top:0;z-index:5}.brand{font-weight:900;letter-spacing:.4px}.brand span{color:#8fe8ff}.top a{color:#fff;text-decoration:none;border:1px solid #ffffff55;padding:9px 13px;border-radius:10px}.wrap{max-width:1180px;margin:auto;padding:30px 20px}.welcome{background:linear-gradient(135deg,#fff,#eef2ff);border:1px solid #dbe3ff;border-radius:24px;padding:28px;box-shadow:0 15px 45px #17255412}.eyebrow{font-size:11px;color:var(--violet);font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.welcome h1{font-size:clamp(30px,5vw,45px);margin:7px 0}.welcome p{color:var(--muted);line-height:1.6}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}.stat,.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:19px;box-shadow:0 8px 25px #1725540a}.stat strong{font-size:28px}.stat small{display:block;color:var(--muted);margin-top:4px}.section{margin-top:25px}.section h2{margin-bottom:12px}.courses{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.course{padding:21px;border:1px solid var(--line);border-radius:17px;background:#fff}.course h3{margin:0 0 5px}.course p{color:var(--muted);font-size:14px}.progress{height:9px;background:#e2e8f0;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--violet),var(--pink))}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.btn{display:inline-block;text-decoration:none;border:0;border-radius:10px;padding:11px 14px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:var(--blue)}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.activity{display:grid;gap:9px}.item{padding:13px;border-left:4px solid var(--blue);background:#f8faff;border-radius:8px}.empty{color:var(--muted);padding:20px;text-align:center;border:1px dashed #cbd5e1;border-radius:14px}.login{display:none}
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.courses{grid-template-columns:1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr}}
 </style>
-<script src="settlem-api.js?v=20260913"></script><link rel="icon" type="image/png" href="settlem-academy-logo.png">
 </head>
 <body>
 <div class="top"><div class="brand"><img src="settlem-academy-logo.png" alt="Settlem Academy logo" style="width:36px;height:36px;object-fit:contain;vertical-align:middle;margin-right:8px">SETTLEM <span>ACADEMY</span> · STUDENT</div><div><a href="index.html">Website</a> <a href="student-login.html" onclick="logout()">Logout</a></div></div>
 <div class="wrap">
-<section class="welcome"><div class="eyebrow">Student Dashboard</div><h1 id="hello">Welcome back 👋</h1><p>Continue your mathematics journey, track your progress and practise with confidence.</p><div class="actions"><a class="btn primary" href="learning-room.html">▶ Continue Learning</a><a class="btn secondary" href="practice-tests.html">Take a Test</a><a class="btn secondary" href="study-materials.html">Study Materials</a><a class="btn secondary" href="certificates.html">🏆 Certificates</a><a class="btn secondary" href="feedback.html">💬 Feedback</a><a class="btn secondary" href="support.html">🆘 Support</a></div></section>
-<div class="grid"><div class="stat"><strong id="courseCount">0</strong><small>Enrolled Courses</small></div><div class="stat"><strong id="avgProgress">0%</strong><small>Overall Progress</small></div><div class="stat"><strong id="testScore">—</strong><small>Latest Test Score</small></div><div class="stat"><strong id="lessons">0</strong><small>Learning Modules Completed</small></div></div>
+<section class="welcome"><div class="eyebrow">Student Dashboard</div><h1 id="hello">Welcome back 👋</h1><p>Continue your mathematics journey, track your progress and practise with confidence.</p><div class="actions"><a class="btn primary" href="learning-room.html">▶ Continue Learning</a><a class="btn secondary" href="practice-tests.html">Take a Test</a><a class="btn secondary" href="study-materials.html">Study Materials</a></div></section>
+<div class="grid"><div class="stat"><strong id="courseCount">0</strong><small>Enrolled Courses</small></div><div class="stat"><strong id="avgProgress">0%</strong><small>Overall Progress</small></div><div class="stat"><strong id="testScore">—</strong><small>Latest Test Score</small></div><div class="stat"><strong id="lessons">0</strong><small>Lessons Completed</small></div></div>
 <section class="section"><div class="row"><h2>My Courses</h2><a class="btn secondary" href="index.html#courses">Explore Courses</a></div><div id="courses" class="courses"></div></section>
-<section class="section"><div class="row"><h2>Announcements</h2><span class="muted" id="noticeCount"></span></div><div class="card activity" id="announcements"><div class="empty">Loading announcements…</div></div></section>
 <section class="section"><h2>Recent Activity</h2><div class="card activity" id="activity"></div></section>
 </div>
 <script>
-const COURSE_KEY='settlemEnrolledCourses', USER_KEY='settlemAcademyUser', PROG='settlemAcademyLearningProgress', TEST='settlemLatestTest';
-const allCourses=['B.Tech Mathematics','Intermediate Mathematics','Class 10 Mathematics','Classes 5–7 Mathematics'];
-const defaults=[25,10,10,0];
-function get(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d}}
-let enrolled=get(COURSE_KEY,[]); if(!Array.isArray(enrolled)) enrolled=[];
-let user=get(USER_KEY,null); if(user&&user.name) hello.textContent='Welcome back, '+user.name+' 👋';
-async function syncAccount(){
-  if(!localStorage.getItem('settlemAuthToken')) return;
+const API='https://settlem-academy-1.onrender.com/api';
+const COURSE_KEY='settlemEnrolledCourses', USER_KEY='settlemAcademyUser', TEST='settlemLatestTest';
+
+async function api(path){
+  const token=localStorage.getItem('settlemAuthToken');
+  if(!token){ window.location.href='student-login.html'; return null; }
+  const res=await fetch(API+path,{headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'}});
+  let data={}; try{data=await res.json()}catch(e){}
+  if(res.status===401){localStorage.removeItem('settlemAuthToken');window.location.href='student-login.html';return null;}
+  if(!res.ok) throw new Error(data.error||'Unable to load dashboard.');
+  return data;
+}
+
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+
+async function render(){
   try{
-    const me=await SettlemAPI.request('/me');
-    user=me; localStorage.setItem(USER_KEY,JSON.stringify(me));
-    if(me&&me.name) hello.textContent='Welcome back, '+me.name+' 👋';
-    const rows=await SettlemAPI.request('/courses');
-    if(Array.isArray(rows)){ enrolled=rows.map(r=>r.course); localStorage.setItem(COURSE_KEY,JSON.stringify(enrolled)); }
-    const dash=await SettlemAPI.request('/dashboard');
-    rebuildServerProgress(dash&&dash.completed);
-    if(dash&&dash.latestTest) localStorage.setItem(TEST,JSON.stringify({score:dash.latestTest.score}));
-  }catch(e){}
+    const data=await api('/dashboard');
+    if(!data)return;
+    const enrolled=Array.isArray(data.courses)?data.courses:[];
+    const completed=Array.isArray(data.completed)?data.completed:[];
+    const latest=data.latestTest||null;
+
+    if(data.user){
+      localStorage.setItem(USER_KEY,JSON.stringify(data.user));
+      hello.textContent='Welcome back, '+(data.user.name||'Student')+' 👋';
+    }
+
+    // Keep the existing localStorage course key in sync for the Learning Room.
+    localStorage.setItem(COURSE_KEY,JSON.stringify(enrolled));
+
+    const completedByCourse={};
+    completed.forEach(x=>{
+      const c=x.course;
+      if(!completedByCourse[c])completedByCourse[c]=new Set();
+      completedByCourse[c].add(Number(x.module_index));
+    });
+
+    courses.innerHTML=enrolled.length ? enrolled.map(c=>{
+      const done=completedByCourse[c]?.size||0;
+      const p=Math.min(100,done*25);
+      return `<article class="course">
+        <div class="eyebrow">Course</div>
+        <h3>${esc(c)}</h3>
+        <p>${p?`You are ${p}% through this course.`:'Ready to start your first lesson.'}</p>
+        <div class="progress"><i style="width:${p}%"></i></div>
+        <div class="actions"><a class="btn primary" href="learning-room.html" onclick="localStorage.setItem('settlemCurrentCourse',${JSON.stringify(c)})">${p?'Continue':'Start Learning'}</a></div>
+      </article>`;
+    }).join('') : '<div class="empty">No courses enrolled yet. Explore courses to get started.</div>';
+
+    const totalModules=enrolled.length*4;
+    const doneTotal=completed.length;
+    avgProgress.textContent=(totalModules?Math.min(100,Math.round(doneTotal/totalModules*100)):0)+'%';
+    courseCount.textContent=enrolled.length;
+    lessons.textContent=doneTotal;
+    testScore.textContent=latest&&typeof latest.score!=='undefined'?latest.score+'%':'—';
+
+    activity.innerHTML=doneTotal
+      ? `<div class="item">✓ You have completed ${doneTotal} learning module${doneTotal>1?'s':''}.</div><div class="item">📚 Keep going — your next lesson is waiting in the Learning Room.</div>`
+      : '<div class="empty">Your learning activity will appear here as you complete lessons.</div>';
+  }catch(error){
+    activity.innerHTML='<div class="empty">'+esc(error.message||'Unable to load your dashboard.')+'</div>';
+  }
 }
-let serverCompleted=[];
-function rebuildServerProgress(rows){serverCompleted=Array.isArray(rows)?rows.filter(x=>x&&x.course&&Number.isFinite(Number(x.module_index))).map(x=>x.course+'|'+Number(x.module_index)):[]}
-function progressFor(c){
-  const done=new Set(serverCompleted.filter(k=>k.startsWith(c+'|')).map(k=>Number(k.split('|')[1])));
-  if(done.size)return Math.min(100,done.size*25);
-  const p=get(PROG,{}),localDone=new Set();
-  Object.keys(p).forEach(k=>{if(!p[k]||!k.startsWith(c+'|'))return;const parts=k.split('|');if(parts.length>=2)localDone.add(Number(parts[1]));});
-  return Math.min(100,localDone.size*25);
+
+function logout(){
+  localStorage.removeItem('settlemAuthToken');
+  localStorage.removeItem(USER_KEY);
+  localStorage.removeItem('settlemLoggedIn');
 }
-async function enroll(c){if(!enrolled.includes(c)){if(localStorage.getItem('settlemAuthToken')){try{await SettlemAPI.request('/courses/enroll',{method:'POST',body:JSON.stringify({course:c})})}catch(e){}} enrolled.push(c);localStorage.setItem(COURSE_KEY,JSON.stringify(enrolled));render()}}
-function render(){
- let total=0; courses.innerHTML=enrolled.map(c=>{let p=progressFor(c);total+=p;return `<article class="course"><div class="eyebrow">Course</div><h3>${c}</h3><p>${p?`You are ${p}% through this course.`:'Ready to start your first lesson.'}</p><div class="progress"><i style="width:${p}%"></i></div><div class="actions"><a class="btn primary" href="learning-room.html" onclick="localStorage.setItem('settlemCurrentCourse',${JSON.stringify(c)})">${p?'Continue':'Start Learning'}</a></div></article>`}).join('');
- avgProgress.textContent=Math.round(total/(enrolled.length||1))+'%';courseCount.textContent=enrolled.length;
- let p=get(PROG,{}),localModules=new Set();Object.keys(p).forEach(k=>{if(p[k]){const parts=k.split('|');if(parts.length>=2)localModules.add(parts[0]+'|'+parts[1]);}});
- let done=serverCompleted.length||localModules.size;lessons.textContent=done;
- let t=get(TEST,null);testScore.textContent=t&&typeof t.score!=='undefined'?t.score+'%':'—';
- activity.innerHTML=done?'<div class="item">✓ You have completed '+done+' learning module'+(done>1?'s':'')+'.</div><div class="item">📚 Keep going — your next lesson is waiting in the Learning Room.</div>':'<div class="empty">Your learning activity will appear here as you complete lessons.</div>';
-}
-function logout(){localStorage.removeItem(USER_KEY)}
-async function loadAnnouncements(){const box=document.getElementById('announcements');try{if(!localStorage.getItem('settlemAuthToken')){box.innerHTML='<div class="empty">Log in to view student announcements.</div>';return}const rows=await SettlemAPI.request('/announcements');document.getElementById('noticeCount').textContent=rows.length?rows.length+' notice'+(rows.length>1?'s':''):'';box.innerHTML=rows.length?rows.map(a=>`<div class="item"><strong>📢 ${safe(a.title)}</strong><div class="muted" style="margin-top:6px">${safe(a.message)}</div><div style="font-size:11px;color:#94a3b8;margin-top:7px">${new Date(a.created_at).toLocaleDateString()}</div></div>`).join(''):'<div class="empty">No announcements right now.</div>'}catch(e){box.innerHTML='<div class="empty">Announcements will appear here when available.</div>'}}function safe(s){return String(s||'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-render(); syncAccount().then(render); loadAnnouncements();
+
+render();
 </script>
-<div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body>
+</body>
 </html>

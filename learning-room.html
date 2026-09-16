@@ -10,7 +10,6 @@
 .layout{display:grid;grid-template-columns:310px 1fr;min-height:calc(100vh - 65px)}aside{background:#fff;border-right:1px solid var(--line);padding:24px 16px}.course-select{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;font-weight:700;margin-bottom:18px}.module{padding:14px;border-radius:14px;margin:9px 0;cursor:pointer;border:1px solid transparent}.module:hover{background:#f1f5ff}.module.active{background:linear-gradient(135deg,#eef2ff,#f5f3ff);border-color:#c7d2fe}.module small{color:var(--muted)}main{padding:28px;max-width:1100px;width:100%}.heading{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;flex-wrap:wrap}.eyebrow{font-size:11px;font-weight:900;color:var(--violet);letter-spacing:1.4px;text-transform:uppercase}.heading h1{margin:6px 0;font-size:34px}.heading p{color:var(--muted);margin-top:0}.progress{background:#e2e8f0;height:9px;border-radius:99px;overflow:hidden;width:230px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--violet),var(--pink));transition:.3s}.video-box{margin-top:22px;background:#0b1027;border-radius:20px;overflow:hidden;box-shadow:0 18px 50px #17255420;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}.video-box iframe{width:100%;height:100%;border:0}.placeholder{color:#fff;text-align:center;padding:30px}.placeholder .play{font-size:55px}.lesson{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:18px}.lesson h2{margin:0 0 7px}.lesson p{color:var(--muted);line-height:1.65}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:11px;padding:12px 16px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:var(--blue)}.complete{background:#dcfce7;color:#166534}.complete.done{background:#166534;color:#fff}.empty{background:#fff;border:1px dashed #cbd5e1;border-radius:16px;padding:30px;color:var(--muted);text-align:center;margin-top:20px}.lesson-list{display:grid;gap:9px;margin-top:18px}.lesson-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px 14px;cursor:pointer}.lesson-item.active{border-color:#a5b4fc;background:#eef2ff}.lesson-item.done{border-color:#bbf7d0}.lesson-no{min-width:32px;height:32px;border-radius:9px;background:#eef2ff;color:var(--blue);display:grid;place-items:center;font-weight:900}.lesson-item.done .lesson-no{background:#dcfce7;color:#166534}.lesson-meta{flex:1}.lesson-meta strong{display:block}.lesson-meta small{color:var(--muted)}.nav-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}.nav-actions .btn{min-width:130px}.module-progress{font-size:12px;color:var(--muted);margin-top:3px}
 @media(max-width:850px){.layout{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line)}}
 </style>
-<link rel="icon" type="image/png" href="settlem-academy-logo.png">
 </head>
 <body>
 <div class="top"><div class="brand"><img src="settlem-academy-logo.png" alt="Settlem Academy logo" style="width:36px;height:36px;object-fit:contain;vertical-align:middle;margin-right:8px">SETTLEM <span>ACADEMY</span> · LEARNING ROOM</div><a href="student-dashboard.html">Student Dashboard</a></div>
@@ -26,9 +25,9 @@
 <div id="content"></div>
 </main>
 </div>
-<script src="settlem-api.js?v=20260913"></script>
 <script>
-const VIDEO_KEY='settlemAcademyVideos',PROG_KEY='settlemAcademyLearningProgress',LESSON_KEY='settlemCurrentLesson';
+const API='https://settlem-academy-1.onrender.com/api';
+const LESSON_KEY='settlemCurrentLesson';
 const courseModules={
  'B.Tech Mathematics':['Differential Equations','Laplace Transforms','Vector Calculus','Probability & Random Variables'],
  'Intermediate Mathematics':['Mathematical Foundations','Core Mathematics','Problem Solving','Revision & Preparation'],
@@ -39,80 +38,90 @@ const courseDescs={
  'B.Tech Mathematics':['Learn first-order and higher-order differential equations with standard methods and worked examples.','Understand Laplace transforms, inverse transforms and applications to differential equations.','Build confidence with gradient, divergence, curl, multiple integrals and vector identities.','Master probability, random variables, distributions, moments and exam-oriented problem solving.'],
  'Intermediate Mathematics':['Build the concepts you need before moving into advanced problem solving.','Learn the key ideas step by step with clear explanations.','Apply concepts through worked examples and exam-style questions.','Revise efficiently and prepare with focused practice.'],
  'Class 10 Mathematics':['Build the concepts you need before moving into advanced problem solving.','Learn the key ideas step by step with clear explanations.','Apply concepts through worked examples and exam-style questions.','Revise efficiently and prepare with focused practice.'],
- 'Classes 5–7 Mathematics':['Build the concepts you need before moving into advanced problem solving.','Learn the key ideas step by step with clear explanations.','Apply concepts through worked examples and exam-style questions.','Revise efficiently and prepare with focused practice.']
+ 'Classes 5–7 Mathematics':['Build the concepts you need before moving into advanced problem solving.','Learn the key ideas step by step with clear explanations.','Apply concepts through worked examples and exam-style practice.','Revise efficiently and prepare with focused practice.']
 };
-let currentCourse=localStorage.getItem('settlemCurrentCourse')||'B.Tech Mathematics',currentModule=Number(localStorage.getItem('settlemCurrentModule')||0),currentLesson=Number(localStorage.getItem(LESSON_KEY)||0);
+
+let currentCourse=localStorage.getItem('settlemCurrentCourse')||'B.Tech Mathematics';
+let currentModule=Number(localStorage.getItem('settlemCurrentModule')||0);
+let currentLesson=Number(localStorage.getItem(LESSON_KEY)||0);
+let allVideos=[];
+let completed=[];
+
+async function api(path,options={}){
+ const token=localStorage.getItem('settlemAuthToken');
+ if(!token){window.location.href='student-login.html';return null;}
+ const headers={'Content-Type':'application/json',...(options.headers||{}),Authorization:'Bearer '+token};
+ const res=await fetch(API+path,{...options,headers});
+ let data={};try{data=await res.json()}catch(e){}
+ if(res.status===401){localStorage.removeItem('settlemAuthToken');window.location.href='student-login.html';return null;}
+ if(!res.ok)throw new Error(data.error||'Request failed');
+ return data;
+}
 function moduleNames(){return courseModules[currentCourse]||courseModules['B.Tech Mathematics']}
 function descs(){return courseDescs[currentCourse]||courseDescs['B.Tech Mathematics']}
-let videosCache=[];
-let apiVideosLoaded=false;
-const featuredLessons=[{id:'featured-rv-10s',title:'Random Variable in 10 Seconds! 🤯',course:'B.Tech Mathematics',module:'Probability & Random Variables',youtube_url:'https://www.youtube.com/watch?v=SGokvzWeqvk',videoId:'SGokvzWeqvk',video_id:'SGokvzWeqvk',description:'A quick concept introduction to Random Variables from Settlem Academy.',order:1,type:'Lesson',createdAt:'2026-09-13'}];
-const module4StudyLessons=[
- {id:'m4-study-1',title:'Probability Basics & Terminology',description:'Sample space, events, favourable outcomes and core probability laws.',url:'btech-probability.html#lesson-1'},
- {id:'m4-study-2',title:'Conditional Probability & Bayes’ Theorem',description:'Conditional probability, independence and Bayes’ theorem.',url:'btech-probability.html#lesson-2'},
- {id:'m4-study-3',title:'Random Variables — Concept & Types',description:'Discrete and continuous random variables with examples.',url:'btech-probability.html#lesson-3'},
- {id:'m4-study-4',title:'Probability Mass Function (PMF)',description:'PMF rules, validation and discrete probability calculations.',url:'btech-probability.html#lesson-4'},
- {id:'m4-study-5',title:'Probability Density Function (PDF)',description:'Density functions, normalization and probability as area.',url:'btech-probability.html#lesson-5'},
- {id:'m4-study-6',title:'Expectation & Moments',description:'Mean, higher moments and linearity of expectation.',url:'btech-probability.html#lesson-6'},
- {id:'m4-study-7',title:'Variance & Standard Deviation',description:'Variance, standard deviation and transformation rules.',url:'btech-probability.html#lesson-7'},
- {id:'m4-study-8',title:'Bernoulli & Binomial Distribution',description:'Bernoulli trials, binomial probability, mean and variance.',url:'btech-probability.html#lesson-8'},
- {id:'m4-study-9',title:'Poisson Distribution',description:'Poisson model, parameter λ, mean and variance.',url:'btech-probability.html#lesson-9'},
- {id:'m4-study-10',title:'Continuous Distributions & CDF',description:'CDF, PDF-CDF relationship and interval probabilities.',url:'btech-probability.html#lesson-10'},
- {id:'m4-study-11',title:'Important Exam Problems — Part 1',description:'Mixed probability, PMF, expectation and variance problems.',url:'btech-probability.html#lesson-11'},
- {id:'m4-study-12',title:'Important Exam Problems — Part 2 + Revision',description:'Distribution selection, common traps and final revision.',url:'btech-probability.html#lesson-12'}
-];
-function module4FallbackVideos(){return module4StudyLessons.map((x,i)=>({id:x.id,title:x.title,course:'B.Tech Mathematics',module:'Probability & Random Variables',description:x.description,order:i+1,type:'Study Notes',videoId:'',study_url:x.url,createdAt:'2026-09-15'}));}
-
-function ensureFeaturedLessons(){try{const existing=JSON.parse(localStorage.getItem(VIDEO_KEY)||'[]');if(!existing.some(v=>v.id==='featured-rv-10s')){localStorage.setItem(VIDEO_KEY,JSON.stringify(existing.concat(featuredLessons)));}}catch(e){localStorage.setItem(VIDEO_KEY,JSON.stringify(featuredLessons));}}
-function getVideos(){return videosCache.length?videosCache:(()=>{try{return JSON.parse(localStorage.getItem(VIDEO_KEY)||'[]')}catch(e){return []}})()}
-function getProgress(){try{return JSON.parse(localStorage.getItem(PROG_KEY)||'{}')}catch(e){return {}}}
-async function loadApiVideos(){
-  try{
-    const token=localStorage.getItem('settlemAuthToken');
-    if(!token || !window.SettlemAPI) return;
-    const data=await SettlemAPI.request('/videos?course='+encodeURIComponent(currentCourse));
-    videosCache=Array.isArray(data)?data.map(v=>({...v,order:v.order||v.id,createdAt:v.created_at||v.createdAt,type:v.type||'Lesson'})):[];
-    if(!videosCache.length) ensureFeaturedLessons();
-    apiVideosLoaded=true;
-    localStorage.setItem(VIDEO_KEY,JSON.stringify(videosCache));
-    render();
-  }catch(e){
-    apiVideosLoaded=false;
-  }
-}
-function setCourse(c){currentCourse=c;currentModule=0;currentLesson=0;videosCache=[];localStorage.setItem('settlemCurrentCourse',c);localStorage.setItem('settlemCurrentModule','0');localStorage.setItem(LESSON_KEY,'0');render();loadApiVideos()}
+function moduleVideos(){const names=moduleNames();return allVideos.filter(v=>v.course===currentCourse&&v.module===names[currentModule]).sort((a,b)=>(Number(a.order)||9999)-(Number(b.order)||9999)||String(a.createdAt||'').localeCompare(String(b.createdAt||'')))}
+function isModuleDone(i){return completed.some(x=>x.course===currentCourse&&Number(x.module_index)===i)}
+function setCourse(c){currentCourse=c;currentModule=0;currentLesson=0;localStorage.setItem('settlemCurrentCourse',c);localStorage.setItem('settlemCurrentModule','0');localStorage.setItem(LESSON_KEY,'0');render()}
 function selectModule(i){currentModule=i;currentLesson=0;localStorage.setItem('settlemCurrentModule',String(i));localStorage.setItem(LESSON_KEY,'0');render()}
-function moduleVideos(){const names=moduleNames();const arr=getVideos().filter(v=>v.course===currentCourse&&v.module===names[currentModule]).sort((a,b)=>(Number(a.order)||9999)-(Number(b.order)||9999)||String(a.createdAt||'').localeCompare(String(b.createdAt||'')));if(!arr.length&&currentCourse==='B.Tech Mathematics'&&currentModule===3)return module4FallbackVideos();return arr}
-function lessonKey(v){return currentCourse+'|'+currentModule+'|'+v.id}
-function render(){
- courseSelect.value=currentCourse;const names=moduleNames(),descriptions=descs();if(currentModule<0||currentModule>=names.length)currentModule=0;
- modules.innerHTML=names.map((m,i)=>`<div class="module ${i===currentModule?'active':''}" onclick="selectModule(${i})"><strong>${i+1}. ${m}</strong><br><small>${moduleStatus(i)}</small></div>`).join('');
- pageTitle.textContent=names[currentModule];pageDesc.textContent=descriptions[currentModule];
- const arr=moduleVideos(),p=getProgress();if(currentLesson<0||currentLesson>=Math.max(arr.length,1))currentLesson=0;
- const totalLessons=arr.length,doneLessons=arr.filter(v=>p[lessonKey(v)]).length;
- const allVideos=getVideos().filter(v=>v.course===currentCourse);
- const completedModules=names.reduce((count,m,i)=>{
-   const mv=allVideos.filter(v=>v.module===m);
-   if(!mv.length) return count;
-   const done=mv.every(v=>!!p[currentCourse+'|'+i+'|'+v.id] || !!p[currentCourse+'|'+i]);
-   return count+(done?1:0);
- },0);
- const pct=names.length?Math.min(100,Math.round((completedModules/names.length)*100)):0;
- progressText.textContent=pct+'% Complete';bar.style.width=pct+'%';
- if(!arr.length){content.innerHTML=`<div class="empty"><div style="font-size:42px">▶</div><h2>No lessons connected yet</h2><p>Admin can add YouTube lessons for <strong>${esc(currentCourse)}</strong> → <strong>${esc(names[currentModule])}</strong> from the Video Manager.</p><a class="btn primary" href="video-manager.html">Open Video Manager</a></div>`;return}
- const v=arr[currentLesson],done=!!p[lessonKey(v)];
- const list=arr.map((x,i)=>`<button class="lesson-item ${i===currentLesson?'active ':''}${p[lessonKey(x)]?'done':''}" onclick="selectLesson(${i})"><span class="lesson-no">${p[lessonKey(x)]?'✓':i+1}</span><span class="lesson-meta"><strong>${esc(x.title)}</strong><small>${esc(x.type||'Lesson')} · ${p[lessonKey(x)]?'Completed':'Not completed'}</small></span></button>`).join('');
- const media=v.videoId?`<div class="video-box"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(v.videoId)}?rel=0" title="${esc(v.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`:`<div class="video-box"><div class="placeholder"><div class="play">📘</div><h2>Study Notes Lesson</h2><p>Read the full lesson, formulas, worked examples and exam practice.</p><a class="btn primary" href="${esc(v.study_url||'btech-probability.html')}">Open Lesson Notes →</a></div></div>`;content.innerHTML=`<div class="lesson-list"><div class="eyebrow">MODULE LESSONS · ${doneLessons}/${totalLessons} COMPLETE</div>${list}</div>${media}<section class="lesson"><div class="eyebrow">${esc(v.course)} · ${esc(v.module)} · ${esc(v.type||'Lesson')}</div><h2>${esc(v.title)}</h2><p>${esc(v.description||'Continue the lesson and practise the concepts covered in this lesson.')}</p><div class="actions"><button class="btn ${done?'complete done':'complete'}" onclick="toggleComplete()">${done?'✓ Completed':'Mark as Complete'}</button><a class="btn secondary" href="${esc(v.study_url||'study-materials.html')}">Study Materials</a><a class="btn secondary" href="practice-tests.html">Practice Tests</a></div><div class="nav-actions"><button class="btn secondary" onclick="previousLesson()" ${currentLesson===0?'disabled':''}>← Previous Lesson</button><button class="btn primary" onclick="nextLesson()" ${currentLesson===arr.length-1?'disabled':''}>Next Lesson →</button></div></section>`;
-}
 function selectLesson(i){currentLesson=i;localStorage.setItem(LESSON_KEY,String(i));render()}
 function previousLesson(){if(currentLesson>0)selectLesson(currentLesson-1)}
 function nextLesson(){const arr=moduleVideos();if(currentLesson<arr.length-1)selectLesson(currentLesson+1)}
-async function toggleComplete(){const arr=moduleVideos();if(!arr.length)return;let p=getProgress(),k=lessonKey(arr[currentLesson]);p[k]=!p[k];localStorage.setItem(PROG_KEY,JSON.stringify(p));render();try{if(localStorage.getItem('settlemAuthToken')&&window.SettlemAPI){await SettlemAPI.request('/progress',{method:'POST',body:JSON.stringify({course:currentCourse,module_index:currentModule,completed:p[k]})});if(p[k]){const dash=await SettlemAPI.request('/dashboard');const done=(dash.completed||[]).filter(x=>x.course===currentCourse).length;if(done>=4){const cert=await SettlemAPI.request('/certificates/issue',{method:'POST',body:JSON.stringify({course:currentCourse})});if(cert&&cert.certificate_id)alert('🎉 Congratulations! You completed '+currentCourse+' and earned certificate '+cert.certificate_id+'. Open Certificates from your Student Dashboard.')}}}}catch(e){}}
-function moduleStatus(i){const names=moduleNames(),arr=getVideos().filter(v=>v.course===currentCourse&&v.module===names[i]),p=getProgress(),done=arr.filter(v=>p[currentCourse+'|'+i+'|'+v.id]).length;return arr.length?`${done}/${arr.length} lessons complete`:'No lessons yet'}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-ensureFeaturedLessons();
-render();
-loadApiVideos();
+async function toggleComplete(){
+ const arr=moduleVideos(); if(!arr.length)return;
+ const done=isModuleDone(currentModule);
+ try{
+   await api('/progress',{method:'POST',body:JSON.stringify({course:currentCourse,module_index:currentModule,completed:!done})});
+   const data=await api('/dashboard');
+   completed=Array.isArray(data?.completed)?data.completed:[];
+   render();
+ }catch(e){alert(e.message||'Unable to update progress.');}
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+function render(){
+ courseSelect.value=currentCourse;
+ const names=moduleNames(),descriptions=descs();
+ if(currentModule<0||currentModule>=names.length)currentModule=0;
+ modules.innerHTML=names.map((m,i)=>`<div class="module ${i===currentModule?'active':''}" onclick="selectModule(${i})"><strong>${i+1}. ${esc(m)}</strong><br><small>${moduleStatus(i)}</small></div>`).join('');
+ pageTitle.textContent=names[currentModule];pageDesc.textContent=descriptions[currentModule];
+
+ const arr=moduleVideos();
+ if(currentLesson<0||currentLesson>=Math.max(arr.length,1))currentLesson=0;
+ const done=isModuleDone(currentModule);
+ const completedCount=completed.filter(x=>x.course===currentCourse).length;
+ const pct=Math.min(100,Math.round(completedCount/4*100));
+ progressText.textContent=pct+'% Complete';bar.style.width=pct+'%';
+
+ if(!arr.length){
+   content.innerHTML=`<div class="empty"><div style="font-size:42px">▶</div><h2>No lessons connected yet</h2><p>Admin can add YouTube lessons for <strong>${esc(currentCourse)}</strong> → <strong>${esc(names[currentModule])}</strong> from the Video Manager.</p><a class="btn primary" href="video-manager.html">Open Video Manager</a></div>`;
+   return;
+ }
+ const v=arr[currentLesson];
+ const list=arr.map((x,i)=>`<button class="lesson-item ${i===currentLesson?'active ':''}${done?'done':''}" onclick="selectLesson(${i})"><span class="lesson-no">${done?'✓':i+1}</span><span class="lesson-meta"><strong>${esc(x.title)}</strong><small>${esc(x.type||'Lesson')} · ${done?'Completed':'Not completed'}</small></span></button>`).join('');
+ content.innerHTML=`<div class="lesson-list"><div class="eyebrow">MODULE LESSONS · ${done?'COMPLETE':'IN PROGRESS'}</div>${list}</div>
+ <div class="video-box"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(v.videoId)}?rel=0" title="${esc(v.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+ <section class="lesson"><div class="eyebrow">${esc(v.course)} · ${esc(v.module)} · ${esc(v.type||'Lesson')}</div><h2>${esc(v.title)}</h2><p>${esc(v.description||'Continue the lesson and practise the concepts covered in this video.')}</p>
+ <div class="actions"><button class="btn ${done?'complete done':'complete'}" onclick="toggleComplete()">${done?'✓ Module Completed':'Mark Module Complete'}</button><a class="btn secondary" href="study-materials.html">Study Materials</a><a class="btn secondary" href="practice-tests.html">Practice Tests</a></div>
+ <div class="nav-actions"><button class="btn secondary" onclick="previousLesson()" ${currentLesson===0?'disabled':''}>← Previous Lesson</button><button class="btn primary" onclick="nextLesson()" ${currentLesson===arr.length-1?'disabled':''}>Next Lesson →</button></div></section>`;
+}
+function moduleStatus(i){
+ const names=moduleNames(),arr=allVideos.filter(v=>v.course===currentCourse&&v.module===names[i]);
+ return arr.length?(isModuleDone(i)?`Module complete · ${arr.length} lesson${arr.length>1?'s':''}`:`${arr.length} lesson${arr.length>1?'s':''} available`):'No lessons yet';
+}
+async function init(){
+ try{
+   const [videos,data]=await Promise.all([api('/videos'),api('/dashboard')]);
+   if(!videos||!data)return;
+   allVideos=Array.isArray(videos)?videos:[];
+   completed=Array.isArray(data.completed)?data.completed:[];
+   const enrolled=Array.isArray(data.courses)?data.courses:[];
+   if(enrolled.length&&!enrolled.includes(currentCourse)){currentCourse=enrolled[0];localStorage.setItem('settlemCurrentCourse',currentCourse);}
+   render();
+ }catch(e){
+   content.innerHTML=`<div class="empty"><h2>Unable to load your Learning Room</h2><p>${esc(e.message||'Please try again.')}</p></div>`;
+ }
+}
+init();
 </script>
-<div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body>
+</body>
 </html>
