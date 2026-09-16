@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Student Management | Settlem Academy</title>
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=1fmbLkyJW6ajs0mfBmir8iQz40-dm0rXYG-grTErI0x35k1dBBPy0CIaifWxlE9Ne5qFoxVRzdPzY1yD4gvkUlDxDk00wcg4PJZNZXmWtLlMlqJGh05X4C_3hvtgKSDFlybwl-_IzCndjZX3oW9PHG7E77GOGyALBB-LPsA9P75_xiFDu2pFVjh1tCCtaRT3FnAM_RG2-qUt1vVYmYVO6vIy8ru9nLiw8SjACJvhnuIQu0JZ1yhLZzgBPch503LqnL_2o23kQ3ESYUVzPNZ8YE2njiv89O0YtvdpTfL0GksvdwZUtNXqp9uyWMa3YhQaBqFOGeXLdPUXFktKcZbAMh3XBd0pTx8x1Rb9aL-0j2U" charset="UTF-8"></script><style>
+<title>Student Management | Settlem Academy</title><meta name="settlem-build" content="standalone-api-20260916">
+<style>
 :root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--pink:#ec4899;--bg:#f5f7ff;--muted:#64748b;--line:#e2e8f0}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}.top{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:17px 5%;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900}.brand span{color:#8fe8ff}.top a{color:#fff;text-decoration:none;border:1px solid #ffffff55;padding:9px 13px;border-radius:10px}.wrap{max-width:1200px;margin:auto;padding:30px 20px}.hero{background:linear-gradient(135deg,#fff,#eef2ff);border:1px solid #dbe3ff;border-radius:24px;padding:28px;box-shadow:0 15px 45px #17255412}.eyebrow{font-size:11px;color:var(--violet);font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:42px;margin:7px 0}.hero p{color:var(--muted)}.toolbar{display:flex;gap:12px;margin:20px 0;flex-wrap:wrap}.toolbar input,.toolbar select{padding:12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font:inherit}.tablewrap{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:auto;box-shadow:0 10px 30px #1725540a}table{width:100%;border-collapse:collapse;min-width:850px}th,td{padding:15px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}th{background:#f8faff;color:#475569;font-size:12px;text-transform:uppercase;letter-spacing:.6px}.badge{display:inline-block;padding:5px 8px;border-radius:99px;background:#eef2ff;color:var(--blue);font-size:11px;font-weight:800;margin:2px}.bar{height:7px;width:110px;background:#e2e8f0;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--violet))}.btn{border:0;border-radius:9px;padding:9px 11px;font-weight:800;cursor:pointer}.view{background:#eef2ff;color:var(--blue)}.empty{padding:35px;text-align:center;color:var(--muted)}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:20px 0}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px}.stat strong{font-size:25px}.stat small{display:block;color:var(--muted);margin-top:3px}@media(max-width:800px){.summary{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:34px}}
 </style></head>
@@ -10,27 +10,7 @@
 <div class="summary"><div class="stat"><strong id="count">0</strong><small>Students</small></div><div class="stat"><strong id="enrolled">0</strong><small>Total Enrollments</small></div><div class="stat"><strong id="avg">0%</strong><small>Average Progress</small></div><div class="stat"><strong id="active">0</strong><small>Active Learners</small></div></div>
 <div class="toolbar"><input id="search" placeholder="Search name or email…" oninput="render()"><select id="courseFilter" onchange="render()"><option value="">All Courses</option><option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option></select></div>
 <div class="tablewrap"><table><thead><tr><th>Student</th><th>Email</th><th>Courses</th><th>Progress</th><th>Latest Test</th><th>Action</th></tr></thead><tbody id="rows"></tbody></table><div id="empty" class="empty" style="display:none">No students found in this browser.</div></div></div>
-<script src="settlem-api.js?v=3e667e5"></script>
-<script>
-// Safety fallback: this page remains functional even if the shared API script is cached or blocked.
-if (!window.SettlemAPI) {
-  (function(){
-    const API='https://settlem-academy-1.onrender.com';
-    async function request(path, options={}) {
-      const headers={'Content-Type':'application/json',...(options.headers||{})};
-      const token=localStorage.getItem('settlemAuthToken');
-      if(token) headers.Authorization='Bearer '+token;
-      const p=String(path||'');
-      const url=/^https?:\\/\\//i.test(p) ? p : API + (p.startsWith('/api/') ? p : '/api'+(p.startsWith('/')?p:'/'+p));
-      const res=await fetch(url,{...options,headers});
-      let data={}; try{data=await res.json()}catch(e){}
-      if(!res.ok){ if(res.status===401){localStorage.removeItem('settlemAuthToken'); throw new Error('Admin session expired. Please log in again.');} throw new Error(data.error||'Request failed'); }
-      return data;
-    }
-    window.SettlemAPI={request,base:()=>API,hasSession:()=>!!localStorage.getItem('settlemAuthToken')};
-  })();
-}
-</script>
+
 <script>
 let allStudents = [];
 
@@ -134,7 +114,21 @@ async function loadStudents(){
   empty.style.display = 'none';
 
   try {
-    const data = await SettlemAPI.request('/admin/students');
+    const token = localStorage.getItem('settlemAuthToken');
+    if (!token) throw new Error('Admin session not found. Please log in again.');
+
+    const response = await fetch('https://settlem-academy-1.onrender.com/api/admin/students', {
+      method: 'GET',
+      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
+    });
+
+    let data = {};
+    try { data = await response.json(); } catch (e) {}
+
+    if (!response.ok) {
+      if (response.status === 401) throw new Error('Admin session expired. Please log in again.');
+      throw new Error(data.error || 'Unable to load students from the database.');
+    }
     if (!Array.isArray(data)) throw new Error('Unexpected student data received from the server.');
     allStudents = data;
     render();
