@@ -10,8 +10,7 @@
 .badge{padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800}.live{background:#e7faf7;color:#0f806f}.draft{background:#fff3dc;color:#a16207}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.action{padding:16px;border:1px solid var(--line);border-radius:12px;background:#fff;font-weight:800}.action span{display:block;color:var(--blue);font-size:20px;margin-bottom:5px}.activity{padding:13px 0;border-bottom:1px solid var(--line)}.activity:last-child{border:0}
 @media(max-width:850px){.sidebar{width:70px;padding:20px 10px}.logo span,.menu a span{display:none}.menu a{text-align:center}.main{margin-left:70px}.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.content{padding:22px}.top{padding:0 20px}}
 @media(max-width:520px){.stats{grid-template-columns:1fr}.table{font-size:12px}}
-.profile{display:grid;grid-template-columns:90px 1fr;gap:20px;align-items:center}.profile-photo{width:90px;height:90px;border-radius:22px;object-fit:cover;border:1px solid var(--line);background:#f8fafc}.profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.profile-item{padding:14px;border:1px solid var(--line);border-radius:13px;background:#fbfcff}.profile-item small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}.profile-item strong{font-size:14px}.profile-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.profile-btn{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--blue);font-weight:800;text-decoration:none;cursor:pointer}.profile-btn.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;border:0}.logout{color:#b42318}.profile-form{display:none;margin-top:16px;padding:16px;border:1px dashed #cbd5e1;border-radius:14px;background:#f8fafc}.profile-form.open{display:block}.profile-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.profile-form label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:5px;text-transform:uppercase}.profile-form input{width:100%;padding:11px;border:1px solid #d8deea;border-radius:9px;font:inherit}.profile-note{font-size:12px;color:var(--muted);margin:10px 0 0}@media(max-width:600px){.profile{grid-template-columns:1fr}.profile-grid,.profile-form-grid{grid-template-columns:1fr}}</style><link rel="icon" type="image/png" href="settlem-academy-logo.png">
-</head><body>
+.profile{display:grid;grid-template-columns:90px 1fr;gap:20px;align-items:center}.profile-photo{width:90px;height:90px;border-radius:22px;object-fit:cover;border:1px solid var(--line);background:#f8fafc}.profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.profile-item{padding:14px;border:1px solid var(--line);border-radius:13px;background:#fbfcff}.profile-item small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}.profile-item strong{font-size:14px}.profile-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.profile-btn{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--blue);font-weight:800;text-decoration:none;cursor:pointer}.profile-btn.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;border:0}.logout{color:#b42318}.profile-form{display:none;margin-top:16px;padding:16px;border:1px dashed #cbd5e1;border-radius:14px;background:#f8fafc}.profile-form.open{display:block}.profile-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.profile-form label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:5px;text-transform:uppercase}.profile-form input{width:100%;padding:11px;border:1px solid #d8deea;border-radius:9px;font:inherit}.profile-note{font-size:12px;color:var(--muted);margin:10px 0 0}@media(max-width:600px){.profile{grid-template-columns:1fr}.profile-grid,.profile-form-grid{grid-template-columns:1fr}}</style></head><body>
 <aside class="sidebar"><a class="logo" href="index.html"><img class="logo-img" src="settlem-academy-logo.png" alt="Settlem Academy logo"><span>SETTLEM ACADEMY</span></a><div class="menu">
 <a class="active" href="admin-dashboard.html">⌂ <span>Dashboard</span></a><a href="student-management.html">◉ <span>Students</span></a><a href="video-manager.html">🎬 Video Manager</a><a href="content-manager.html">▣ <span>Content Manager</span></a><a href="video-lessons.html">▶ <span>Video Lessons</span></a><a href="study-materials.html">▤ <span>Materials</span></a><a href="practice-tests.html">✓ <span>Tests</span></a><a href="index.html">↗ <span>View Website</span></a></div></aside>
 <div class="main"><header class="top"><div class="admin">Admin / Teacher Portal</div><div class="avatar">A</div></header>
@@ -22,32 +21,55 @@
 <tr><td><strong>Intermediate Mathematics</strong></td><td>36</td><td><span class="badge live">LIVE</span></td></tr>
 <tr><td><strong>Class 10 Mathematics</strong></td><td>31</td><td><span class="badge live">LIVE</span></td></tr>
 <tr><td><strong>Classes 5–7</strong></td><td>19</td><td><span class="badge draft">BUILDING</span></td></tr></table></section>
-<aside class="card"><h2>Quick Actions</h2><div class="actions"><a class="action" href="student-management.html"><span>＋</span>Add Student</a><a class="action" href="video-manager.html"><span>▶</span>Add Lesson</a><a class="action" href="materials-manager.html"><span>▤</span>Add Material</a><a class="action" href="test-engine.html"><span>✓</span>Create Test</a><a class="action" href="admin-feedback.html"><span>💬</span>Feedback</a><a class="action" href="admin-support.html"><span>🆘</span>Support Inbox</a><a class="action" href="announcements-manager.html"><span>📢</span>Announcement</a></div></aside></div>
+<aside class="card"><h2>Quick Actions</h2><div class="actions"><a class="action" href="student-management.html"><span>＋</span>Add Student</a><a class="action" href="video-manager.html"><span>▶</span>Add Lesson</a><a class="action" href="materials-manager.html"><span>▤</span>Add Material</a><a class="action" href="test-engine.html"><span>✓</span>Create Test</a></div></aside></div>
 <div class="card" style="margin-top:20px"><h2>Recent Activity</h2><div class="activity"><strong>New student registration</strong><div class="muted">A new learner joined Settlem Academy.</div></div><div class="activity"><strong>Practice test completed</strong><div class="muted">A student completed the Mathematics Quick Assessment.</div></div><div class="activity"><strong>Content management</strong><div class="muted">Video and study-material sections are ready for real content.</div></div></div>
-<div class="card" style="margin-top:20px;background:linear-gradient(135deg,#101a43,#293e87);color:#fff"><h2>Next: Real Admin System</h2><p style="color:#d9e1f5;max-width:720px">This dashboard is the front-end foundation. The next stage can connect secure admin authentication, a database, student records, course management, uploads and live test results.</p></div>
-</main></div><script src="settlem-api.js?v=20260913"></script><script>
-(async function guardAndLoad(){
+<div class="card" style="margin-top:20px;background:linear-gradient(135deg,#101a43,#293e87);color:#fff"><h2>Next: Real Admin System</h2><p style="color:#d9e1f5;max-width:720px">This admin dashboard is connected to the live Settlem Academy database. Statistics and course enrollment counts update automatically.</p></div>
+</main></div><script>
+
+const API='https://settlem-academy-1.onrender.com';
+async function dashFetch(path,options={}){
+  const token=localStorage.getItem('settlemAuthToken');
+  if(!token){location.href='admin-login.html';return null}
+  const headers={'Content-Type':'application/json',...(options.headers||{}),Authorization:'Bearer '+token};
+  const r=await fetch(API+path,{...options,headers});
+  let d={};try{d=await r.json()}catch(e){}
+  if(!r.ok){if(r.status===401){localStorage.removeItem('settlemAuthToken');localStorage.removeItem('settlemAcademyUser');location.href='admin-login.html';}throw new Error(d.error||'Request failed')}
+  return d;
+}
+async function loadOverview(){
   try{
-    if(!SettlemAPI.hasSession()){ location.href="admin-login.html"; return; }
-    const me=await SettlemAPI.request("/api/me");
-    if(me.role!=="admin"){ localStorage.removeItem("settlemAuthToken"); localStorage.removeItem("settlemAcademyUser"); location.href="admin-login.html"; return; }
-    localStorage.setItem("settlemAcademyUser",JSON.stringify(me));
-    const [students,videos,materials,tests]=await Promise.all([
-      SettlemAPI.request("/api/admin/students"),
-      SettlemAPI.request("/api/videos"),
-      SettlemAPI.request("/api/materials"),
-      SettlemAPI.request("/api/tests")
-    ]);
-    document.querySelector(".stats .stat:nth-child(1) .num").textContent=students.length;
-    document.querySelector(".stats .stat:nth-child(2) .num").textContent=new Set(students.flatMap(s=>s.courses||[])).size || 4;
-    document.querySelector(".stats .stat:nth-child(3) .num").textContent=videos.length;
-    document.querySelector(".stats .stat:nth-child(4) .num").textContent=tests.length;
-    const rows=document.querySelectorAll(".table tr");
-    const counts={}; students.forEach(s=>(s.courses||[]).forEach(c=>counts[c]=(counts[c]||0)+1));
-    const names=["B.Tech Mathematics","Intermediate Mathematics","Class 10 Mathematics","Classes 5–7 Mathematics"];
-    names.forEach((name,i)=>{ if(rows[i+1]){ rows[i+1].children[1].textContent=counts[name]||0; } });
-    const activity=document.querySelector(".activity");
-    if(activity) activity.querySelector(".muted").textContent=`${students.length} student account${students.length===1?"":"s"} currently registered.`;
-  }catch(e){ console.error(e); if(e.message && /Authentication|token|expired/i.test(e.message)){ localStorage.removeItem("settlemAuthToken"); localStorage.removeItem("settlemAcademyUser"); location.href="admin-login.html"; } }
-})();
-try{const u=JSON.parse(localStorage.getItem("settlemAcademyUser")||"null")||{};const p=JSON.parse(localStorage.getItem("settlemAdminProfile")||"{}");document.getElementById("adminName").textContent=p.name||u.name||"Academy Administrator";document.getElementById("adminEmail").textContent=u.email||p.email||"Not connected";document.getElementById("adminRole").textContent=u.role||p.designation||"Administrator";document.getElementById("profileName").value=p.name||u.name||"";document.getElementById("profileEmail").value=p.email||u.email||"";document.getElementById("profilePhone").value=p.phone||"";document.getElementById("profileDesignation").value=p.designation||"Founder / Administrator";const a=document.querySelector(".avatar");a.textContent=(p.name||u.name||"A").trim().charAt(0).toUpperCase();}catch(e){}function toggleProfile(){document.getElementById("profileForm").classList.toggle("open")}function saveProfile(){const p={name:document.getElementById("profileName").value.trim(),email:document.getElementById("profileEmail").value.trim(),phone:document.getElementById("profilePhone").value.trim(),designation:document.getElementById("profileDesignation").value.trim()};localStorage.setItem("settlemAdminProfile",JSON.stringify(p));document.getElementById("adminName").textContent=p.name||"Academy Administrator";document.getElementById("adminEmail").textContent=p.email||document.getElementById("adminEmail").textContent;document.getElementById("adminRole").textContent=p.designation||"Administrator";document.querySelector(".avatar").textContent=(p.name||"A").charAt(0).toUpperCase();toggleProfile()}function logoutAdmin(){localStorage.removeItem("settlemAuthToken");localStorage.removeItem("settlemAcademyUser");return true}</script><a href="student-management.html">👥 Student Management</a><a href="test-engine.html">📝 Test Engine</a><a href="materials-manager.html">📚 Materials Manager</a><div style="margin:30px auto;max-width:1100px;padding:18px;border-radius:15px;background:#eef2ff;color:#243b8f;font-weight:700">🔐 Backend Foundation Ready — Central accounts, enrollments, videos, materials, tests and progress API.</div><div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body></html>
+    const d=await dashFetch('/api/admin/overview');
+    if(!d)return;
+    document.querySelector('.stat:nth-child(1) .num').textContent=d.students;
+    document.querySelector('.stat:nth-child(2) .num').textContent=d.courses;
+    document.querySelector('.stat:nth-child(3) .num').textContent=d.videos;
+    document.querySelector('.stat:nth-child(4) .num').textContent=d.tests;
+    const table=document.querySelector('.table');
+    const rows=d.courseRows||[];
+    table.innerHTML='<tr><th>Course</th><th>Students</th><th>Status</th></tr>'+
+      rows.map(x=>`<tr><td><strong>${escDash(x.course)}</strong></td><td>${x.students}</td><td><span class="badge live">LIVE</span></td></tr>`).join('');
+  }catch(e){console.warn(e)}
+}
+function escDash(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+try{
+ const u=JSON.parse(localStorage.getItem("settlemAcademyUser")||"null")||{};
+ const p=JSON.parse(localStorage.getItem("settlemAdminProfile")||"{}");
+ document.getElementById("adminName").textContent=p.name||u.name||"Academy Administrator";
+ document.getElementById("adminEmail").textContent=u.email||p.email||"Not connected";
+ document.getElementById("adminRole").textContent=u.role||p.designation||"Administrator";
+ document.getElementById("profileName").value=p.name||u.name||"";
+ document.getElementById("profileEmail").value=p.email||u.email||"";
+ document.getElementById("profilePhone").value=p.phone||"";
+ document.getElementById("profileDesignation").value=p.designation||"Founder / Administrator";
+ const a=document.querySelector(".avatar");a.textContent=(p.name||u.name||"A").trim().charAt(0).toUpperCase();
+}catch(e){}
+function toggleProfile(){document.getElementById("profileForm").classList.toggle("open")}
+function saveProfile(){
+ const p={name:profileName.value.trim(),email:profileEmail.value.trim(),phone:profilePhone.value.trim(),designation:profileDesignation.value.trim()};
+ localStorage.setItem("settlemAdminProfile",JSON.stringify(p));adminName.textContent=p.name||"Academy Administrator";adminEmail.textContent=p.email||adminEmail.textContent;adminRole.textContent=p.designation||"Administrator";document.querySelector(".avatar").textContent=(p.name||"A").charAt(0).toUpperCase();toggleProfile()
+}
+function logoutAdmin(){localStorage.removeItem("settlemAuthToken");localStorage.removeItem("settlemAcademyUser");return true}
+loadOverview();
+
+</script>
+</body></html>

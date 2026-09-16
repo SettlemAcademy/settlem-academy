@@ -1,15 +1,71 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Study Material Manager | Settlem Academy</title>
-<style>:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--bg:#f5f7ff;--muted:#64748b;--line:#e2e8f0}*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}.top{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:17px 5%;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900}.brand span{color:#8fe8ff}.top a{color:#fff;text-decoration:none;border:1px solid #ffffff55;padding:9px 13px;border-radius:10px}.wrap{max-width:1150px;margin:auto;padding:30px 20px}.hero{background:linear-gradient(135deg,#fff,#eef2ff);border:1px solid #dbe3ff;border-radius:24px;padding:28px}.eyebrow{font-size:11px;color:var(--violet);font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:42px;margin:7px 0}.hero p{color:var(--muted);line-height:1.6}.status{display:inline-block;padding:7px 10px;border-radius:999px;background:#ecfdf5;color:#047857;font-size:12px;font-weight:800}.grid{display:grid;grid-template-columns:1fr 1.2fr;gap:18px;margin-top:20px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 10px 30px #1725540a}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;font:inherit}.field textarea{min-height:80px}.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:var(--blue)}.item{border:1px solid var(--line);border-radius:14px;padding:16px;margin:10px 0;background:#fbfcff}.pill{display:inline-block;padding:5px 8px;border-radius:99px;background:#e0f2fe;color:#075985;font-size:11px;font-weight:800;margin:2px}.success{color:#047857;font-weight:800}.danger-text{color:#be123c;font-weight:800}.note{font-size:13px;color:var(--muted);line-height:1.5}.loading{color:var(--muted);padding:20px;text-align:center}@media(max-width:750px){.grid{grid-template-columns:1fr}.hero h1{font-size:34px}}</style><link rel="icon" type="image/png" href="settlem-academy-logo.png">
-</head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Study Material Manager | Settlem Academy</title>
+<style>
+:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--pink:#ec4899;--bg:#f5f7ff;--muted:#64748b;--line:#e2e8f0}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}.top{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:17px 5%;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900}.brand span{color:#8fe8ff}.top a{color:#fff;text-decoration:none;border:1px solid #ffffff55;padding:9px 13px;border-radius:10px}.wrap{max-width:1150px;margin:auto;padding:30px 20px}.hero{background:linear-gradient(135deg,#fff,#eef2ff);border:1px solid #dbe3ff;border-radius:24px;padding:28px}.eyebrow{font-size:11px;color:var(--violet);font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:42px;margin:7px 0}.hero p{color:var(--muted)}.grid{display:grid;grid-template-columns:1fr 1.2fr;gap:18px;margin-top:20px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 10px 30px #1725540a}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;font:inherit}.field textarea{min-height:80px}.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:var(--blue)}.danger{background:#fff0f3;color:#be123c}.item{border:1px solid var(--line);border-radius:14px;padding:16px;margin:10px 0}.pill{display:inline-block;padding:5px 8px;border-radius:99px;background:#e0f2fe;color:#075985;font-size:11px;font-weight:800;margin:2px}.success{color:#047857;font-weight:800}.note{font-size:13px;color:var(--muted);line-height:1.5}
+</style></head>
 <body><div class="top"><div class="brand"><img src="settlem-academy-logo.png" alt="Settlem Academy logo" style="width:36px;height:36px;object-fit:contain;border-radius:9px;vertical-align:middle;margin-right:9px">SETTLEM <span>ACADEMY</span> · MATERIALS</div><a href="admin-dashboard.html">← Admin Dashboard</a></div>
-<div class="wrap"><section class="hero"><div class="eyebrow">Secure Resource Management</div><h1>Build your central study library.</h1><p>Add notes, formula sheets, important questions, worksheets and revision resources. Published resources are stored centrally and can be displayed to authenticated students.</p><div class="status">● Connected to Settlem Academy API</div></section>
-<div class="grid"><section class="card"><h2>Add Resource</h2><div class="field"><label>Resource title</label><input id="title" placeholder="e.g. Differentiation Formula Sheet"></div><div class="field"><label>Course</label><select id="course"><option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option></select></div><div class="field"><label>Resource type</label><select id="type"><option>Chapter Notes</option><option>Formula Sheet</option><option>Important Questions</option><option>Practice Worksheet</option><option>Revision Pack</option><option>Test Preparation</option></select></div><div class="field"><label>Resource link</label><input id="url" placeholder="PDF / Google Drive / website link"></div><div class="field"><label>Description</label><textarea id="desc" placeholder="What will students learn from this resource?"></textarea></div><button class="btn primary" id="saveBtn" onclick="add()">Publish Resource</button><p id="msg"></p><p class="note">Resources are saved to the central PostgreSQL-backed API. Only authenticated administrators can publish content.</p></section>
-<section class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2 style="margin:0">Central Study Library</h2><button class="btn secondary" onclick="load()">↻ Refresh</button></div><div id="list"><div class="loading">Loading resources…</div></div></section></div></div>
-<script src="settlem-api.js?v=20260913"></script><script>
-const $=id=>document.getElementById(id);function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-async function guard(){if(!SettlemAPI.hasSession()){location.href='admin-login.html';return false}try{const me=await SettlemAPI.request('/me');if(me.role!=='admin'){location.href='student-dashboard.html';return false}return true}catch(e){msg.textContent=e.message||'Unable to verify admin session.';msg.className='danger-text';return false}}
-async function load(){if(!await guard())return;list.innerHTML='<div class="loading">Loading resources…</div>';try{const arr=await SettlemAPI.request('/materials');list.innerHTML=arr.length?arr.map(x=>`<div class="item"><span class="pill">${esc(x.course)}</span><span class="pill">${esc(x.type)}</span><h3>${esc(x.title)}</h3><p class="note">${esc(x.description||'No description added.')}</p><a class="btn secondary" href="${esc(x.url)}" target="_blank" rel="noopener">Open Resource</a></div>`).join(''):'<p class="note">No published resources yet.</p>'}catch(e){list.innerHTML='<p class="note">Unable to load the central study library: '+esc(e.message||'Please try again.')+'</p>'}}
-async function add(){if(!await guard())return;const t=$('title').value.trim(),u=$('url').value.trim();if(!t||!u){show('Enter a title and resource link.',false);return}const b=$('saveBtn');b.disabled=true;b.textContent='Publishing…';try{await SettlemAPI.request('/materials',{method:'POST',body:JSON.stringify({title:t,course:$('course').value,type:$('type').value,url:u,description:$('desc').value.trim()})});$('title').value='';$('url').value='';$('desc').value='';show('Resource published to the central library.',true);await load()}catch(e){show(e.message||'Unable to publish resource.',false)}finally{b.disabled=false;b.textContent='Publish Resource'}}
-function show(t,ok){msg.className=ok?'success':'danger-text';msg.textContent=t}guard().then(ok=>{if(ok)load()});
-</script><div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body></html>
+<div class="wrap"><section class="hero"><div class="eyebrow">Resource Management</div><h1>Build your study library.</h1><p>Add notes, formula sheets, important questions, worksheets and revision resources. Students will see published resources in the Study Materials page.</p></section>
+<div class="grid"><section class="card"><h2>Add Resource</h2>
+<div class="field"><label>Resource title</label><input id="title" placeholder="e.g. Differentiation Formula Sheet"></div>
+<div class="field"><label>Course</label><select id="course"><option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option></select></div>
+<div class="field"><label>Resource type</label><select id="type"><option>Chapter Notes</option><option>Formula Sheet</option><option>Important Questions</option><option>Practice Worksheet</option><option>Revision Pack</option><option>Test Preparation</option></select></div>
+<div class="field"><label>Resource link</label><input id="url" placeholder="Google Drive / PDF / website link"></div>
+<div class="field"><label>Description</label><textarea id="desc" placeholder="What will students learn from this resource?"></textarea></div>
+<button class="btn primary" onclick="add()">Publish Resource</button><p id="msg"></p>
+<p class="note">Resources are saved in the central Settlem Academy database and are available to authenticated administrators.</p>
+</section><section class="card"><h2>Published Library</h2><div id="list"></div></section></div></div>
+<script>
+
+const API='https://settlem-academy-1.onrender.com';
+function adminToken(){
+  const t=localStorage.getItem('settlemAuthToken');
+  if(!t) throw new Error('Admin session not found. Please log in again.');
+  return t;
+}
+async function adminFetch(path, options={}){
+  const headers={'Content-Type':'application/json',...(options.headers||{})};
+  headers.Authorization='Bearer '+adminToken();
+  const r=await fetch(API+path,{...options,headers});
+  let d={}; try{d=await r.json()}catch(e){}
+  if(!r.ok){
+    if(r.status===401){localStorage.removeItem('settlemAuthToken');localStorage.removeItem('settlemAcademyUser');location.href='admin-login.html';}
+    throw new Error(d.error||'Request failed');
+  }
+  return d;
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+async function loadMaterials(){
+  try{
+    const arr=await adminFetch('/api/admin/materials');
+    list.innerHTML=arr.length?arr.map(x=>`<div class="item">
+      <span class="pill">${esc(x.course)}</span><span class="pill">${esc(x.type)}</span>
+      <h3>${esc(x.title)}</h3><p class="note">${esc(x.description||'No description added.')}</p>
+      <a class="btn secondary" href="${esc(x.url)}" target="_blank" rel="noopener">Open Resource</a>
+      <button class="btn danger" onclick="removeItem(${x.id})">Delete</button>
+    </div>`).join(''):'<p class="note">No resources in the database yet.</p>';
+  }catch(e){list.innerHTML=`<p class="note">${esc(e.message)}</p>`}
+}
+async function add(){
+  const t=document.getElementById('title').value.trim(),u=document.getElementById('url').value.trim();
+  if(!t||!u){msg.textContent='Enter a title and resource link.';return}
+  try{
+    await adminFetch('/api/materials',{method:'POST',body:JSON.stringify({
+      title:t,course:course.value,type:type.value,url:u,description:desc.value.trim()
+    })});
+    document.getElementById('title').value=document.getElementById('url').value=document.getElementById('desc').value='';
+    msg.className='success';msg.textContent='Resource published to the database successfully.';loadMaterials();
+  }catch(e){msg.className='';msg.textContent=e.message}
+}
+async function removeItem(id){
+  if(!confirm('Delete this resource from the database?'))return;
+  try{await adminFetch('/api/admin/materials/'+id,{method:'DELETE'});loadMaterials()}
+  catch(e){msg.textContent=e.message}
+}
+loadMaterials();
+
+</script>
+</body>
+</html>
