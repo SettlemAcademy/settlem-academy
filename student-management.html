@@ -1,59 +1,140 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Student Management | Settlem Academy</title>
-<style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=ll68ZIKafA7BWAnRgH3dSte0OX27aTPUORYK66La0zC-duoDm7ykSJfuh2j2tlPumjZCtU3B7RLsBgkrCG1VFUmmZIS4dTvQk7CuLZ2wbjvKHqjosmQLsJHdAUCkxC5XOqu-QARGKxTQ6LVl48BE3K9nOPC9iX8xUIBl4RO5jgzi3SARfqlTcP8afWZKtaTKNHcVh16fzD8LkiG9Xz5AfNmPQpzDxirst5DSpt0jn-CE5Oooa-DBmInylsvj2lXMUM_8IM87mrNQ0yi8srJtBufSVm2thyY13t3ce7hwpD7DPsysibUq_m3pPmih0or03uwkVrSPeg8dPwm6pwhihaOPR2ie4TMPSK87YKeUQ2Y" charset="UTF-8"></script><style>
 :root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--pink:#ec4899;--bg:#f5f7ff;--muted:#64748b;--line:#e2e8f0}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}.top{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:17px 5%;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900}.brand span{color:#8fe8ff}.top a{color:#fff;text-decoration:none;border:1px solid #ffffff55;padding:9px 13px;border-radius:10px}.wrap{max-width:1200px;margin:auto;padding:30px 20px}.hero{background:linear-gradient(135deg,#fff,#eef2ff);border:1px solid #dbe3ff;border-radius:24px;padding:28px;box-shadow:0 15px 45px #17255412}.eyebrow{font-size:11px;color:var(--violet);font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:42px;margin:7px 0}.hero p{color:var(--muted)}.toolbar{display:flex;gap:12px;margin:20px 0;flex-wrap:wrap}.toolbar input,.toolbar select{padding:12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font:inherit}.tablewrap{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:auto;box-shadow:0 10px 30px #1725540a}table{width:100%;border-collapse:collapse;min-width:850px}th,td{padding:15px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}th{background:#f8faff;color:#475569;font-size:12px;text-transform:uppercase;letter-spacing:.6px}.badge{display:inline-block;padding:5px 8px;border-radius:99px;background:#eef2ff;color:var(--blue);font-size:11px;font-weight:800;margin:2px}.bar{height:7px;width:110px;background:#e2e8f0;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--violet))}.btn{border:0;border-radius:9px;padding:9px 11px;font-weight:800;cursor:pointer}.view{background:#eef2ff;color:var(--blue)}.empty{padding:35px;text-align:center;color:var(--muted)}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:20px 0}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px}.stat strong{font-size:25px}.stat small{display:block;color:var(--muted);margin-top:3px}@media(max-width:800px){.summary{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:34px}}
-</style><link rel="icon" type="image/png" href="settlem-academy-logo.png">
-</head>
+</style></head>
 <body><div class="top"><div class="brand"><img src="settlem-academy-logo.png" alt="Settlem Academy logo" style="width:36px;height:36px;object-fit:contain;border-radius:9px;vertical-align:middle;margin-right:9px">SETTLEM <span>ACADEMY</span> · ADMIN</div><a href="admin-dashboard.html">← Admin Dashboard</a></div>
 <div class="wrap"><section class="hero"><div class="eyebrow">Administration</div><h1>Student Management</h1><p>View students, enrolled courses, learning progress and recent test performance.</p></section>
 <div class="summary"><div class="stat"><strong id="count">0</strong><small>Students</small></div><div class="stat"><strong id="enrolled">0</strong><small>Total Enrollments</small></div><div class="stat"><strong id="avg">0%</strong><small>Average Progress</small></div><div class="stat"><strong id="active">0</strong><small>Active Learners</small></div></div>
 <div class="toolbar"><input id="search" placeholder="Search name or email…" oninput="render()"><select id="courseFilter" onchange="render()"><option value="">All Courses</option><option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option></select></div>
 <div class="tablewrap"><table><thead><tr><th>Student</th><th>Email</th><th>Courses</th><th>Progress</th><th>Latest Test</th><th>Action</th></tr></thead><tbody id="rows"></tbody></table><div id="empty" class="empty" style="display:none">No students found in this browser.</div></div></div>
-<script src="settlem-api.js?v=20260913"></script><script>
-let allStudents=[];
+<script src="settlem-api.js"></script>
+<script>
+let allStudents = [];
+
+function escapeHtml(value){
+  return String(value ?? '').replace(/[&<>"']/g, m => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  }[m]));
+}
+
+function studentProgress(student){
+  const courseCount = Array.isArray(student.courses) ? student.courses.length : 0;
+  const completed = Number(student.completedModules || 0);
+  if (!courseCount) return 0;
+  return Math.min(100, Math.round((completed / (courseCount * 4)) * 100));
+}
+
+function getFilteredStudents(){
+  const q = (document.getElementById('search').value || '').trim().toLowerCase();
+  const f = document.getElementById('courseFilter').value;
+  return allStudents.filter(s => {
+    const haystack = `${s.name || ''} ${s.email || ''}`.toLowerCase();
+    const courses = Array.isArray(s.courses) ? s.courses : [];
+    return haystack.includes(q) && (!f || courses.includes(f));
+  });
+}
+
+function render(){
+  const filtered = getFilteredStudents();
+
+  const totalEnrollments = allStudents.reduce(
+    (n, s) => n + (Array.isArray(s.courses) ? s.courses.length : 0), 0
+  );
+  const progresses = allStudents.map(studentProgress);
+  const average = progresses.length
+    ? Math.round(progresses.reduce((a,b) => a + b, 0) / progresses.length)
+    : 0;
+  const active = progresses.filter(p => p > 0).length;
+
+  document.getElementById('count').textContent = allStudents.length;
+  document.getElementById('enrolled').textContent = totalEnrollments;
+  document.getElementById('avg').textContent = average + '%';
+  document.getElementById('active').textContent = active;
+
+  const rows = document.getElementById('rows');
+  const empty = document.getElementById('empty');
+
+  rows.innerHTML = filtered.map((s, i) => {
+    const courses = Array.isArray(s.courses) ? s.courses : [];
+    const progress = studentProgress(s);
+    const test = s.latestTest && typeof s.latestTest.score === 'number'
+      ? `${s.latestTest.score}%`
+      : '—';
+    const created = s.created_at ? new Date(s.created_at).toLocaleDateString() : '—';
+
+    return `<tr>
+      <td><strong>${escapeHtml(s.name || 'Student')}</strong><br><small style="color:var(--muted)">Joined ${escapeHtml(created)}</small></td>
+      <td>${escapeHtml(s.email || '—')}</td>
+      <td>${courses.length ? courses.map(c => `<span class="badge">${escapeHtml(c)}</span>`).join('') : '—'}</td>
+      <td><div class="bar"><i style="width:${progress}%"></i></div><small>${progress}%</small></td>
+      <td>${test}</td>
+      <td><button class="btn view" type="button" onclick="viewStudent(${i})">View</button></td>
+    </tr>`;
+  }).join('');
+
+  empty.textContent = filtered.length
+    ? ''
+    : (allStudents.length ? 'No students match your search/filter.' : 'No students found.');
+  empty.style.display = filtered.length ? 'none' : 'block';
+}
+
+function viewStudent(index){
+  const s = getFilteredStudents()[index];
+  if (!s) return;
+  const progress = studentProgress(s);
+  const courses = Array.isArray(s.courses) ? s.courses : [];
+  const test = s.latestTest && typeof s.latestTest.score === 'number'
+    ? `${s.latestTest.score}%`
+    : 'No test submitted';
+
+  alert(
+    `Student: ${s.name || 'Student'}\n` +
+    `Email: ${s.email || '—'}\n` +
+    `Courses: ${courses.length ? courses.join(', ') : 'None'}\n` +
+    `Progress: ${progress}%\n` +
+    `Latest Test: ${test}`
+  );
+}
+
 async function loadStudents(){
-  try{
-    if(!SettlemAPI.hasSession()){ location.href='admin-login.html'; return; }
-    const me=await SettlemAPI.request('/me');
-    if(me.role!=='admin') throw new Error('Administrator access required');
-    localStorage.setItem('settlemAcademyUser',JSON.stringify(me));
-    allStudents=await SettlemAPI.request('/admin/students');
+  const rows = document.getElementById('rows');
+  const empty = document.getElementById('empty');
+
+  if (!localStorage.getItem('settlemAuthToken')) {
+    rows.innerHTML = '';
+    empty.textContent = 'Admin session not found. Please log in again.';
+    empty.style.display = 'block';
+    return;
+  }
+
+  rows.innerHTML = '<tr><td colspan="6" style="padding:28px;text-align:center">Loading students from Settlem Academy database…</td></tr>';
+  empty.style.display = 'none';
+
+  try {
+    const data = await SettlemAPI.request('/admin/students');
+    if (!Array.isArray(data)) throw new Error('Unexpected student data received from the server.');
+    allStudents = data;
     render();
-  }catch(e){
-    if(e.message && /Authentication|token|expired|Administrator/i.test(e.message)){ localStorage.removeItem('settlemAuthToken'); localStorage.removeItem('settlemAcademyUser'); location.href='admin-login.html'; return; }
-    document.getElementById('rows').innerHTML=''; document.getElementById('empty').style.display='block'; document.getElementById('empty').textContent=e.message||'Unable to load students.';
+  } catch (error) {
+    allStudents = [];
+    document.getElementById('count').textContent = '0';
+    document.getElementById('enrolled').textContent = '0';
+    document.getElementById('avg').textContent = '0%';
+    document.getElementById('active').textContent = '0';
+    rows.innerHTML = '';
+    empty.textContent = error.message || 'Unable to load students.';
+    empty.style.display = 'block';
+
+    if (error.message && /session|log in|expired|401/i.test(error.message)) {
+      setTimeout(() => { window.location.href = 'admin-login.html'; }, 1200);
+    }
   }
 }
-function completedCount(s){
- const direct=Number(s.completedModules);
- if(Number.isFinite(direct)&&direct>0) return direct;
- if(Array.isArray(s.completed)) return s.completed.filter(x=>x && (x.completed===undefined || x.completed===true || Number(x.completed)===1)).length;
- if(Array.isArray(s.completedLessons)) return s.completedLessons.length;
- return 0;
-}
-function overall(s){
- const explicit=Number(s.progress ?? s.overallProgress);
- if(Number.isFinite(explicit)) return Math.max(0,Math.min(100,Math.round(explicit)));
- return Math.min(100,Math.round((completedCount(s)/4)*100));
-}
-function render(){
- let q=document.getElementById('search').value.toLowerCase(),f=document.getElementById('courseFilter').value;
- let arr=allStudents.filter(s=>(String(s.name||'')+' '+String(s.email||'')).toLowerCase().includes(q)&&(!f||(s.courses||[]).includes(f)));
- document.getElementById('count').textContent=allStudents.length;
- document.getElementById('enrolled').textContent=allStudents.reduce((n,s)=>n+(s.courses||[]).length,0);
- document.getElementById('avg').textContent=(allStudents.length?Math.round(allStudents.reduce((n,s)=>n+overall(s),0)/allStudents.length):0)+'%';
- document.getElementById('active').textContent=allStudents.filter(s=>completedCount(s)>0).length;
- document.getElementById('rows').innerHTML=arr.map(s=>{const p=overall(s);const latest=s.latestTest?.score;return `<tr><td><strong>${esc(s.name||'Student')}</strong></td><td>${esc(s.email||'—')}</td><td>${(s.courses||[]).map(c=>'<span class="badge">'+esc(c)+'</span>').join('')||'—'}</td><td><div class="bar"><i style="width:${p}%"></i></div><small>${p}%</small></td><td>${typeof latest==='number'?latest+'%':'—'}</td><td><button class="btn view" onclick='viewStudent(${JSON.stringify(s)})'>View</button></td></tr>`}).join('');
- document.getElementById('empty').style.display=arr.length?'none':'block';
-}
-function viewStudent(s){alert(`Student: ${s.name||'Student'}
-Email: ${s.email||'—'}
-Courses: ${(s.courses||[]).join(', ')||'None'}
-Completed Modules: ${completedCount(s)}
-Progress: ${overall(s)}%
-Latest Test: ${typeof s.latestTest?.score==='number'?s.latestTest.score+'%':'—'}`)}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('courseFilter').addEventListener('change', render);
 loadStudents();
-</script></script><div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body></html>
+</script></body></html>
