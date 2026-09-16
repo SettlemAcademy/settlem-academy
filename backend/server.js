@@ -609,7 +609,219 @@ app.get("/api/admin/students",auth,admin,async(req,res)=>{
 });
 
 
-async function seedDefaultContent(){
+// ================= ADMIN CONTENT MANAGEMENT =================
+
+app.get("/api/admin/videos",auth,admin,async(req,res)=>{
+  try{
+    const r=await query(
+      "SELECT id,title,course,module,youtube_url,video_id,description,published,created_at FROM videos ORDER BY id DESC"
+    );
+    res.json(r.rows);
+  }catch(e){
+    console.error(e);
+    res.status(500).json({error:"Unable to load videos"});
+  }
+});
+
+app.delete("/api/admin/videos/:id",auth,admin,async(req,res)=>{
+  try{
+    const r=await query(
+      "DELETE FROM videos WHERE id=$1 RETURNING id",
+      [req.params.id]
+    );
+    if(!r.rows.length)return res.status(404).json({error:"Video not found"});
+    res.json({ok:true});
+  }catch(e){
+    console.error(e);
+    res.status(500).json({error:"Unable to delete video"});
+  }
+});
+
+app.get("/api/admin/materials",auth,admin,async(req,res)=>{
+  try{
+    const r=await query(
+      "SELECT id,title,course,type,url,description,published,created_at FROM materials ORDER BY id DESC"
+    );
+    res.json(r.rows);
+  }catch(e){
+    console.error(e);
+    res.status(500).json({error:"Unable to load materials"});
+  }
+});
+
+app.delete("/api/admin/materials/:id",auth,admin,async(req,res)=>{
+  try{
+    const r=await query(
+      "DELETE FROM materials WHERE id=$1 RETURNING id",
+      [req.params.id]
+    );
+    if(!r.rows.length)return res.status(404).json({error:"Material not found"});
+    res.json({ok:true});
+  }catch(e){
+    console.error(e);
+    res.status(500).json({error:"Unable to delete material"});
+  }
+});
+
+app.get("/api/admin/tests",auth,admin,async(req,res)=>{
+  try{
+    const r=await query(`
+      SELECT
+        t.id,
+        t.title,
+        t.course,
+        t.instructions,
+        t.published,
+        t.created_at,
+        COUNT(q.id)::int AS question_count
+      FROM tests t
+      LEFT JOIN questions q ON q.test_id=t.id
+      GROUP BY t.id
+      ORDER BY t.id DESC
+    `);
+    res.json(r.rows);
+  }catch(e){
+    console.error(e);
+    res.status(500).json({error:"Unable to load tests"});
+  }
+});
+
+app.post("/api/admin/tests",auth,admin,async(req,res)=>{
+  const {title,course,instructions="",published=true}=req.body||{};
+
+  if(!title||!course){
+    return res.status(400).json({
+      error:"Test title and course are required"
+    });
+  }
+
+  try{
+    const r=await query(
+      `INSERT INTO tests(title,course,instructions,published)
+       VALUES($1,$2,$3,$4)
+       RETURNING id,title,course,instructions,published`,
+      [
+        title.trim(),
+        course,
+        instructions.trim(),
+        published ? 1 : 0
+      ]
+    );
+
+    res.status(201).json(r.rows[0]);
+  }catch(e){
+    console.error(e);
+    res.status(500).json({error:"Unable to create test"});
+  }
+});
+
+app.get("/api/admin/tests/:id",auth,admin,async(req,res)=>{
+  try{
+    const testResult=await query(
+      `SELECT id,title,course,instructions,published
+       FROM tests
+       WHERE id=$1`,
+      [req.params.id]
+    );
+
+    if(!testResult.rows.length){
+      return res.status(404).json({error:"Test not found"});
+    }
+
+    const test=testResult.rows[0];
+
+    const questionResult=await query(
+      `SELECT id,question,option_a,option_b,option_c,option_d,correct_index
+       FROM questions
+       WHERE test_id=$1
+       ORDER BY id`,
+      [test.id]
+    );
+
+    test.questions=questionResult.rows;
+
+    res.json(test);
+  }catch(e){
+    console.error(e);
+    res.status(500).json({error:"Unable to load test"});
+  }
+});
+
+app.post("/api/admin/tests/:id/questions",auth,admin,async(req,res)=>{
+  const {
+    question,
+    option_a,
+    option_b,
+    option_c,
+    option_d,
+    correct_index
+  }=req.body||{};
+
+  if(
+    !question||
+    !option_a||
+    !option_b||
+    !option_c||
+    !option_d||
+    ![0,1,2,3].includes(Number(correct_index))
+  ){
+    return res.status(400).json({
+      error:"Question, four options and a valid correct answer are required"
+    });
+  }
+
+  try{
+    const test=await query(
+      "SELECT id FROM tests WHERE id=$1",
+      [req.params.id]
+    );
+
+    if(!test.rows.length){
+      return res.status(404).json({error:"Test not found"});
+    }
+
+    const r=await query(
+      `INSERT INTO questions
+       (test_id,question,option_a,option_b,option_c,option_d,correct_index)
+       VALUES($1,$2,$3,$4,$5,$6,$7)
+       RETURNING id`,
+      [
+        req.params.id,
+        question.trim(),
+        option_a.trim(),
+        option_b.trim(),
+        option_c.trim(),
+        option_d.trim(),
+        Number(correct_index)
+      ]
+    );
+
+    res.status(201).json({id:r.rows[0].id});
+  }catch(e){
+    console.error(e);
+    res.status(500).json({error:"Unable to add question"});
+  }
+});
+
+app.delete("/api/admin/tests/:id",auth,admin,async(req,res)=>{
+  try{
+    const r=await query(
+      "DELETE FROM tests WHERE id=$1 RETURNING id",
+      [req.params.id]
+    );
+
+    if(!r.rows.length){
+      return res.status(404).json({error:"Test not found"});
+    }
+
+    res.json({ok:true});
+  }catch(e){
+    console.error(e);
+    res.status(500).json({error:"Unable to delete test"});
+  }
+});
+
+// ================= END ADMIN CONTENT MANAGEMENT =================async function seedDefaultContent(){
   const seedCourses=[
   ["B.Tech Mathematics","btech-mathematics","Engineering Mathematics for B.Tech learners","B.Tech",["Differential Equations","Laplace Transforms","Vector Calculus","Probability & Random Variables"]],
   ["Intermediate Mathematics","intermediate-mathematics","Concepts, problem solving and exam preparation","Intermediate",["Mathematical Foundations","Core Mathematics","Problem Solving","Revision & Preparation"]],
