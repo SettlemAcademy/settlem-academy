@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Student Login | Settlem Academy</title><script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=1VbNghW6wOZ0JaXxPLXn3nsDEAr4bAWVppLk4qSvATV8198gcFDKxcP-oXwIS0fvM-92omWY4RdY0NpKAlL_hxnDSzB452ilXHSSW4dpYmGer2KgcLkBFL43KUlNCdBTcL03LbIGd_C7yCc9ViNqIq2TcEDNo-nYV-WeI19nGKND2C75kH5Hzc1QZd181b1GmCh9ySATRXqzuLywDIktBiFrjMwAAV0X-08dgcCuhy6VdhkjC3vAZt7-zVUYhe2m3XNqf6ezF60h7tvDgWS-k2UjIJPszDwBeJaknQU_0jYazmMme668ia36OgXolsx1Jhc1kThw-ojxeBX0WXorKw" charset="UTF-8"></script><style>
+<title>Student Login | Settlem Academy</title>
+<meta name="settlem-build" content="standalone-login-20260916"><script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=WIwj5VbN9g1ZGRV6bCLhfwfVbP2T36FfGVdB5voufbskybj4wnHgputq0Foffy8lk-FqJVsUVDefu3blWVqGQpf9_Kn2aC6q4XR2nIjZYBMMA04KzJDCVdQVGquD6YzaFv5sc4ab9W-ma68MwlS0ri6fQEsn8RHmT7bQALYP2FAbukrl7r1Q2HOc3USx0_Wju5y_38C7fe5ENO0t4VOSz4ga6zHy3AsIyjnFnZlE8sHweLsoIB_ehJC1Mx7HAq-zK9TwLoMOVbusbtqxa84Pyu8NBw-MWL4x4SjvdQyil3mj4Kwi7CWrxNF48OQLE2jnMt47X1MrLddSCY0zlaXF1w" charset="UTF-8"></script><style>
 :root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--ink:#18233f;--muted:#64748b;--line:#e5eaf3;--bg:#f6f8fc}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:var(--bg)}
 a{text-decoration:none;color:inherit}.wrap{width:min(1120px,92%);margin:auto}
@@ -34,7 +35,6 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
 <p class="muted" style="margin-top:20px;font-size:12px">Your account is securely connected to the Settlem Academy online database.</p>
 </section>
 </div></main><footer>© Settlem Academy • Mathematics Learning Platform</footer>
-<script src="settlem-api.js"></script>
 <script>
 let mode='login';
 function showLogin(){
@@ -50,17 +50,37 @@ async function submitForm(e){
  const note=document.getElementById('note'), btn=document.getElementById('submitBtn');
  const email=document.getElementById('email').value.trim().toLowerCase();
  const password=document.getElementById('password').value;
+ const API='https://settlem-academy-1.onrender.com/api';
  note.style.display='none'; btn.disabled=true;
  btn.textContent=mode==='register'?'Creating Account…':'Signing in…';
+
+ async function request(path, options={}){
+  const headers={'Content-Type':'application/json',...(options.headers||{})};
+  const token=localStorage.getItem('settlemAuthToken');
+  if(token) headers.Authorization='Bearer '+token;
+  const response=await fetch(API+path,{...options,headers});
+  let data={};
+  try{ data=await response.json(); }catch(e){}
+  if(!response.ok) throw new Error(data.error||'Request failed. Please try again.');
+  return data;
+ }
+
  try{
   if(mode==='register'){
    const name=document.getElementById('name').value.trim()||'Student';
-   const data=await SettlemAPI.request('/auth/register',{method:'POST',body:JSON.stringify({name,email,password})});
-   if(data.token) localStorage.setItem('settlemAuthToken',data.token);
+   const data=await request('/auth/register',{
+    method:'POST',
+    body:JSON.stringify({name,email,password})
+   });
+   if(!data.token) throw new Error('Registration succeeded but no secure session token was returned.');
+   localStorage.setItem('settlemAuthToken',data.token);
    localStorage.setItem('settlemLoggedIn','true');
    localStorage.setItem('settlemStudent',JSON.stringify(data.user||{name,email}));
   }else{
-   const data=await SettlemAPI.login(email,password);
+   const data=await request('/auth/login',{
+    method:'POST',
+    body:JSON.stringify({email,password})
+   });
    if(!data.token) throw new Error('Login succeeded but no secure session token was returned.');
    localStorage.setItem('settlemAuthToken',data.token);
    localStorage.setItem('settlemLoggedIn','true');
