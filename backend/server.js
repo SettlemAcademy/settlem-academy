@@ -821,7 +821,9 @@ app.delete("/api/admin/tests/:id",auth,admin,async(req,res)=>{
   }
 });
 
-// ================= END ADMIN CONTENT MANAGEMENT =================async function seedDefaultContent(){
+// // ---------------- END ADMIN CONTENT MANAGEMENT ----------------
+
+async function seedDefaultContent(){
   const seedCourses=[
   ["B.Tech Mathematics","btech-mathematics","Engineering Mathematics for B.Tech learners","B.Tech",["Differential Equations","Laplace Transforms","Vector Calculus","Probability & Random Variables"]],
   ["Intermediate Mathematics","intermediate-mathematics","Concepts, problem solving and exam preparation","Intermediate",["Mathematical Foundations","Core Mathematics","Problem Solving","Revision & Preparation"]],
