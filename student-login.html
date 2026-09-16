@@ -16,9 +16,10 @@ label{display:block;font-size:13px;font-weight:800;margin:14px 0 7px}input{width
 .note{margin-top:14px;padding:10px 12px;border-radius:10px;background:#eef8f6;color:#14786c;font-size:12px;display:none}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
 @media(max-width:760px){.shell{grid-template-columns:1fr}.visual{display:none}.form{padding:32px}}
-</style></head>
+</style><link rel="icon" type="image/png" href="settlem-academy-logo.png">
+</head>
 <body>
-<header><div class="wrap nav"><a class="brand" href="index.html"><b>SA</b>SETTLEM ACADEMY</a><a href="index.html" class="muted">← Back to website</a></div></header>
+<header><div class="wrap nav"><a class="brand" href="index.html"><img src="settlem-academy-logo.png" alt="Settlem Academy logo" style="width:34px;height:34px;object-fit:contain;border-radius:8px;vertical-align:middle;margin-right:8px">SETTLEM ACADEMY</a><a href="index.html" class="muted">← Back to website</a></div></header>
 <main><div class="shell">
 <section class="visual"><span class="pill">STUDENT LEARNING PORTAL</span><h1>Learn smarter.<br>Grow stronger.</h1><p>Access your courses, video lessons, study materials and practice tests from one place.</p><div class="formula">∑  ∫  π  √x  Δ</div></section>
 <section class="form">
@@ -27,42 +28,33 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
 <form id="form" onsubmit="submitForm(event)">
 <div id="nameField" style="display:none"><label>Student Name</label><input id="name" type="text" placeholder="Enter your name"></div>
 <label>Email Address</label><input id="email" type="email" placeholder="student@example.com" required>
-<label>Password</label><input id="password" type="password" placeholder="Enter your password" required minlength="4">
+<label>Password</label><input id="password" type="password" placeholder="Minimum 6 characters" required minlength="6"><div id="confirmField" style="display:none"><label>Confirm Password</label><input id="confirmPassword" type="password" placeholder="Re-enter your password"></div>
 <button class="submit" id="submitBtn">Login to Dashboard</button>
 <div class="note" id="note"></div>
 </form><p style="text-align:center"><a href="course-enrollment.html">Choose Courses</a></p>
-<p class="muted" style="margin-top:20px;font-size:12px">Your account is securely connected to the Settlem Academy online learning portal.</p>
+<p class="muted" style="margin-top:20px;font-size:12px">Your student account is securely stored in the Settlem Academy online account service.</p>
 </section>
 </div></main><footer>© Settlem Academy • Mathematics Learning Platform</footer>
-<script src="settlem-api.js"></script><script>
+<script src="settlem-api.js?v=20260916"></script><script>
 let mode='login';
-function showLogin(){
- mode='login'; nameField.style.display='none'; title.textContent='Welcome back'; subtitle.textContent='Sign in to continue your mathematics learning.';
- loginTab.classList.add('active'); registerTab.classList.remove('active'); submitBtn.textContent='Login to Dashboard'; note.style.display='none';
-}
-function showRegister(){
- mode='register'; nameField.style.display='block'; title.textContent='Create your account'; subtitle.textContent='Join Settlem Academy and start learning.';
- registerTab.classList.add('active'); loginTab.classList.remove('active'); submitBtn.textContent='Create Account'; note.style.display='none';
-}
+function showLogin(){mode='login';nameField.style.display='none';confirmField.style.display='none';title.textContent='Welcome back';subtitle.textContent='Sign in to continue your mathematics learning.';loginTab.classList.add('active');registerTab.classList.remove('active');submitBtn.textContent='Login to Dashboard';}
+function showRegister(){mode='register';nameField.style.display='block';confirmField.style.display='block';title.textContent='Create your account';subtitle.textContent='Join Settlem Academy and start learning.';registerTab.classList.add('active');loginTab.classList.remove('active');submitBtn.textContent='Create Account';}
+function message(text){note.textContent=text;note.style.display='block'}
 async function submitForm(e){
- e.preventDefault();
- note.style.display='block'; note.textContent='Connecting to Settlem Academy…';
- submitBtn.disabled=true;
+ e.preventDefault(); note.style.display='none'; submitBtn.disabled=true;
+ const email=document.getElementById('email').value.trim().toLowerCase(), password=document.getElementById('password').value;
  try{
-   const email=document.getElementById('email').value.trim().toLowerCase();
-   const password=document.getElementById('password').value;
-   const name=document.getElementById('name').value.trim();
-   const data=mode==='register' ? await apiRegister(name,email,password) : await apiLogin(email,password);
-   localStorage.setItem('settlemAuthToken',data.token);
-   localStorage.setItem('settlemAcademyUser',JSON.stringify(data.user));
-   localStorage.removeItem('settlemStudent');
-   localStorage.removeItem('settlemLoggedIn');
-   window.location.href='student-dashboard.html';
- }catch(err){
-   note.textContent=err.message || 'Unable to connect to the server.';
- }finally{
-   submitBtn.disabled=false;
- }
+   if(mode==='register'){
+     const name=document.getElementById('name').value.trim(), confirm=document.getElementById('confirmPassword').value;
+     if(!name){message('Please enter your name.');return;}
+     if(password.length<6){message('Password must be at least 6 characters.');return;}
+     if(password!==confirm){message('Passwords do not match.');return;}
+     const d=await SettlemAPI.request('/auth/register',{method:'POST',body:JSON.stringify({name,email,password})});
+     localStorage.setItem('settlemAuthToken',d.token);localStorage.setItem('settlemAcademyUser',JSON.stringify(d.user));localStorage.setItem('settlemLoggedIn','true');location.href='student-dashboard.html';return;
+   }
+   const d=await SettlemAPI.request('/auth/login',{method:'POST',body:JSON.stringify({email,password})});
+   localStorage.setItem('settlemAuthToken',d.token);localStorage.setItem('settlemAcademyUser',JSON.stringify(d.user));localStorage.setItem('settlemLoggedIn','true');location.href='student-dashboard.html';
+ }catch(err){message(err.message||'Unable to connect to the account service. Please try again.');}
+ finally{submitBtn.disabled=false}
 }
-</script>
-</body></html>
+</script><div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body></html>

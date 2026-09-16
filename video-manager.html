@@ -1,106 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Video Manager | Settlem Academy</title>
 <style>
-:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--pink:#ec4899;--bg:#f5f7ff;--card:#fff;--muted:#64748b;--line:#e2e8f0}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}
-header{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:20px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px;position:sticky;top:0;z-index:5}
-.brand{font-weight:900;letter-spacing:.5px}.brand span{color:#8fe8ff}.back{color:#fff;text-decoration:none;border:1px solid #ffffff44;padding:9px 14px;border-radius:10px}
-main{max-width:1180px;margin:35px auto;padding:0 20px}.hero{background:linear-gradient(135deg,#fff,#eef2ff);border:1px solid #dbe3ff;border-radius:24px;padding:30px;box-shadow:0 18px 50px #17255412}.eyebrow{font-size:12px;font-weight:800;color:var(--violet);letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,48px);margin:8px 0}.hero p{color:var(--muted);max-width:760px;line-height:1.7}
-.grid{display:grid;grid-template-columns:1fr 1.35fr;gap:22px;margin-top:22px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 10px 30px #1725540b}.card h2{margin-top:0}.field{margin:13px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:7px}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:11px;font:inherit;background:#fff}.field textarea{min-height:90px;resize:vertical}.btn{border:0;border-radius:11px;padding:12px 16px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:var(--blue)}.danger{background:#fff0f3;color:#be123c}.actions{display:flex;gap:9px;flex-wrap:wrap}.list{display:grid;gap:12px}.video{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfcff}.video-top{display:flex;justify-content:space-between;gap:12px}.tag{font-size:11px;background:#e0f2fe;color:#075985;padding:5px 8px;border-radius:99px;font-weight:800}.video h3{margin:9px 0 5px}.video p{color:var(--muted);font-size:14px;line-height:1.5}.empty{color:var(--muted);padding:25px;text-align:center;border:1px dashed #cbd5e1;border-radius:14px}
-.note{margin-top:16px;color:#475569;font-size:13px;line-height:1.6}.success{color:#047857;font-weight:800}.danger-text{color:#be123c;font-weight:800}
-@media(max-width:850px){.grid{grid-template-columns:1fr}}
-</style>
-<script src="settlem-api.js"></script></head>
-<body onload="requireAdminPage()">>
-<header><div class="brand">SETTLEM <span>ACADEMY</span> · VIDEO MANAGER</div><a class="back" href="admin-dashboard.html">← Admin Dashboard</a></header>
-<main>
-<section class="hero">
-<div class="eyebrow">Content Management</div>
-<h1>Connect your real video lessons.</h1>
-<p>Add YouTube lesson links, assign them to the correct course and module, and the Learning Room will use the same saved content automatically.</p>
-</section>
-
-<div class="grid">
-<section class="card">
-<h2>Add Video Lesson</h2>
-<div class="field"><label>Lesson title</label><input id="title" placeholder="e.g. Introduction to Differentiation"></div>
-<div class="field"><label>Course</label><select id="course"><option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option></select></div>
-<div class="field"><label>Module</label><select id="module"><option>Mathematical Foundations</option><option>Core Concepts</option><option>Problem Solving</option><option>Revision & Preparation</option></select></div>
-<div class="field"><label>YouTube URL</label><input id="url" placeholder="https://www.youtube.com/watch?v=..."></div>
-<div class="field"><label>Description</label><textarea id="desc" placeholder="Short description for students"></textarea></div>
-<div class="actions"><button class="btn primary" onclick="saveVideo()">Save Video</button><button class="btn secondary" onclick="demoVideo()">Add Demo</button></div>
-<p class="note">The YouTube URL is stored in this browser for now. This is a front-end content manager; production multi-user storage can be connected later.</p>
-<div id="msg"></div>
-</section>
-
-<section class="card">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-<h2 style="margin:0">Video Library</h2><button class="btn danger" onclick="clearVideos()">Clear All</button>
-</div>
-<div id="list" class="list" style="margin-top:16px"></div>
-</section>
-</div>
-</main>
-<script>
-const KEY='settlemAcademyVideos';
-function getVideos(){return JSON.parse(localStorage.getItem(KEY)||'[]')}
-function idFromUrl(url){
- try{let u=new URL(url); if(u.hostname.includes('youtu.be')) return u.pathname.slice(1); return u.searchParams.get('v')||''}catch(e){return ''}
-}
-function saveVideo(){
- const title=document.getElementById('title').value.trim(), url=document.getElementById('url').value.trim();
- if(!title||!url){show('Please enter a lesson title and YouTube URL.',false);return}
- const id=idFromUrl(url); if(!id){show('Please enter a valid YouTube watch or youtu.be link.',false);return}
- const item={id:crypto.randomUUID(),title,course:course.value,module:module.value,url,videoId:id,description:desc.value.trim(),createdAt:new Date().toISOString()};
- const arr=getVideos();arr.push(item);localStorage.setItem(KEY,JSON.stringify(arr));reset();render();show('Video saved successfully.',true)
-}
-function demoVideo(){
- title.value='Demo Lesson — Replace with Your YouTube Video';url.value='https://www.youtube.com/watch?v=dQw4w9WgXcQ';desc.value='Demo entry. Replace this link with your real Settlem Academy lesson.';saveVideo()
-}
-function removeVideo(id){localStorage.setItem(KEY,JSON.stringify(getVideos().filter(v=>v.id!==id)));render()}
-function clearVideos(){if(confirm('Remove all saved videos from this browser?')){localStorage.removeItem(KEY);render()}}
-function reset(){title.value='';url.value='';desc.value=''}
-function show(t,ok){msg.className=ok?'success':'danger-text';msg.textContent=t}
-function render(){
- const arr=getVideos();list.innerHTML=arr.length?arr.map(v=>`<article class="video"><div class="video-top"><span class="tag">${v.course}</span><span class="tag">${v.module}</span></div><h3>${escapeHtml(v.title)}</h3><p>${escapeHtml(v.description||'No description added.')}</p><div class="actions"><a class="btn secondary" target="_blank" href="${v.url}">Open YouTube</a><button class="btn danger" onclick="removeVideo('${v.id}')">Delete</button></div></article>`).join(''):'<div class="empty">No videos yet. Add your first YouTube lesson above.</div>'
-}
-function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-render()
-</script>
-<script>
-async function loadCentralVideos(){
- if(!getToken())return;
- try{
-  const d=await apiAdminVideos();
-  window.__centralVideos=d.videos||[];
-  const list=document.querySelector(".library-list")||document.querySelector("#videoLibrary")||document.querySelector(".video-library");
-  if(!list)return;
-  if(!window.__centralVideos.length){list.innerHTML="<div style='padding:16px;color:#64748b'>No videos in the central database yet.</div>";return;}
-  list.innerHTML=window.__centralVideos.map(v=>`<div class="library-item" style="padding:14px;border:1px solid #e6eaf2;border-radius:12px;margin:8px 0"><strong>${escV(v.title||"Untitled")}</strong><div style="font-size:12px;color:#64748b">${escV(v.course||"")} · ${escV(v.module||"")}</div></div>`).join("");
- }catch(e){console.warn("Central video API unavailable:",e.message);}
-}
-function escV(v){return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
-window.addEventListener("DOMContentLoaded",loadCentralVideos);
-</script>
-<script id="centralCreateHook_video">
-(function(){
- const form=document.querySelector("form");
- if(!form)return;
- form.addEventListener("submit",async function(e){
-   if(!getToken() || form.dataset.centralBusy==="1") return;
-   e.preventDefault(); form.dataset.centralBusy="1";
-   try{
-     const vals=[...form.querySelectorAll("input,select,textarea")].map(x=>x.value.trim());
-     const payload={title:vals[0]||"Untitled Lesson",course:vals[1]||"",module:vals[2]||"",youtube_url:vals[3]||vals.find(v=>/youtu/i.test(v))||"",description:vals[4]||""};
-     await apiAdminAddVideo(payload);
-     alert("Video saved to the central database.");
-     location.reload();
-   }catch(err){alert("Could not save to the central database: "+err.message);form.dataset.centralBusy="0";}
- });
-})();
-</script></body>
-</html>
+:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--bg:#f5f7ff;--card:#fff;--muted:#64748b;--line:#e2e8f0}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}header{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:20px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px;position:sticky;top:0;z-index:5}.brand{font-weight:900;letter-spacing:.5px}.brand span{color:#8fe8ff}.back{color:#fff;text-decoration:none;border:1px solid #ffffff44;padding:9px 14px;border-radius:10px}main{max-width:1180px;margin:35px auto;padding:0 20px}.hero{background:linear-gradient(135deg,#fff,#eef2ff);border:1px solid #dbe3ff;border-radius:24px;padding:30px;box-shadow:0 18px 50px #17255412}.eyebrow{font-size:12px;font-weight:800;color:var(--violet);letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,48px);margin:8px 0}.hero p{color:var(--muted);max-width:760px;line-height:1.7}.status{display:inline-flex;gap:7px;align-items:center;margin-top:10px;padding:7px 10px;border-radius:999px;background:#ecfdf5;color:#047857;font-size:12px;font-weight:800}.grid{display:grid;grid-template-columns:1fr 1.35fr;gap:22px;margin-top:22px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 10px 30px #1725540b}.card h2{margin-top:0}.field{margin:13px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:7px}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:11px;font:inherit;background:#fff}.field textarea{min-height:90px;resize:vertical}.btn{border:0;border-radius:11px;padding:12px 16px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:var(--blue)}.actions{display:flex;gap:9px;flex-wrap:wrap}.list{display:grid;gap:12px}.video{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfcff}.video-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.tag{font-size:11px;background:#e0f2fe;color:#075985;padding:5px 8px;border-radius:99px;font-weight:800}.video h3{margin:9px 0 5px}.video p{color:var(--muted);font-size:14px;line-height:1.5}.empty{color:var(--muted);padding:25px;text-align:center;border:1px dashed #cbd5e1;border-radius:14px}.note{margin-top:16px;color:#475569;font-size:13px;line-height:1.6}.success{color:#047857;font-weight:800}.danger-text{color:#be123c;font-weight:800}.loading{color:var(--muted);padding:20px;text-align:center}@media(max-width:850px){.grid{grid-template-columns:1fr}}
+</style><link rel="icon" type="image/png" href="settlem-academy-logo.png">
+</head><body>
+<header><div class="brand"><img src="settlem-academy-logo.png" alt="Settlem Academy logo" style="width:36px;height:36px;object-fit:contain;vertical-align:middle;margin-right:8px">SETTLEM <span>ACADEMY</span> · VIDEO MANAGER</div><a class="back" href="admin-dashboard.html">← Admin Dashboard</a></header>
+<main><section class="hero"><div class="eyebrow">Secure Content Management</div><h1>Manage your real video lessons.</h1><p>Add YouTube lessons, assign them to the correct course and module, and save them centrally. Published lessons are available to authenticated students through the Learning Room.</p><div class="status">● Connected to Settlem Academy API</div></section>
+<div class="grid"><section class="card"><h2>Add Video Lesson</h2><div class="field"><label>Lesson title</label><input id="title" placeholder="e.g. Introduction to Differentiation"></div><div class="field"><label>Course</label><select id="course"><option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option></select></div><div class="field"><label>Module</label><select id="module"></select></div><div class="field"><label>YouTube URL</label><input id="url" placeholder="https://www.youtube.com/watch?v=..."></div><div class="field"><label>Description</label><textarea id="desc" placeholder="Short description for students"></textarea></div><button class="btn primary" id="saveBtn" onclick="saveVideo()">Save Video</button><p class="note">Videos are saved to the central PostgreSQL-backed API. Only authenticated administrators can publish content.</p><div id="msg"></div></section>
+<section class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2 style="margin:0">Central Video Library</h2><button class="btn secondary" onclick="loadVideos()">↻ Refresh</button></div><div id="list" class="list" style="margin-top:16px"><div class="loading">Loading videos…</div></div></section></div></main>
+<script src="settlem-api.js?v=20260913"></script><script>
+const courseModules={'B.Tech Mathematics':['Differential Equations','Laplace Transforms','Vector Calculus','Probability & Random Variables'],'Intermediate Mathematics':['Mathematical Foundations','Core Mathematics','Problem Solving','Revision & Preparation'],'Class 10 Mathematics':['Foundations & Concepts','Core Mathematics','Problem Solving','Revision & Preparation'],'Classes 5–7 Mathematics':['Number Skills','Core Concepts','Problem Solving','Revision & Practice']};
+const $=id=>document.getElementById(id);function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function refreshModules(){const c=$('course').value;$('module').innerHTML=(courseModules[c]||[]).map(m=>`<option>${esc(m)}</option>`).join('')}$('course').addEventListener('change',refreshModules);refreshModules();
+function idFromUrl(url){try{const u=new URL(url);if(u.hostname.includes('youtu.be'))return u.pathname.replace(/^\//,'').split('/')[0];return u.searchParams.get('v')||u.pathname.match(/\/embed\/([^/]+)/)?.[1]||''}catch(e){return ''}}
+async function guard(){if(!SettlemAPI.hasSession()){location.href='admin-login.html';return false}try{const me=await SettlemAPI.request('/me');if(me.role!=='admin'){location.href='student-dashboard.html';return false}return true}catch(e){if(!localStorage.getItem('settlemAuthToken'))location.href='admin-login.html';else show(e.message||'Unable to verify admin session.',false);return false}}
+async function loadVideos(){if(!await guard())return;list.innerHTML='<div class="loading">Loading videos…</div>';try{const arr=await SettlemAPI.request('/videos');list.innerHTML=arr.length?arr.map(v=>`<article class="video"><div class="video-top"><span class="tag">${esc(v.course)}</span><span class="tag">${esc(v.module)}</span></div><h3>${esc(v.title)}</h3><p>${esc(v.description||'No description added.')}</p><div class="actions"><a class="btn secondary" target="_blank" rel="noopener" href="${esc(v.youtube_url||'#')}">Open YouTube</a></div></article>`).join(''):'<div class="empty">No published videos yet. Add your first lesson above.</div>'}catch(e){list.innerHTML='<div class="empty">Unable to load the central video library. '+esc(e.message||'Please try again.')+'</div>'}}
+async function saveVideo(){if(!await guard())return;const t=$('title').value.trim(),url=$('url').value.trim(),id=idFromUrl(url);if(!t||!url){show('Please enter a lesson title and YouTube URL.',false);return}if(!id){show('Please enter a valid YouTube watch, youtu.be or embed link.',false);return}const b=$('saveBtn');b.disabled=true;b.textContent='Saving…';try{await SettlemAPI.request('/videos',{method:'POST',body:JSON.stringify({title:t,course:$('course').value,module:$('module').value,youtube_url:url,video_id:id,description:$('desc').value.trim()})});$('title').value='';$('url').value='';$('desc').value='';show('Video published to the central library.',true);await loadVideos()}catch(e){show(e.message||'Unable to save video.',false)}finally{b.disabled=false;b.textContent='Save Video'}}
+function show(t,ok){$('msg').className=ok?'success':'danger-text';$('msg').textContent=t}guard().then(ok=>{if(ok)loadVideos()});
+</script><div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body></html>

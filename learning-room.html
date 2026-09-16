@@ -1,69 +1,118 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>B.Tech Mathematics Learning Room | Settlem Academy</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Room | Settlem Academy</title>
 <style>
-:root{--navy:#101a43;--navy2:#17265c;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--pink:#ec4899;--bg:#f6f8ff;--white:#fff;--line:#e3e8f3;--muted:#64748b;--ink:#18233f;--success:#15803d}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}a{text-decoration:none;color:inherit}
-.top{background:linear-gradient(135deg,var(--navy),#263b91);color:#fff;padding:14px 4%;display:flex;align-items:center;justify-content:space-between;gap:15px;position:sticky;top:0;z-index:20;box-shadow:0 8px 25px #101a4318}.brand{font-weight:900;letter-spacing:.5px}.brand span{color:#8fe8ff}.toplinks{display:flex;gap:8px;flex-wrap:wrap}.toplinks a{border:1px solid #ffffff3d;border-radius:10px;padding:8px 11px;font-size:13px}
-.layout{display:grid;grid-template-columns:315px minmax(0,1fr);min-height:calc(100vh - 63px)}aside{background:#fff;border-right:1px solid var(--line);padding:22px 17px}.course-label{font-size:11px;font-weight:900;letter-spacing:1.3px;color:var(--violet);text-transform:uppercase}.course-name{font-size:20px;font-weight:900;margin:5px 0 15px}.overall{padding:15px;border-radius:15px;background:linear-gradient(135deg,#eef3ff,#f7f1ff);border:1px solid #dce4ff;margin-bottom:18px}.overall-row{display:flex;justify-content:space-between;font-weight:900}.track{height:9px;background:#dfe5ef;border-radius:99px;overflow:hidden;margin-top:9px}.track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--violet),var(--pink));transition:.25s}
-.module{padding:15px;margin:9px 0;border:1px solid var(--line);border-radius:14px;cursor:pointer;background:#fff;transition:.2s}.module:hover{transform:translateY(-1px);box-shadow:0 8px 20px #101a4310}.module.active{background:#eef2ff;border-color:#b9c7ff;box-shadow:0 7px 20px #2563eb14}.module-head{display:flex;gap:10px;align-items:center}.num{width:30px;height:30px;border-radius:10px;background:#edf2ff;color:var(--blue);display:grid;place-items:center;font-weight:900;font-size:12px}.module.active .num{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.module strong{font-size:14px}.module small{display:block;color:var(--muted);margin-left:40px;margin-top:3px}
-main{padding:30px;max-width:1150px;width:100%;margin:auto}.head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;flex-wrap:wrap}.ey{font-size:11px;font-weight:900;color:var(--violet);letter-spacing:1.4px;text-transform:uppercase}.head h1{margin:5px 0;font-size:clamp(30px,4vw,42px);line-height:1.1}.muted{color:var(--muted)}.summary{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.pill{padding:8px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:800}
-.lesson-area{margin-top:22px}.empty{padding:38px 25px;background:#fff;border:1px dashed #cbd5e1;border-radius:18px;text-align:center}.empty .icon{font-size:46px}.empty h2{margin:8px 0}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:18px;box-shadow:0 8px 28px #1725540a}.video{background:#0b1027;border-radius:18px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 18px 50px #17255420}.video iframe{width:100%;height:100%;border:0}.lesson-meta{font-size:12px;color:var(--violet);font-weight:900;letter-spacing:1px;text-transform:uppercase}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.btn{display:inline-block;border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer;font-size:13px}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:#3155c8}.done{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}.outline{background:#fff;border:1px solid #ccd5e1;color:var(--ink)}
-.resources{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}.resource{padding:17px;border:1px solid var(--line);border-radius:15px;background:#fff}.resource b{display:block;margin-bottom:4px}.resource span{font-size:12px;color:var(--muted)}.notice{display:none;margin-top:15px;padding:12px 14px;border-radius:11px;font-size:13px;font-weight:700}.lesson-list{display:grid;gap:10px;margin-top:18px}.lesson-row{display:flex;width:100%;text-align:left;cursor:pointer;font:inherit;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:13px;background:#fbfcff}.lesson-no{width:30px;height:30px;border-radius:9px;background:#eef2ff;color:var(--blue);display:grid;place-items:center;font-weight:900}.lesson-row strong{font-size:14px}.lesson-row p{margin:4px 0 0;font-size:12px}.lesson-badge{margin-left:auto;font-size:10px;font-weight:900;letter-spacing:.6px;color:var(--violet);background:#f3e8ff;border-radius:999px;padding:6px 8px}@media(max-width:600px){.lesson-row{align-items:flex-start}.lesson-badge{margin-left:0}}
-.notice.show{display:block}.notice.ok{background:#ecfdf3;color:#166534;border:1px solid #bbf7d0}.notice.err{background:#fff1f2;color:#b42318;border:1px solid #fecdd3}
-@media(max-width:850px){.layout{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line)}main{padding:20px}.resources{grid-template-columns:1fr}}
+:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--pink:#ec4899;--bg:#f5f7ff;--card:#fff;--muted:#64748b;--line:#e2e8f0}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}.top{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:17px 4%;display:flex;justify-content:space-between;align-items:center;gap:15px;position:sticky;top:0;z-index:5}.brand{font-weight:900}.brand span{color:#8fe8ff}.top a{color:#fff;text-decoration:none;border:1px solid #ffffff44;padding:8px 12px;border-radius:9px}
+.layout{display:grid;grid-template-columns:310px 1fr;min-height:calc(100vh - 65px)}aside{background:#fff;border-right:1px solid var(--line);padding:24px 16px}.course-select{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;font-weight:700;margin-bottom:18px}.module{padding:14px;border-radius:14px;margin:9px 0;cursor:pointer;border:1px solid transparent}.module:hover{background:#f1f5ff}.module.active{background:linear-gradient(135deg,#eef2ff,#f5f3ff);border-color:#c7d2fe}.module small{color:var(--muted)}main{padding:28px;max-width:1100px;width:100%}.heading{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;flex-wrap:wrap}.eyebrow{font-size:11px;font-weight:900;color:var(--violet);letter-spacing:1.4px;text-transform:uppercase}.heading h1{margin:6px 0;font-size:34px}.heading p{color:var(--muted);margin-top:0}.progress{background:#e2e8f0;height:9px;border-radius:99px;overflow:hidden;width:230px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--violet),var(--pink));transition:.3s}.video-box{margin-top:22px;background:#0b1027;border-radius:20px;overflow:hidden;box-shadow:0 18px 50px #17255420;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}.video-box iframe{width:100%;height:100%;border:0}.placeholder{color:#fff;text-align:center;padding:30px}.placeholder .play{font-size:55px}.lesson{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:18px}.lesson h2{margin:0 0 7px}.lesson p{color:var(--muted);line-height:1.65}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:11px;padding:12px 16px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:var(--blue)}.complete{background:#dcfce7;color:#166534}.complete.done{background:#166534;color:#fff}.empty{background:#fff;border:1px dashed #cbd5e1;border-radius:16px;padding:30px;color:var(--muted);text-align:center;margin-top:20px}.lesson-list{display:grid;gap:9px;margin-top:18px}.lesson-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px 14px;cursor:pointer}.lesson-item.active{border-color:#a5b4fc;background:#eef2ff}.lesson-item.done{border-color:#bbf7d0}.lesson-no{min-width:32px;height:32px;border-radius:9px;background:#eef2ff;color:var(--blue);display:grid;place-items:center;font-weight:900}.lesson-item.done .lesson-no{background:#dcfce7;color:#166534}.lesson-meta{flex:1}.lesson-meta strong{display:block}.lesson-meta small{color:var(--muted)}.nav-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}.nav-actions .btn{min-width:130px}.module-progress{font-size:12px;color:var(--muted);margin-top:3px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line)}}
 </style>
+<link rel="icon" type="image/png" href="settlem-academy-logo.png">
 </head>
 <body>
-<div class="top"><div class="brand">SETTLEM <span>ACADEMY</span> · LEARNING ROOM</div><div class="toplinks"><a href="student-dashboard.html">Dashboard</a><a href="course-enrollment.html">Courses</a></div></div>
+<div class="top"><div class="brand"><img src="settlem-academy-logo.png" alt="Settlem Academy logo" style="width:36px;height:36px;object-fit:contain;vertical-align:middle;margin-right:8px">SETTLEM <span>ACADEMY</span> · LEARNING ROOM</div><a href="student-dashboard.html">Student Dashboard</a></div>
 <div class="layout">
 <aside>
-  <div class="course-label">Current Course</div><div class="course-name">B.Tech Mathematics</div>
-  <div class="overall"><div class="overall-row"><span>Course Progress</span><span id="pctSide">0%</span></div><div class="track"><i id="fillSide"></i></div></div>
-  <div id="modules"></div>
+<select id="courseSelect" class="course-select" onchange="setCourse(this.value)">
+<option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option>
+</select>
+<div id="modules"></div>
 </aside>
 <main>
-  <div class="head"><div><div class="ey">Your Learning Space</div><h1 id="title">Mathematical Foundations</h1><p id="desc" class="muted"></p></div><div class="pill" id="moduleStatus">Module 1 of 4</div></div>
-  <div class="summary"><span class="pill">🎓 B.Tech Mathematics</span><span class="pill">📚 4 Modules</span><span class="pill">📝 Practice & Revision</span></div>
-  <div id="notice" class="notice"></div>
-  <div id="content" class="lesson-area"></div>
+<div class="heading"><div><div class="eyebrow">Your Learning Space</div><h1 id="pageTitle">Mathematical Foundations</h1><p id="pageDesc">Build the concepts you need before moving into advanced problem solving.</p></div><div><strong id="progressText">0% Complete</strong><div class="progress"><i id="bar"></i></div></div></div>
+<div id="content"></div>
 </main>
 </div>
+<script src="settlem-api.js?v=20260913"></script>
 <script>
-const API_BASE='https://settlem-academy-api.onrender.com/api';
-const names=['Mathematical Foundations','Core Concepts','Problem Solving','Revision & Preparation'];
-const descs=['Build the mathematical foundation required for confident university-level learning.','Develop concepts step by step and connect ideas to practical problem solving.','Apply learned methods through guided examples, practice and exam-style questions.','Review the course systematically and prepare with focused revision and self-checks.'];
-const moduleContent=[
- {lessons:[['1.1 Mathematical Language & Notation','Learn the symbols, terminology and conventions used throughout university mathematics.'],['1.2 Algebraic Foundations','Review expressions, identities, equations and standard algebraic techniques.'],['1.3 Functions & Graphs','Understand functions, domains, ranges and how mathematical relationships are represented graphically.']],objective:'Establish a strong foundation and build confidence with the notation and algebra used in later modules.'},
- {lessons:[['2.1 Concept Building','Learn how to read a mathematical definition and identify its conditions.'],['2.2 Worked Examples','Follow a structured approach from given information to a complete mathematical solution.'],['2.3 Connecting Concepts','Recognise relationships between formulas, representations and mathematical ideas.']],objective:'Develop a systematic way to understand new mathematical concepts and connect them.'},
- {lessons:[['3.1 Understanding the Problem','Identify what is given, what is required and which mathematical tools may apply.'],['3.2 Step-by-Step Solutions','Organise calculations clearly and verify each important step.'],['3.3 Application Practice','Apply concepts to progressively challenging university-level problems.']],objective:'Turn mathematical understanding into reliable problem-solving performance.'},
- {lessons:[['4.1 Quick Concept Review','Review definitions, formulas and core methods from the course.'],['4.2 Practice & Self-Check','Use targeted questions to identify strengths and areas that need revision.'],['4.3 Final Preparation','Create a focused revision plan and practise presenting complete solutions.']],objective:'Consolidate learning and prepare for assessments through focused revision and self-checks.'}
+const VIDEO_KEY='settlemAcademyVideos',PROG_KEY='settlemAcademyLearningProgress',LESSON_KEY='settlemCurrentLesson';
+const courseModules={
+ 'B.Tech Mathematics':['Differential Equations','Laplace Transforms','Vector Calculus','Probability & Random Variables'],
+ 'Intermediate Mathematics':['Mathematical Foundations','Core Mathematics','Problem Solving','Revision & Preparation'],
+ 'Class 10 Mathematics':['Foundations & Concepts','Core Mathematics','Problem Solving','Revision & Preparation'],
+ 'Classes 5–7 Mathematics':['Number Skills','Core Concepts','Problem Solving','Revision & Practice']
+};
+const courseDescs={
+ 'B.Tech Mathematics':['Learn first-order and higher-order differential equations with standard methods and worked examples.','Understand Laplace transforms, inverse transforms and applications to differential equations.','Build confidence with gradient, divergence, curl, multiple integrals and vector identities.','Master probability, random variables, distributions, moments and exam-oriented problem solving.'],
+ 'Intermediate Mathematics':['Build the concepts you need before moving into advanced problem solving.','Learn the key ideas step by step with clear explanations.','Apply concepts through worked examples and exam-style questions.','Revise efficiently and prepare with focused practice.'],
+ 'Class 10 Mathematics':['Build the concepts you need before moving into advanced problem solving.','Learn the key ideas step by step with clear explanations.','Apply concepts through worked examples and exam-style questions.','Revise efficiently and prepare with focused practice.'],
+ 'Classes 5–7 Mathematics':['Build the concepts you need before moving into advanced problem solving.','Learn the key ideas step by step with clear explanations.','Apply concepts through worked examples and exam-style questions.','Revise efficiently and prepare with focused practice.']
+};
+let currentCourse=localStorage.getItem('settlemCurrentCourse')||'B.Tech Mathematics',currentModule=Number(localStorage.getItem('settlemCurrentModule')||0),currentLesson=Number(localStorage.getItem(LESSON_KEY)||0);
+function moduleNames(){return courseModules[currentCourse]||courseModules['B.Tech Mathematics']}
+function descs(){return courseDescs[currentCourse]||courseDescs['B.Tech Mathematics']}
+let videosCache=[];
+let apiVideosLoaded=false;
+const featuredLessons=[{id:'featured-rv-10s',title:'Random Variable in 10 Seconds! 🤯',course:'B.Tech Mathematics',module:'Probability & Random Variables',youtube_url:'https://www.youtube.com/watch?v=SGokvzWeqvk',videoId:'SGokvzWeqvk',video_id:'SGokvzWeqvk',description:'A quick concept introduction to Random Variables from Settlem Academy.',order:1,type:'Lesson',createdAt:'2026-09-13'}];
+const module4StudyLessons=[
+ {id:'m4-study-1',title:'Probability Basics & Terminology',description:'Sample space, events, favourable outcomes and core probability laws.',url:'btech-probability.html#lesson-1'},
+ {id:'m4-study-2',title:'Conditional Probability & Bayes’ Theorem',description:'Conditional probability, independence and Bayes’ theorem.',url:'btech-probability.html#lesson-2'},
+ {id:'m4-study-3',title:'Random Variables — Concept & Types',description:'Discrete and continuous random variables with examples.',url:'btech-probability.html#lesson-3'},
+ {id:'m4-study-4',title:'Probability Mass Function (PMF)',description:'PMF rules, validation and discrete probability calculations.',url:'btech-probability.html#lesson-4'},
+ {id:'m4-study-5',title:'Probability Density Function (PDF)',description:'Density functions, normalization and probability as area.',url:'btech-probability.html#lesson-5'},
+ {id:'m4-study-6',title:'Expectation & Moments',description:'Mean, higher moments and linearity of expectation.',url:'btech-probability.html#lesson-6'},
+ {id:'m4-study-7',title:'Variance & Standard Deviation',description:'Variance, standard deviation and transformation rules.',url:'btech-probability.html#lesson-7'},
+ {id:'m4-study-8',title:'Bernoulli & Binomial Distribution',description:'Bernoulli trials, binomial probability, mean and variance.',url:'btech-probability.html#lesson-8'},
+ {id:'m4-study-9',title:'Poisson Distribution',description:'Poisson model, parameter λ, mean and variance.',url:'btech-probability.html#lesson-9'},
+ {id:'m4-study-10',title:'Continuous Distributions & CDF',description:'CDF, PDF-CDF relationship and interval probabilities.',url:'btech-probability.html#lesson-10'},
+ {id:'m4-study-11',title:'Important Exam Problems — Part 1',description:'Mixed probability, PMF, expectation and variance problems.',url:'btech-probability.html#lesson-11'},
+ {id:'m4-study-12',title:'Important Exam Problems — Part 2 + Revision',description:'Distribution selection, common traps and final revision.',url:'btech-probability.html#lesson-12'}
 ];
-let moduleIndex=Number(localStorage.getItem('settlemCurrentModule')||0); if(moduleIndex<0||moduleIndex>3)moduleIndex=0;
-let course='B.Tech Mathematics', videos=[];
-const token=()=>localStorage.getItem('settlemAuthToken');
-const localProgress=()=>JSON.parse(localStorage.getItem('settlemAcademyLearningProgress')||'{}');
-const key=i=>course+'|'+i;
-function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function setNotice(text,type){notice.textContent=text;notice.className='notice show '+type}
-function selectModule(i){moduleIndex=i;localStorage.setItem('settlemCurrentModule',String(i));render()}
-function openLesson(i){ location.href='btech-lesson.html?module='+moduleIndex+'&lesson='+i }
-async function api(path,options={}){const h={'Content-Type':'application/json',...(options.headers||{})};if(token())h.Authorization='Bearer '+token();const r=await fetch(API_BASE+path,{...options,headers:h});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'Request failed');return d}
-async function loadVideos(){videos=[];if(!token())return;try{const d=await api('/videos?course='+encodeURIComponent(course));videos=Array.isArray(d)?d:(d.videos||[])}catch(e){console.warn(e)}}
-function render(){
- const p=localProgress(), done=names.filter((_,i)=>!!p[key(i)]).length, percent=Math.round(done/4*100);
- pctSide.textContent=percent+'%';fillSide.style.width=percent+'%';
- modules.innerHTML=names.map((n,i)=>`<div class="module ${i===moduleIndex?'active':''}" onclick="selectModule(${i})"><div class="module-head"><div class="num">${i+1}</div><strong>${n}</strong></div><small>${p[key(i)]?'✓ Completed':'Not completed yet'}</small></div>`).join('');
- title.textContent=names[moduleIndex];desc.textContent=descs[moduleIndex];moduleStatus.textContent='Module '+(moduleIndex+1)+' of 4';
- const list=videos.filter(v=>v.course===course && v.module===names[moduleIndex]);
- const mc=moduleContent[moduleIndex];
- const lessonCards=mc.lessons.map((l,i)=>`<button class="lesson-row" onclick="openLesson(${i})"><div class="lesson-no">${i+1}</div><div><strong>${esc(l[0])}</strong><p class="muted">${esc(l[1])}</p></div><span class="lesson-badge">OPEN LESSON →</span></button>`).join('');
- const videoBlock=list.length?`<div class="video"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(list[0].video_id||list[0].videoId)}?rel=0" title="${esc(list[0].title)}" allowfullscreen></iframe></div>`:'';
- content.innerHTML=`${videoBlock}<div class="card"><div class="lesson-meta">Module ${moduleIndex+1} · ${names[moduleIndex]}</div><h2>Module Learning Plan</h2><p class="muted">${esc(mc.objective)}</p><div class="lesson-list">${lessonCards}</div><div class="resources"><div class="resource"><b>🎥 Video Lessons</b><span>${list.length?'Published videos are available.':'Videos can be added by the academy from the admin content area.'}</span></div><div class="resource"><b>📄 Study Material</b><span>Use the Study Materials area for notes and downloadable resources.</span></div><div class="resource"><b>📝 Practice</b><span>Use Practice Tests to check understanding and exam readiness.</span></div></div><div class="actions"><button class="btn ${p[key(moduleIndex)]?'done':'primary'}" onclick="toggleComplete()">${p[key(moduleIndex)]?'✓ Module Completed':'Mark Module Complete'}</button><a class="btn secondary" href="video-lessons.html">🎥 Video Lessons</a><a class="btn secondary" href="study-materials.html">📚 Study Materials</a><a class="btn secondary" href="practice-tests.html">📝 Practice Tests</a></div></div>`;
+function module4FallbackVideos(){return module4StudyLessons.map((x,i)=>({id:x.id,title:x.title,course:'B.Tech Mathematics',module:'Probability & Random Variables',description:x.description,order:i+1,type:'Study Notes',videoId:'',study_url:x.url,createdAt:'2026-09-15'}));}
+
+function ensureFeaturedLessons(){try{const existing=JSON.parse(localStorage.getItem(VIDEO_KEY)||'[]');if(!existing.some(v=>v.id==='featured-rv-10s')){localStorage.setItem(VIDEO_KEY,JSON.stringify(existing.concat(featuredLessons)));}}catch(e){localStorage.setItem(VIDEO_KEY,JSON.stringify(featuredLessons));}}
+function getVideos(){return videosCache.length?videosCache:(()=>{try{return JSON.parse(localStorage.getItem(VIDEO_KEY)||'[]')}catch(e){return []}})()}
+function getProgress(){try{return JSON.parse(localStorage.getItem(PROG_KEY)||'{}')}catch(e){return {}}}
+async function loadApiVideos(){
+  try{
+    const token=localStorage.getItem('settlemAuthToken');
+    if(!token || !window.SettlemAPI) return;
+    const data=await SettlemAPI.request('/videos?course='+encodeURIComponent(currentCourse));
+    videosCache=Array.isArray(data)?data.map(v=>({...v,order:v.order||v.id,createdAt:v.created_at||v.createdAt,type:v.type||'Lesson'})):[];
+    if(!videosCache.length) ensureFeaturedLessons();
+    apiVideosLoaded=true;
+    localStorage.setItem(VIDEO_KEY,JSON.stringify(videosCache));
+    render();
+  }catch(e){
+    apiVideosLoaded=false;
+  }
 }
-async function toggleComplete(){const p=localProgress(),k=key(moduleIndex),next=!p[k];p[k]=next;localStorage.setItem('settlemAcademyLearningProgress',JSON.stringify(p));try{if(token())await api('/progress',{method:'POST',body:JSON.stringify({course,module_index:moduleIndex,completed:next})});setNotice(next?'Module completed successfully. Your progress has been updated.':'Module marked incomplete.','ok')}catch(e){setNotice('Saved on this device, but the online progress update failed: '+e.message,'err')}render()}
-(async()=>{await loadVideos();render()})();
+function setCourse(c){currentCourse=c;currentModule=0;currentLesson=0;videosCache=[];localStorage.setItem('settlemCurrentCourse',c);localStorage.setItem('settlemCurrentModule','0');localStorage.setItem(LESSON_KEY,'0');render();loadApiVideos()}
+function selectModule(i){currentModule=i;currentLesson=0;localStorage.setItem('settlemCurrentModule',String(i));localStorage.setItem(LESSON_KEY,'0');render()}
+function moduleVideos(){const names=moduleNames();const arr=getVideos().filter(v=>v.course===currentCourse&&v.module===names[currentModule]).sort((a,b)=>(Number(a.order)||9999)-(Number(b.order)||9999)||String(a.createdAt||'').localeCompare(String(b.createdAt||'')));if(!arr.length&&currentCourse==='B.Tech Mathematics'&&currentModule===3)return module4FallbackVideos();return arr}
+function lessonKey(v){return currentCourse+'|'+currentModule+'|'+v.id}
+function render(){
+ courseSelect.value=currentCourse;const names=moduleNames(),descriptions=descs();if(currentModule<0||currentModule>=names.length)currentModule=0;
+ modules.innerHTML=names.map((m,i)=>`<div class="module ${i===currentModule?'active':''}" onclick="selectModule(${i})"><strong>${i+1}. ${m}</strong><br><small>${moduleStatus(i)}</small></div>`).join('');
+ pageTitle.textContent=names[currentModule];pageDesc.textContent=descriptions[currentModule];
+ const arr=moduleVideos(),p=getProgress();if(currentLesson<0||currentLesson>=Math.max(arr.length,1))currentLesson=0;
+ const totalLessons=arr.length,doneLessons=arr.filter(v=>p[lessonKey(v)]).length;
+ const allVideos=getVideos().filter(v=>v.course===currentCourse);
+ const completedModules=names.reduce((count,m,i)=>{
+   const mv=allVideos.filter(v=>v.module===m);
+   if(!mv.length) return count;
+   const done=mv.every(v=>!!p[currentCourse+'|'+i+'|'+v.id] || !!p[currentCourse+'|'+i]);
+   return count+(done?1:0);
+ },0);
+ const pct=names.length?Math.min(100,Math.round((completedModules/names.length)*100)):0;
+ progressText.textContent=pct+'% Complete';bar.style.width=pct+'%';
+ if(!arr.length){content.innerHTML=`<div class="empty"><div style="font-size:42px">▶</div><h2>No lessons connected yet</h2><p>Admin can add YouTube lessons for <strong>${esc(currentCourse)}</strong> → <strong>${esc(names[currentModule])}</strong> from the Video Manager.</p><a class="btn primary" href="video-manager.html">Open Video Manager</a></div>`;return}
+ const v=arr[currentLesson],done=!!p[lessonKey(v)];
+ const list=arr.map((x,i)=>`<button class="lesson-item ${i===currentLesson?'active ':''}${p[lessonKey(x)]?'done':''}" onclick="selectLesson(${i})"><span class="lesson-no">${p[lessonKey(x)]?'✓':i+1}</span><span class="lesson-meta"><strong>${esc(x.title)}</strong><small>${esc(x.type||'Lesson')} · ${p[lessonKey(x)]?'Completed':'Not completed'}</small></span></button>`).join('');
+ const media=v.videoId?`<div class="video-box"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(v.videoId)}?rel=0" title="${esc(v.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`:`<div class="video-box"><div class="placeholder"><div class="play">📘</div><h2>Study Notes Lesson</h2><p>Read the full lesson, formulas, worked examples and exam practice.</p><a class="btn primary" href="${esc(v.study_url||'btech-probability.html')}">Open Lesson Notes →</a></div></div>`;content.innerHTML=`<div class="lesson-list"><div class="eyebrow">MODULE LESSONS · ${doneLessons}/${totalLessons} COMPLETE</div>${list}</div>${media}<section class="lesson"><div class="eyebrow">${esc(v.course)} · ${esc(v.module)} · ${esc(v.type||'Lesson')}</div><h2>${esc(v.title)}</h2><p>${esc(v.description||'Continue the lesson and practise the concepts covered in this lesson.')}</p><div class="actions"><button class="btn ${done?'complete done':'complete'}" onclick="toggleComplete()">${done?'✓ Completed':'Mark as Complete'}</button><a class="btn secondary" href="${esc(v.study_url||'study-materials.html')}">Study Materials</a><a class="btn secondary" href="practice-tests.html">Practice Tests</a></div><div class="nav-actions"><button class="btn secondary" onclick="previousLesson()" ${currentLesson===0?'disabled':''}>← Previous Lesson</button><button class="btn primary" onclick="nextLesson()" ${currentLesson===arr.length-1?'disabled':''}>Next Lesson →</button></div></section>`;
+}
+function selectLesson(i){currentLesson=i;localStorage.setItem(LESSON_KEY,String(i));render()}
+function previousLesson(){if(currentLesson>0)selectLesson(currentLesson-1)}
+function nextLesson(){const arr=moduleVideos();if(currentLesson<arr.length-1)selectLesson(currentLesson+1)}
+async function toggleComplete(){const arr=moduleVideos();if(!arr.length)return;let p=getProgress(),k=lessonKey(arr[currentLesson]);p[k]=!p[k];localStorage.setItem(PROG_KEY,JSON.stringify(p));render();try{if(localStorage.getItem('settlemAuthToken')&&window.SettlemAPI){await SettlemAPI.request('/progress',{method:'POST',body:JSON.stringify({course:currentCourse,module_index:currentModule,completed:p[k]})});if(p[k]){const dash=await SettlemAPI.request('/dashboard');const done=(dash.completed||[]).filter(x=>x.course===currentCourse).length;if(done>=4){const cert=await SettlemAPI.request('/certificates/issue',{method:'POST',body:JSON.stringify({course:currentCourse})});if(cert&&cert.certificate_id)alert('🎉 Congratulations! You completed '+currentCourse+' and earned certificate '+cert.certificate_id+'. Open Certificates from your Student Dashboard.')}}}}catch(e){}}
+function moduleStatus(i){const names=moduleNames(),arr=getVideos().filter(v=>v.course===currentCourse&&v.module===names[i]),p=getProgress(),done=arr.filter(v=>p[currentCourse+'|'+i+'|'+v.id]).length;return arr.length?`${done}/${arr.length} lessons complete`:'No lessons yet'}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+ensureFeaturedLessons();
+render();
+loadApiVideos();
 </script>
-</body></html>
+<div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body>
+</html>

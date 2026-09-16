@@ -1,0 +1,24 @@
+SETTLEM ACADEMY CONSOLIDATED REPAIR AUDIT — 2026-09-16
+
+Repository layout: matches the current GitHub repository layout (frontend files at root, backend/ for Render API).
+
+Verified statically:
+- backend/server.js Node syntax: PASS
+- frontend/settlem-api.js syntax: PASS
+- frontend/site-navigation.js syntax: PASS
+- Frontend SettlemAPI calls cross-checked against backend routes: PASS
+- Retired settlem-academy-api.onrender.com references: removed
+- Retired Netlify deployment references in frontend/seeded materials: removed
+- Student dashboard defaults to server enrollment truth: PASS
+- Student login browser-only fallback removed: PASS
+- Compatibility routes added for live dashboard calls:
+  /api/live-classes
+  /api/points/me
+  /api/leaderboard
+  /api/analytics/student
+- Start Learning CTA points to student-login.html
+- Existing seeded navigation CTA is updated on backend startup
+- Existing seeded material URLs are updated on backend startup
+
+Known limitation:
+- This environment cannot perform a real browser smoke test against the deployed Render site. The backend health endpoint was previously verified live by the user.

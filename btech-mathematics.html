@@ -8,58 +8,76 @@
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--ink);line-height:1.6}a{text-decoration:none;color:inherit}.wrap{width:min(1160px,92%);margin:auto}
 nav{height:76px;border-bottom:1px solid var(--line);background:#fff}.nav{height:100%;display:flex;align-items:center;justify-content:space-between}.brand{font-size:20px;font-weight:900}.brand b{color:var(--blue)}.back{color:var(--blue);font-weight:800;font-size:14px}
 .hero{padding:75px 0;background:linear-gradient(135deg,#f5f9ff,#fff 65%)}.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:50px;align-items:center}.eyebrow{font-size:12px;letter-spacing:1.4px;font-weight:900;color:var(--blue)}h1{font-size:clamp(42px,6vw,64px);line-height:1.05;letter-spacing:-2px;margin:12px 0}p{color:var(--muted)}.btn{display:inline-block;padding:12px 18px;border-radius:9px;font-weight:800;font-size:14px;margin-right:8px}.primary{background:var(--blue);color:#fff}.outline{border:1px solid #ccd5e1}
-.panel{background:var(--ink);color:#fff;border-radius:22px;padding:28px}.panel p{color:#c6d1df}.items{display:grid;grid-template-columns:1fr 1fr;gap:12px}.item{border:1px solid #ffffff22;padding:14px;border-radius:10px}.item strong{display:block}.item small{color:#b7c5d7}
+.panel{background:var(--ink);color:#fff;border-radius:22px;padding:28px}.enroll-strip{padding:35px 0;background:#eef4ff}.enroll-inner{display:flex;justify-content:space-between;align-items:center;gap:25px;flex-wrap:wrap}.enroll-inner h2{margin:5px 0;font-size:28px}.enroll-inner p{margin:0}.panel p{color:#c6d1df}.items{display:grid;grid-template-columns:1fr 1fr;gap:12px}.item{border:1px solid #ffffff22;padding:14px;border-radius:10px}.item strong{display:block}.item small{color:#b7c5d7}
 section{padding:70px 0}.head{margin-bottom:30px}.head h2{font-size:34px;margin:5px 0}.modules{display:grid;grid-template-columns:1fr 1fr;gap:16px}.module,.resource{border:1px solid var(--line);border-radius:16px;padding:22px}.module h3{margin:8px 0}.module p,.resource p{font-size:14px}.lessons{border-top:1px solid var(--line);margin-top:15px}.lesson{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}.lesson span{color:var(--muted)}.resources{background:var(--pale)}.resource-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}footer{background:#061326;color:#aebbd0;padding:35px 0}footer p{font-size:12px}
 @media(max-width:800px){.grid,.modules,.resource-grid{grid-template-columns:1fr}.hero{padding:55px 0}.back{font-size:12px}}
-
-/* Settlem Academy — Student-Friendly Premium Palette */
-:root{
- --navy:#101a43; --navy2:#17265c; --blue:#2563eb; --violet:#7c3aed;
- --teal:#0f9f8f; --amber:#f59e0b; --pink:#ec4899;
- --ink:#18233f; --muted:#64748b; --line:#e5eaf3; --bg:#f7f9fc; --white:#fff;
-}
-body{background:var(--bg);color:var(--ink)}
-.hero{background:linear-gradient(135deg,#ffffff 0%,#eef4ff 55%,#f5efff 100%)}
-.eyebrow{color:var(--blue)}
-.btn-primary{background:linear-gradient(135deg,var(--blue),var(--violet));box-shadow:0 8px 18px rgba(37,99,235,.20)}
-.btn-soft{background:#eef3ff;color:var(--blue)}
-.card{box-shadow:0 10px 30px rgba(16,26,67,.06);border-color:#e2e8f3}
-.brand span{background:linear-gradient(135deg,var(--blue),var(--violet))}
-nav a:hover{color:var(--blue)}
-
-</style>
-
-<style id="settlem-color-accents">
-.hero h1{background:linear-gradient(90deg,#101a43 0%,#2563eb 52%,#7c3aed 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.card:nth-child(4n+1) .icon{background:#eaf1ff;color:#2563eb}
-.card:nth-child(4n+2) .icon{background:#f1eaff;color:#7c3aed}
-.card:nth-child(4n+3) .icon{background:#e7faf7;color:#0f9f8f}
-.card:nth-child(4n) .icon{background:#fff4dc;color:#d97706}
-.tag{background:#edf2ff;color:#315dcc}
-.course:nth-child(3n+1){border-top:3px solid #2563eb}
-.course:nth-child(3n+2){border-top:3px solid #7c3aed}
-.course:nth-child(3n){border-top:3px solid #0f9f8f}
-</style>
+ .module{cursor:pointer}.module-btn{margin-top:14px}.outline{background:#fff;color:var(--blue);border:1px solid #c7d2fe}
+.brand img{width:52px!important;height:52px!important;object-fit:contain!important;border-radius:50%!important;background:transparent!important;vertical-align:middle;margin-right:10px!important}.brand{display:flex;align-items:center;gap:0}.brand b{color:var(--blue)}@media(max-width:800px){.brand img{width:48px!important;height:48px!important}}</style>
+<script src="settlem-api.js?v=20260913"></script>
+<link rel="icon" type="image/png" href="settlem-academy-logo.png">
 </head>
 <body>
-<nav><div class="wrap nav"><a class="brand" href="index.html">SETTLEM <b>ACADEMY</b></a><a class="back" href="index.html">← Back to Academy</a></div></nav>
+<nav><div class="wrap nav"><a class="brand" href="index.html"><img src="settlem-academy-logo.png" alt="Settlem Academy logo" style="width:36px;height:36px;object-fit:contain;vertical-align:middle;margin-right:8px">SETTLEM <b>ACADEMY</b></a><a class="back" href="index.html">← Back to Academy</a></div></nav>
 <header class="hero"><div class="wrap grid"><div>
 <div class="eyebrow">B.TECH • MATHEMATICS</div>
 <h1>Build stronger mathematical foundations.</h1>
 <p>A structured learning path for B.Tech students focused on understanding concepts, solving problems and preparing with confidence.</p>
-<a class="btn primary" href="learning-room.html">▶ Start Learning</a><a class="btn outline" href="#modules">View Course Content</a>
+<a class="btn primary" href="#modules">View Course Content</a><a class="btn outline" href="learning-room.html" onclick="localStorage.setItem('settlemCurrentCourse','B.Tech Mathematics')">Start Learning →</a>
 </div>
 <div class="panel"><h2>Course Overview</h2><p>A flexible learning experience supporting classroom learning, revision and independent practice.</p>
 <div class="items"><div class="item"><strong>Concepts</strong><small>Clear explanations</small></div><div class="item"><strong>Examples</strong><small>Step-by-step solutions</small></div><div class="item"><strong>Practice</strong><small>Problem solving</small></div><div class="item"><strong>Revision</strong><small>Exam preparation</small></div></div></div>
 </div></header>
-<section id="modules"><div class="wrap"><div class="head"><div class="eyebrow">COURSE STRUCTURE</div><h2>Learn in a clear sequence</h2><p>A four-module learning path designed for clear progression, practice and revision.</p></div>
+<section class="enroll-strip"><div class="wrap enroll-inner"><div><div class="eyebrow">READY TO LEARN?</div><h2>Start your B.Tech Mathematics journey.</h2><p>Open the Learning Room to watch lessons, complete modules and track your progress.</p></div><button class="btn primary" onclick="enroll()" id="enrollBtn">Enroll in B.Tech Mathematics</button></div></section>
+<section id="modules"><div class="wrap"><div class="head"><div class="eyebrow">COURSE STRUCTURE</div><h2>B.Tech Mathematics — Course Modules</h2><p>Start with the core B.Tech Mathematics pathway and move from concepts to solved problems, practice and revision.</p></div>
 <div class="modules">
-<div class="module"><div class="eyebrow">MODULE 01</div><h3>Mathematical Foundations</h3><p>Essential concepts and methods needed for higher-level mathematics.</p><div class="lessons"><div class="lesson">Concept introduction<span>Lesson</span></div><div class="lesson">Worked examples<span>Lesson</span></div><div class="lesson">Practice set<span>Practice</span></div></div></div>
-<div class="module"><div class="eyebrow">MODULE 02</div><h3>Core Concepts</h3><p>Develop understanding through structured explanations and applications.</p><div class="lessons"><div class="lesson">Concept learning<span>Lesson</span></div><div class="lesson">Solved problems<span>Lesson</span></div><div class="lesson">Self-check questions<span>Practice</span></div></div></div>
-<div class="module"><div class="eyebrow">MODULE 03</div><h3>Problem Solving</h3><p>Move from understanding to application with guided practice.</p><div class="lessons"><div class="lesson">Problem approach<span>Lesson</span></div><div class="lesson">Step-by-step solutions<span>Lesson</span></div><div class="lesson">Practice worksheet<span>Practice</span></div></div></div>
-<div class="module"><div class="eyebrow">MODULE 04</div><h3>Revision & Preparation</h3><p>Review concepts and practise efficiently before examinations.</p><div class="lessons"><div class="lesson">Quick revision<span>Revision</span></div><div class="lesson">Important questions<span>Practice</span></div><div class="lesson">Final self-check<span>Practice</span></div></div></div>
+<div class="module" onclick="openModule(0)"><div class="eyebrow">MODULE 01</div><h3>Differential Equations</h3><p>Learn first-order and higher-order differential equations with standard methods and worked examples.</p><div class="lessons"><div class="lesson">First-order differential equations<span>Lesson</span></div><div class="lesson">Higher-order equations<span>Lesson</span></div><div class="lesson">Solved university problems<span>Practice</span></div></div><button class="btn outline module-btn" type="button">Open Module →</button></div>
+<div class="module" onclick="openModule(1)"><div class="eyebrow">MODULE 02</div><h3>Laplace Transforms</h3><p>Understand Laplace transforms, inverse transforms and applications to differential equations.</p><div class="lessons"><div class="lesson">Laplace transform basics<span>Lesson</span></div><div class="lesson">Inverse Laplace transforms<span>Lesson</span></div><div class="lesson">Applications and problems<span>Practice</span></div></div><button class="btn outline module-btn" type="button">Open Module →</button></div>
+<div class="module" onclick="openModule(2)"><div class="eyebrow">MODULE 03</div><h3>Vector Calculus</h3><p>Build confidence with gradient, divergence, curl, multiple integrals and vector identities.</p><div class="lessons"><div class="lesson">Gradient, divergence and curl<span>Lesson</span></div><div class="lesson">Multiple integrals<span>Lesson</span></div><div class="lesson">Important solved problems<span>Practice</span></div></div><button class="btn outline module-btn" type="button">Open Module →</button></div>
+<div class="module" onclick="openModule(3)"><div class="eyebrow">MODULE 04</div><h3>Probability &amp; Random Variables</h3><p>Master probability, random variables, distributions, moments and exam-oriented problem solving.</p><div class="lessons"><div class="lesson">Random variables and distributions<span>Lesson</span></div><div class="lesson">Mean, variance and moments<span>Lesson</span></div><div class="lesson">20 important problems<span>Practice</span></div></div><button class="btn outline module-btn" type="button">Open Module →</button><a class="btn outline" href="btech-probability.html" style="display:inline-block;margin-left:8px">Study Notes →</a></div>
 </div></div></section>
 <section class="resources" id="resources"><div class="wrap"><div class="head"><div class="eyebrow">LEARNING RESOURCES</div><h2>Everything in one place</h2><p>Ready for your actual videos, notes and practice content.</p></div>
-<div class="resource-grid"><div class="resource"><div class="eyebrow">VIDEO</div><h3>Video Lessons</h3><p>Concept explanations and worked examples.</p></div><div class="resource"><div class="eyebrow">NOTES</div><h3>Study Notes</h3><p>Structured notes for learning and revision.</p></div><div class="resource"><div class="eyebrow">PRACTICE</div><h3>Practice Tests</h3><p>Questions and revision exercises to test understanding.</p></div></div></div></section>
+<div class="resource-grid"><a class="resource" href="video-lessons.html"><div class="eyebrow">VIDEO</div><h3>Video Lessons →</h3><p>Concept explanations and worked examples.</p></a><a class="resource" href="study-materials.html"><div class="eyebrow">NOTES</div><h3>Study Notes →</h3><p>Structured notes for learning and revision.</p></a><a class="resource" href="practice-tests.html"><div class="eyebrow">PRACTICE</div><h3>Practice Tests →</h3><p>Questions and revision exercises to test understanding.</p></a></div></div></section>
 <footer><div class="wrap"><strong>SETTLEM ACADEMY</strong><p>Learn Mathematics • Build Confidence • Achieve Success</p><p>© 2026 Settlem Academy</p></div></footer>
-<div style="position:fixed;right:22px;bottom:22px;z-index:30"><a href="learning-room.html" style="display:inline-block;padding:13px 18px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;font-weight:900;box-shadow:0 10px 25px rgba(37,99,235,.25)">▶ Start Learning</a></div></body></html>
+<script>
+async function enroll(){
+  const course="B.Tech Mathematics", k="settlemEnrolledCourses";
+  let a=JSON.parse(localStorage.getItem(k)||"[]");
+  const token=localStorage.getItem("settlemAuthToken");
+  if(token){
+    try{
+      await SettlemAPI.request('/courses/enroll',{method:'POST',body:JSON.stringify({course})});
+    }catch(e){
+      alert(e.message||'Unable to save enrollment. Please log in again.');
+      return;
+    }
+  }else{
+    alert('Please log in with your student account before enrolling.');
+    location.href='student-login.html';
+    return;
+  }
+  if(!a.includes(course))a.push(course);
+  localStorage.setItem(k,JSON.stringify(a));
+  const b=document.getElementById("enrollBtn");
+  b.textContent="✓ Enrolled — Open Learning Room";
+  b.onclick=function(){localStorage.setItem("settlemCurrentCourse",course);location.href="learning-room.html"};
+}
+(async function(){
+  const token=localStorage.getItem("settlemAuthToken"), course="B.Tech Mathematics";
+  if(token){
+    try{
+      const rows=await SettlemAPI.request('/courses');
+      if(Array.isArray(rows)){
+        const enrolled=rows.some(r=>r&&r.course===course);
+        if(enrolled){
+          const a=JSON.parse(localStorage.getItem("settlemEnrolledCourses")||"[]");
+          if(!a.includes(course))a.push(course);
+          localStorage.setItem("settlemEnrolledCourses",JSON.stringify(a));
+          const b=document.getElementById("enrollBtn");
+          b.textContent="✓ Enrolled — Open Learning Room";
+          b.onclick=function(){localStorage.setItem("settlemCurrentCourse",course);location.href="learning-room.html"};
+        }
+      }
+    }catch(e){}
+  }
+})();
+</script><script>function openModule(i){localStorage.setItem('settlemCurrentCourse','B.Tech Mathematics');localStorage.setItem('settlemCurrentModule',String(i));localStorage.setItem('settlemCurrentLesson','0');location.href='learning-room.html';}</script><div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div><script src="site-navigation.js?v=20260915"></script></body></html>

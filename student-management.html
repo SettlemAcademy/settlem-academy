@@ -4,38 +4,56 @@
 <style>
 :root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--pink:#ec4899;--bg:#f5f7ff;--muted:#64748b;--line:#e2e8f0}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}.top{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:17px 5%;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900}.brand span{color:#8fe8ff}.top a{color:#fff;text-decoration:none;border:1px solid #ffffff55;padding:9px 13px;border-radius:10px}.wrap{max-width:1200px;margin:auto;padding:30px 20px}.hero{background:linear-gradient(135deg,#fff,#eef2ff);border:1px solid #dbe3ff;border-radius:24px;padding:28px;box-shadow:0 15px 45px #17255412}.eyebrow{font-size:11px;color:var(--violet);font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:42px;margin:7px 0}.hero p{color:var(--muted)}.toolbar{display:flex;gap:12px;margin:20px 0;flex-wrap:wrap}.toolbar input,.toolbar select{padding:12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font:inherit}.tablewrap{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:auto;box-shadow:0 10px 30px #1725540a}table{width:100%;border-collapse:collapse;min-width:850px}th,td{padding:15px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}th{background:#f8faff;color:#475569;font-size:12px;text-transform:uppercase;letter-spacing:.6px}.badge{display:inline-block;padding:5px 8px;border-radius:99px;background:#eef2ff;color:var(--blue);font-size:11px;font-weight:800;margin:2px}.bar{height:7px;width:110px;background:#e2e8f0;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--violet))}.btn{border:0;border-radius:9px;padding:9px 11px;font-weight:800;cursor:pointer}.view{background:#eef2ff;color:var(--blue)}.empty{padding:35px;text-align:center;color:var(--muted)}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:20px 0}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px}.stat strong{font-size:25px}.stat small{display:block;color:var(--muted);margin-top:3px}@media(max-width:800px){.summary{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:34px}}
-</style><script src="settlem-api.js"></script></head>
-<body><div class="top"><div class="brand">SETTLEM <span>ACADEMY</span> · ADMIN</div><a href="admin-dashboard.html">← Admin Dashboard</a></div>
+</style><link rel="icon" type="image/png" href="settlem-academy-logo.png">
+</head>
+<body><div class="top"><div class="brand"><img src="settlem-academy-logo.png" alt="Settlem Academy logo" style="width:36px;height:36px;object-fit:contain;border-radius:9px;vertical-align:middle;margin-right:9px">SETTLEM <span>ACADEMY</span> · ADMIN</div><a href="admin-dashboard.html">← Admin Dashboard</a></div>
 <div class="wrap"><section class="hero"><div class="eyebrow">Administration</div><h1>Student Management</h1><p>View students, enrolled courses, learning progress and recent test performance.</p></section>
 <div class="summary"><div class="stat"><strong id="count">0</strong><small>Students</small></div><div class="stat"><strong id="enrolled">0</strong><small>Total Enrollments</small></div><div class="stat"><strong id="avg">0%</strong><small>Average Progress</small></div><div class="stat"><strong id="active">0</strong><small>Active Learners</small></div></div>
 <div class="toolbar"><input id="search" placeholder="Search name or email…" oninput="render()"><select id="courseFilter" onchange="render()"><option value="">All Courses</option><option>B.Tech Mathematics</option><option>Intermediate Mathematics</option><option>Class 10 Mathematics</option><option>Classes 5–7 Mathematics</option></select></div>
 <div class="tablewrap"><table><thead><tr><th>Student</th><th>Email</th><th>Courses</th><th>Progress</th><th>Latest Test</th><th>Action</th></tr></thead><tbody id="rows"></tbody></table><div id="empty" class="empty" style="display:none">No students found in this browser.</div></div></div>
-<script>
-const USER='settlemAcademyUser',ENROLL='settlemEnrolledCourses',PROG='settlemAcademyLearningProgress',TEST='settlemLatestTest';
-function read(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d}}
-function students(){
- let u=read(USER,null); if(!u)return [];
- let courses=read(ENROLL,['B.Tech Mathematics']);
- return [{name:u.name||'Student',email:u.email||'—',courses,progress:overall(courses),test:(read(TEST,null)||{}).score}];
+<script src="settlem-api.js?v=20260913"></script><script>
+let allStudents=[];
+async function loadStudents(){
+  try{
+    if(!SettlemAPI.hasSession()){ location.href='admin-login.html'; return; }
+    const me=await SettlemAPI.request('/me');
+    if(me.role!=='admin') throw new Error('Administrator access required');
+    localStorage.setItem('settlemAcademyUser',JSON.stringify(me));
+    allStudents=await SettlemAPI.request('/admin/students');
+    render();
+  }catch(e){
+    if(e.message && /Authentication|token|expired|Administrator/i.test(e.message)){ localStorage.removeItem('settlemAuthToken'); localStorage.removeItem('settlemAcademyUser'); location.href='admin-login.html'; return; }
+    document.getElementById('rows').innerHTML=''; document.getElementById('empty').style.display='block'; document.getElementById('empty').textContent=e.message||'Unable to load students.';
+  }
 }
-function overall(cs){let p=read(PROG,{}),n=0;cs.forEach(c=>{for(let i=0;i<4;i++)if(p[c+'|'+i])n++});return cs.length?Math.round(n/(cs.length*4)*100):0}
+function completedCount(s){
+ const direct=Number(s.completedModules);
+ if(Number.isFinite(direct)&&direct>0) return direct;
+ if(Array.isArray(s.completed)) return s.completed.filter(x=>x && (x.completed===undefined || x.completed===true || Number(x.completed)===1)).length;
+ if(Array.isArray(s.completedLessons)) return s.completedLessons.length;
+ return 0;
+}
+function overall(s){
+ const explicit=Number(s.progress ?? s.overallProgress);
+ if(Number.isFinite(explicit)) return Math.max(0,Math.min(100,Math.round(explicit)));
+ return Math.min(100,Math.round((completedCount(s)/4)*100));
+}
 function render(){
- let q=search.value.toLowerCase(),f=courseFilter.value,arr=students().filter(s=>(s.name+' '+s.email).toLowerCase().includes(q)&&(!f||s.courses.includes(f)));
- count.textContent=students().length;enrolled.textContent=students().reduce((n,s)=>n+s.courses.length,0);avg.textContent=(students().length?Math.round(students().reduce((n,s)=>n+s.progress,0)/students().length):0)+'%';active.textContent=students().filter(s=>s.progress>0).length;
- rows.innerHTML=arr.map((s,i)=>`<tr><td><strong>${esc(s.name)}</strong></td><td>${esc(s.email)}</td><td>${s.courses.map(c=>'<span class="badge">'+esc(c)+'</span>').join('')}</td><td><div class="bar"><i style="width:${s.progress}%"></i></div><small>${s.progress}%</small></td><td>${typeof s.test==='number'?s.test+'%':'—'}</td><td><button class="btn view" onclick="alert('Student: '+${JSON.stringify(s.name)}+'\\nEmail: '+${JSON.stringify(s.email)}+'\\nProgress: '+${s.progress}+'%')">View</button></td></tr>`).join('');
- empty.style.display=arr.length?'none':'block'
+ let q=document.getElementById('search').value.toLowerCase(),f=document.getElementById('courseFilter').value;
+ let arr=allStudents.filter(s=>(String(s.name||'')+' '+String(s.email||'')).toLowerCase().includes(q)&&(!f||(s.courses||[]).includes(f)));
+ document.getElementById('count').textContent=allStudents.length;
+ document.getElementById('enrolled').textContent=allStudents.reduce((n,s)=>n+(s.courses||[]).length,0);
+ document.getElementById('avg').textContent=(allStudents.length?Math.round(allStudents.reduce((n,s)=>n+overall(s),0)/allStudents.length):0)+'%';
+ document.getElementById('active').textContent=allStudents.filter(s=>completedCount(s)>0).length;
+ document.getElementById('rows').innerHTML=arr.map(s=>{const p=overall(s);const latest=s.latestTest?.score;return `<tr><td><strong>${esc(s.name||'Student')}</strong></td><td>${esc(s.email||'—')}</td><td>${(s.courses||[]).map(c=>'<span class="badge">'+esc(c)+'</span>').join('')||'—'}</td><td><div class="bar"><i style="width:${p}%"></i></div><small>${p}%</small></td><td>${typeof latest==='number'?latest+'%':'—'}</td><td><button class="btn view" onclick='viewStudent(${JSON.stringify(s)})'>View</button></td></tr>`}).join('');
+ document.getElementById('empty').style.display=arr.length?'none':'block';
 }
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}render();
-</script><script>
-async function loadCentralStudents(){
- if(!getToken())return;
- try{
-  const d=await apiAdminStudents(), rows=d.students||[], body=document.querySelector("tbody");
-  if(!body)return;
-  if(!rows.length){body.innerHTML='<tr><td colspan="6">No students registered yet.</td></tr>';return;}
-  body.innerHTML=rows.map(s=>`<tr><td><strong>${esc(s.name||"Student")}</strong></td><td>${esc(s.email||"")}</td><td>${esc((s.enrolled_courses||[]).join(", ")||"—")}</td><td>${Number(s.overall_progress||0)}%</td><td>${s.latest_test_score==null?"—":Number(s.latest_test_score)+"%"}</td><td>Active</td></tr>`).join("");
- }catch(e){console.warn("Central student API unavailable:",e.message);}
-}
-function esc(v){return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
-window.addEventListener("DOMContentLoaded",loadCentralStudents);
-</script></body></html>
+function viewStudent(s){alert(`Student: ${s.name||'Student'}
+Email: ${s.email||'—'}
+Courses: ${(s.courses||[]).join(', ')||'None'}
+Completed Modules: ${completedCount(s)}
+Progress: ${overall(s)}%
+Latest Test: ${typeof s.latestTest?.score==='number'?s.latestTest.score+'%':'—'}`)}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+loadStudents();
+</script></script><div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body></html>

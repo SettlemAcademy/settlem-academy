@@ -463,6 +463,48 @@ app.get("/api/dashboard",auth,async(req,res)=>{
  res.json({user,courses,completed,completedModules:completed.length,latestTest:latest});
 });
 
+
+// Compatibility APIs used by newer Student Dashboard builds. They are derived from
+// the existing PostgreSQL data model, so older and newer frontends can coexist.
+app.get("/api/live-classes",auth,async(req,res)=>{
+  res.json([]);
+});
+
+app.get("/api/points/me",auth,async(req,res)=>{
+  const completed=Number((await query("SELECT COUNT(*)::int AS n FROM lesson_progress WHERE user_id=$1 AND completed::text IN ('1','true')",[req.user.id])).rows[0]?.n||0);
+  const tests=Number((await query("SELECT COUNT(*)::int AS n FROM test_results WHERE user_id=$1",[req.user.id])).rows[0]?.n||0);
+  const perfect=Number((await query("SELECT COUNT(*)::int AS n FROM test_results WHERE user_id=$1 AND score=100",[req.user.id])).rows[0]?.n||0);
+  const points=completed*25+tests*10+perfect*25;
+  const level=Math.max(1,Math.floor(points/100)+1);
+  res.json({points,xp:points,level,completedModules:completed,testsTaken:tests,perfectTests:perfect});
+});
+
+app.get("/api/leaderboard",auth,async(req,res)=>{
+  const rows=await query(`
+    SELECT u.id,u.name,
+      (COUNT(DISTINCT CASE WHEN lp.completed::text IN ('1','true') THEN lp.id END)*25
+       +COUNT(DISTINCT tr.id)*10
+       +COUNT(DISTINCT CASE WHEN tr.score=100 THEN tr.id END)*25)::int AS points
+    FROM users u
+    LEFT JOIN lesson_progress lp ON lp.user_id=u.id
+    LEFT JOIN test_results tr ON tr.user_id=u.id
+    WHERE u.role='student'
+    GROUP BY u.id,u.name
+    ORDER BY points DESC,u.name ASC
+    LIMIT 20`);
+  res.json(rows.rows.map((r,i)=>({...r,rank:i+1,xp:Number(r.points||0)})));
+});
+
+app.get("/api/analytics/student",auth,async(req,res)=>{
+  const courses=(await query("SELECT course,created_at FROM enrollments WHERE user_id=$1 ORDER BY created_at DESC",[req.user.id])).rows;
+  const progress=(await query(`SELECT course,COUNT(*) FILTER (WHERE completed::text IN ('1','true'))::int AS completed_modules,COUNT(*)::int AS tracked_modules
+    FROM lesson_progress WHERE user_id=$1 GROUP BY course ORDER BY course`,[req.user.id])).rows.map(r=>({...r,progress_percent:Math.min(100,Number(r.completed_modules||0)*25)}));
+  const tests=(await query(`SELECT r.test_id,r.score,r.correct,r.total,r.created_at,t.title,t.course
+    FROM test_results r JOIN tests t ON t.id=r.test_id WHERE r.user_id=$1 ORDER BY r.id DESC LIMIT 20`,[req.user.id])).rows;
+  const avg=tests.length?Math.round(tests.reduce((a,b)=>a+Number(b.score||0),0)/tests.length):0;
+  res.json({courses,progress,tests,summary:{enrolled_courses:courses.length,average_test_score:avg,total_tests:tests.length}});
+});
+
 app.post("/api/admin/bootstrap",async(req,res)=>{
  const secret=process.env.ADMIN_BOOTSTRAP_SECRET;
  if(!secret||req.headers["x-bootstrap-secret"]!==secret)return res.status(403).json({error:"Bootstrap not authorized"});
@@ -636,14 +678,15 @@ async function seedDefaultContent(){
   }
 
   const materials=[
-    ["B.Tech Mathematics – Probability & Random Variables Quick Notes","Chapter Notes","https://settlem-academy.netlify.app/btech-study-notes.html#probability","Definitions, random variables, distributions and key concepts in one place."],
-    ["B.Tech Mathematics – Probability Formula Sheet","Formula Sheet","https://settlem-academy.netlify.app/btech-study-notes.html#formulas","Important probability and random-variable formulas for quick revision."],
-    ["B.Tech Mathematics – 20 Important Problems","Important Questions","https://settlem-academy.netlify.app/btech-study-notes.html#problems","A focused list of high-value problems for B.Tech exam preparation."],
-    ["B.Tech Mathematics – Test Preparation Pack","Test Preparation","https://settlem-academy.netlify.app/practice-tests.html","Use this resource with Practice Test 1 to check your preparation."]
+    ["B.Tech Mathematics – Probability & Random Variables Quick Notes","Chapter Notes","btech-study-notes.html#probability","Definitions, random variables, distributions and key concepts in one place."],
+    ["B.Tech Mathematics – Probability Formula Sheet","Formula Sheet","btech-study-notes.html#formulas","Important probability and random-variable formulas for quick revision."],
+    ["B.Tech Mathematics – 20 Important Problems","Important Questions","btech-study-notes.html#problems","A focused list of high-value problems for B.Tech exam preparation."],
+    ["B.Tech Mathematics – Test Preparation Pack","Test Preparation","practice-tests.html","Use this resource with Practice Test 1 to check your preparation."]
   ]
   for(const [title,type,url,description] of materials){
     const m=await query("SELECT id FROM materials WHERE title=$1 LIMIT 1",[title]);
     if(!m.rows.length) await query(`INSERT INTO materials(title,course,type,url,description,published) VALUES($1,$2,$3,$4,$5,1)`,[title,"B.Tech Mathematics",type,url,description]);
+    else await query("UPDATE materials SET url=$1,description=$2,published=1 WHERE id=$3",[url,description,m.rows[0].id]);
   }
 
   const brandDefaults={academy_name:'Settlem Academy',tagline:'Learn Mathematics • Build Confidence • Achieve Success',brand_logo_url:'settlem-academy-logo.png',brand_favicon_url:'settlem-academy-logo.png',brand_primary_color:'#3157d5',brand_secondary_color:'#4338ca',instagram_url:'',facebook_url:'',linkedin_url:'',x_url:'',whatsapp_url:''};
@@ -651,8 +694,8 @@ async function seedDefaultContent(){
   const homeDefaults={home_eyebrow:'A MODERN MATHEMATICS LEARNING PLATFORM',home_hero_title:'Understand Maths. Achieve More.',home_hero_text:'Settlem Academy helps students learn mathematics through clear explanations, structured courses, useful resources and consistent practice.',home_primary_label:'Explore Courses →',home_primary_url:'#courses',home_secondary_label:'How We Teach',home_secondary_url:'#learning',home_learning_label:'Start Learning',home_learning_url:'course-enrollment.html',home_panel_label:'LEARNING • 01',home_panel_formula:'Concepts → Clarity\nClarity → Practice\nPractice → Confidence\nConfidence → Success',home_feature1_title:'Learn from Settlem Academy',home_feature1_text:'Discover mathematics lessons with step-by-step explanations and practical problem solving.',home_feature1_url:'video-lessons.html',home_feature2_title:'Revise with confidence',home_feature2_text:'Keep important notes, formulas, questions and revision resources organised in one place.',home_feature2_url:'#resources'};
   for(const [key,value] of Object.entries(homeDefaults)){ await query("INSERT INTO academy_settings(key,value) VALUES($1,$2) ON CONFLICT(key) DO NOTHING",[key,value]); }
 
-  const navigationDefaults={nav_home:'Home',nav_courses:'Courses',nav_learning:'Learning',nav_resources:'Resources',nav_tests:'Tests',nav_dashboard:'Dashboard',nav_plans:'Plans',nav_about:'About',nav_contact:'Contact',nav_cta_label:'Start Learning',nav_home_url:'index.html#home',nav_courses_url:'index.html#courses',nav_learning_url:'video-lessons.html',nav_resources_url:'study-materials.html',nav_tests_url:'practice-tests.html',nav_dashboard_url:'student-dashboard.html',nav_plans_url:'subscriptions.html',nav_about_url:'about.html',nav_contact_url:'contact.html',nav_cta_url:'course-enrollment.html',footer_tagline:'Learn Mathematics • Build Confidence • Achieve Success',footer_copyright:'© 2026 Settlem Academy'};
-  for(const [key,value] of Object.entries(navigationDefaults)){ await query("INSERT INTO academy_settings(key,value) VALUES($1,$2) ON CONFLICT(key) DO NOTHING",[key,value]); }
+  const navigationDefaults={nav_home:'Home',nav_courses:'Courses',nav_learning:'Learning',nav_resources:'Resources',nav_tests:'Tests',nav_dashboard:'Dashboard',nav_plans:'Plans',nav_about:'About',nav_contact:'Contact',nav_cta_label:'Start Learning',nav_home_url:'index.html#home',nav_courses_url:'index.html#courses',nav_learning_url:'video-lessons.html',nav_resources_url:'study-materials.html',nav_tests_url:'practice-tests.html',nav_dashboard_url:'student-dashboard.html',nav_plans_url:'subscriptions.html',nav_about_url:'about.html',nav_contact_url:'contact.html',nav_cta_url:'student-login.html',footer_tagline:'Learn Mathematics • Build Confidence • Achieve Success',footer_copyright:'© 2026 Settlem Academy'};
+  for(const [key,value] of Object.entries(navigationDefaults)){ await query("INSERT INTO academy_settings(key,value) VALUES($1,$2) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value",[key,value]); }
 
   const aboutDefaults={
     about_hero_title:'Making mathematics easier to understand.',

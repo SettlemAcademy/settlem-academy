@@ -2,25 +2,18 @@ services:
   - type: web
     name: settlem-academy-api
     runtime: node
-    plan: free
-    region: ohio
+    rootDir: backend
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
         value: "20"
-      - key: JWT_SECRET
-        generateValue: true
-      - key: FRONTEND_ORIGIN
-        value: "https://settlem-academy.netlify.app"
       - key: DATABASE_URL
-        fromDatabase:
-          name: settlem-academy-db
-          property: connectionString
-
-databases:
-  - name: settlem-academy-db
-    plan: free
-    region: ohio
-    postgresMajorVersion: "18"
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false
+      - key: ADMIN_BOOTSTRAP_SECRET
+        sync: false
