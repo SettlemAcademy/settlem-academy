@@ -27,6 +27,27 @@ footer{background:#061326;color:#aebbd0;padding:42px 0}.foot{display:flex;justif
 
 .real-lesson{background:linear-gradient(135deg,#f7faff,#f3f0ff)}.real-lesson-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:center}.video-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 18px 45px #0a173014}.video-card iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:14px}.lesson-info{padding:10px}.lesson-info h3{font-size:28px;line-height:1.2;margin:8px 0 12px}.lesson-info p{color:var(--muted);margin-bottom:18px}.pill{display:inline-block;padding:6px 10px;border-radius:99px;background:#eaf1ff;color:var(--blue);font-size:11px;font-weight:900;margin-right:6px}.lesson-note{font-size:12px;color:var(--muted);margin-top:12px}
 @media(max-width:800px){.real-lesson-grid{grid-template-columns:1fr}}
+
+/* Production layout compatibility: align the page markup with the Academy design system. */
+.container{width:min(1160px,92%);margin:0 auto}
+header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+header .nav{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+header nav{height:auto;border:0;background:transparent;backdrop-filter:none;position:static;z-index:auto;display:flex;align-items:center;gap:27px;font-size:14px;font-weight:750}
+header nav a:hover{color:var(--blue)}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 10px 25px #155eef25}
+.btn-soft{background:#eef4ff;color:var(--blue);padding:10px 14px;border-radius:9px;font-size:13px;font-weight:800;display:inline-block;margin-top:14px}
+.lead{font-size:16px;color:var(--muted);max-width:720px}
+.muted{color:var(--muted)}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 10px 30px #0a173008}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.grid .card h3{margin:12px 0 7px;font-size:19px}
+.grid .card p{font-size:13px;line-height:1.6}
+.tag{display:inline-block;margin-top:14px;padding:5px 9px;border-radius:999px;background:#eef4ff;color:var(--blue);font-size:11px;font-weight:900}
+footer .footergrid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:35px}
+.footer-title{color:#fff;font-size:18px;font-weight:900;margin-bottom:8px}
+footer a:hover{color:#fff}
+@media(max-width:900px){header nav{display:none}.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}header .nav{min-height:68px}.container{width:min(94%,1160px)}footer .footergrid{grid-template-columns:1fr}}
 </style><link rel="icon" type="image/png" href="settlem-academy-logo.png">
 </head>
 <body>
