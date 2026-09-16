@@ -1,4 +1,4 @@
-const SETTLEM_API = (localStorage.getItem("settlemApiUrl") || "https://settlem-academy-api.onrender.com").replace(/\/$/, "") + "/api";
+const SETTLEM_API = (localStorage.getItem("settlemApiUrl") || "https://settlem-academy-1.onrender.com").replace(/\/$/, "") + "/api";
 
 function getToken(){ return localStorage.getItem("settlemAuthToken"); }
 function clearAuth(){ localStorage.removeItem("settlemAuthToken"); localStorage.removeItem("settlemAcademyUser"); }
