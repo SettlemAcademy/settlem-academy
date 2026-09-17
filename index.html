@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=QM5glL9MPO8HQpIZvl9ZumTKd7-IXBcd5J13GI_rUG6-Zxsr2QSbSU-M2KL80QXDKjFGuFC-1EO-_PSffOjGgT-KXyuAPIlyS0SfvGCnzCEFJ0bBdiDBCZcnVIGk5_dxeVtWesftuWfBQ5ucYROwp4UIXt865WoGKll2ZZpWb86sP8eg4vXCL9Yt7zZ1Kj1eRWUi8zBMBE9TJESFfZEpxAFmGzd6TqKMtidFvz5D_CaQ3MVWBf5FhO0kQjTZdLtI_r3VsULV4nIKSE9c1K4zxBBnmTXkyGIVwWAspvNZl2KLlE56SUEk8hOdVcpj5FPcl3YdPV0zbWvwUOJYvQgwhA" charset="UTF-8"></script><style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=3cJv_JMsKl1htvO5xVJ7uTGdJmXu8KEaTR3c8AmaPQsYOfeRdgZsz-IpNtIDbf7WbwmsDVLH57vFk-tSjHXNrBXMBZlDWCS2qmAyx4B6oF5X3DHnEB10XnjyPeaeeoKGpJIXvyxGMN4Vx2wW05EK2tG4PRPmR0D3WoR33R76LjXWaAttzW0U5quezHaY5g836PHczpUUeld2kXkHOekdi4-KU4vsWABnWUyxou4ua4zQNMusOt15Un1MqQBRWfMMmzuVrjh1wyiPpfM7NF-JRvEG8GC8a-MmESDaQIehn48grxjgnQ77ZUOGyMaMEXRL32XNshBnOxpLFqJj1NEfaQ" charset="UTF-8"></script><style>
 
 :root{
   --navy:#071634;--navy2:#0d2a60;--blue:#1769e8;--cyan:#52c7ff;
@@ -348,8 +348,8 @@ footer{background:#041027;color:#a9b8cf;padding:42px 0;margin-top:0}.foot{displa
   height:100%;
   object-fit:cover;
   object-position:center center;
-  mix-blend-mode:screen;
-  opacity:.96;
+  mix-blend-mode:normal;
+  opacity:1;
 }
 .visual-shine{
   position:absolute;inset:0;pointer-events:none;
@@ -360,6 +360,22 @@ footer{background:#041027;color:#a9b8cf;padding:42px 0;margin-top:0}.foot{displa
   .hero-math-art{object-position:58% center}
 }
 
+
+/* FINAL PREMIUM RESPONSIVE POLISH */
+.brand-full-logo{background:#fff;border:1px solid #dce8f7;box-shadow:0 8px 24px rgba(20,55,100,.12);}
+.visual-board{background:#061b46!important;}
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr!important;}
+  .visual-board{min-height:360px!important;max-width:720px;margin:28px auto 0;}
+}
+@media(max-width:650px){
+  .brand-full-logo{width:205px!important;max-height:48px!important;}
+  .hero{padding-top:38px!important;}
+  .hero-grid{gap:28px!important;}
+  .visual-board{min-height:300px!important;margin-top:8px!important;}
+  .hero-math-art{object-position:center center!important;}
+}
+
 </style>
 </head>
 <body>
@@ -367,7 +383,16 @@ footer{background:#041027;color:#a9b8cf;padding:42px 0;margin-top:0}.foot{displa
 <nav>
   <div class="wrap navin">
     <a class="brand" href="#home" aria-label="Settlem Academy Home">
-      <img class="brand-full-logo" src="settlem-academy-header-logo.svg" alt="Settlem Academy">
+      <img class="brand-full-logo" src="data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 620 116'>
+<rect width='620' height='116' rx='18' fill='white'/>
+<circle cx='58' cy='58' r='47' fill='#f8fbff' stroke='#e7b32b' stroke-width='3'/>
+<path d='M26 80 L48 27 L70 80 L59 80 L52 61 L43 61 L36 80 Z' fill='#f2b51d'/>
+<path d='M57 27 L57 86 M43 52 L72 52' stroke='#1769e8' stroke-width='8' stroke-linecap='round'/>
+<path d='M43 29 L57 17 L71 29' fill='#1769e8'/>
+<text x='108' y='70' font-family='Arial,Helvetica,sans-serif' font-size='44' font-weight='900' letter-spacing='-1'>
+<tspan fill='#e5aa17'>SETTLEM</tspan><tspan fill='#2167db'> ACADEMY</tspan>
+</text>
+</svg>" alt="Settlem Academy">
     </a>
     <div class="links">
       <a href="#home">Home</a>
@@ -412,7 +437,7 @@ footer{background:#041027;color:#a9b8cf;padding:42px 0;margin-top:0}.foot{displa
 
     <div class="math-board premium-board visual-board">
   <div class="visual-backdrop"></div>
-  <img class="hero-math-art" src="settlem-math-visual.png" alt="Settlem Academy mathematics learning visual">
+  <img class="hero-math-art" src="settlem-math-visual-final.png" alt="Settlem Academy mathematics learning visual">
   <div class="visual-shine"></div>
 </div>
   </div>
@@ -616,3 +641,28 @@ footer{background:#041027;color:#a9b8cf;padding:42px 0;margin-top:0}.foot{displa
 
 </body>
 </html>
+<style>
+/* Final logo + mathematics visual */
+.brand-full-logo{
+  width:330px!important;
+  max-height:64px!important;
+  object-fit:contain!important;
+  background:#fff!important;
+  border:1px solid #dce8f7!important;
+  border-radius:14px!important;
+  box-shadow:0 8px 24px rgba(17,55,110,.12)!important;
+}
+.visual-board{
+  min-height:420px!important;
+  background:#061b46!important;
+}
+.hero-math-art{
+  object-fit:cover!important;
+  object-position:center!important;
+  filter:saturate(1.05) contrast(1.03)!important;
+}
+@media(max-width:650px){
+  .brand-full-logo{width:205px!important;max-height:50px!important}
+  .visual-board{min-height:320px!important}
+}
+</style>
