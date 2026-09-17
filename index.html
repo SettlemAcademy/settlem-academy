@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=kBp04EeN5rbrVI9Eo-w9F9RivCf6PyZjyW6ub7BWuaEkttbvjM50x9kZtBRQafZVszkpqTJdvOZ4aELwYbX5nUJPT0CtnTyHgBc3IE9U7r34OPpSH4c5Rf3AA_VWPg-wdqrrP2_paefx0ZFqZTO3Y_lcjZksmmKQ3jACPQpWzTS85dlbY-iE2_d3TA2DPYe23U7CfPV9KSAgSmMn-yDEWkFC7bFM7EC6PHVagoLdTBx0m0NYtIcPDz5PxE_2ZpijuqIYYpmOFCiLkaB0B8Od-e2A6gkCKqSaUJuXmWL4SxF354wpIrxWL44nJZAZIHMp" charset="UTF-8"></script><style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=sXuNbsDi6rAUxx4Mb_p7q_dmGgLl02fKsYODwqp5wHtWYYLSI-b9N-gtbeAFNlekuPBt2sOnSfDJJzj3I-Z0R-HQXdra-88m01INrpfLFxRXoHLGb1kZ8jI54fi7qaONdiUKUn5No-dJkakcLU8mFHZV1lZsTRxVKNooU6JlmOWLhQT1dleFIJBvW7pGQ0rqYqq0kQ7ckWm-JKp8eKciZ0i8AzdMLXwet1b7pUrgXtAJDdP7zw9QOcRMhu4tC-7KLZGDs6EuyHa2Znv0tHykDb4refBskD1OGpb3GaT_N2J_4UgSX-Pirg_JkIx0DAV3" charset="UTF-8"></script><style>
 :root{
   --navy:#0b1738;--navy2:#122653;--blue:#2563eb;--cyan:#38bdf8;
   --gold:#f5b942;--ink:#14213d;--muted:#64748b;--line:#e5eaf2;
@@ -100,23 +100,44 @@ section.content-section{padding:86px 0}
 .section-head p{color:var(--muted);margin-top:11px;font-size:14px}
 .accent-line{width:52px;height:4px;border-radius:10px;background:linear-gradient(90deg,var(--blue),var(--cyan));margin:15px auto 0}
 
-/* COURSE CARDS */
-.courses{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.course{min-height:265px;border:1px solid var(--line);border-radius:22px;padding:25px;background:#fff;position:relative;overflow:hidden;transition:.25s;box-shadow:0 12px 30px #14213d08}
-.course:hover{transform:translateY(-7px);box-shadow:0 24px 45px #14213d15}
-.course:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:var(--card-color)}
-.course:nth-child(1){--card-color:#10b981;background:linear-gradient(145deg,#f0fdf9,#fff)}
-.course:nth-child(2){--card-color:#2563eb;background:linear-gradient(145deg,#eff6ff,#fff)}
-.course:nth-child(3){--card-color:#f59e0b;background:linear-gradient(145deg,#fff8eb,#fff)}
-.course:nth-child(4){--card-color:#8b5cf6;background:linear-gradient(145deg,#f6f1ff,#fff)}
-.course-icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:23px;background:#fff;box-shadow:0 8px 20px #14213d10;margin-bottom:20px}
-.course .num{font-size:10px;font-weight:900;letter-spacing:1.2px;color:var(--card-color)}
-.course h3{font-size:20px;line-height:1.2;margin:8px 0}
-.course p{font-size:12px;color:var(--muted);line-height:1.65}
-.course-bottom{position:absolute;bottom:22px;left:25px;right:25px;display:flex;align-items:center;justify-content:space-between}
-.course-bottom small{font-size:9px;color:#94a3b8;font-weight:700}
-.arrow{width:34px;height:34px;border-radius:50%;background:var(--card-color);color:#fff;display:grid;place-items:center;font-weight:900}
+/* PREMIUM COURSE CARDS */
+.course-section-intro{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:30px}
+.course-section-intro .section-head{text-align:left;margin:0;max-width:650px}
+.course-section-intro .accent-line{margin:15px 0 0}
+.course-count{font-size:10px;font-weight:800;letter-spacing:1.2px;color:#94a3b8;white-space:nowrap;padding-bottom:8px}
 
+.courses{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.course{min-height:330px;border:1px solid #e2e8f0;border-radius:22px;padding:26px;background:#fff;position:relative;overflow:hidden;
+transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;box-shadow:0 10px 28px #0b17380a}
+.course:hover{transform:translateY(-8px);box-shadow:0 25px 50px #0b17381a;border-color:#cbd8ea}
+.course:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--card-color)}
+.course:after{content:"";position:absolute;width:120px;height:120px;right:-65px;top:-65px;border-radius:50%;background:var(--card-color);opacity:.055}
+
+.course:nth-child(1){--card-color:#10b981;background:linear-gradient(145deg,#f7fffc,#fff)}
+.course:nth-child(2){--card-color:#2563eb;background:linear-gradient(145deg,#f5f9ff,#fff)}
+.course:nth-child(3){--card-color:#f59e0b;background:linear-gradient(145deg,#fffaf1,#fff)}
+.course:nth-child(4){--card-color:#8b5cf6;background:linear-gradient(145deg,#faf7ff,#fff)}
+
+.course-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:25px}
+.course-icon{width:55px;height:55px;border-radius:16px;display:grid;place-items:center;font-size:25px;background:#fff;
+box-shadow:0 9px 22px #14213d12;border:1px solid #edf1f6}
+.course .num{font-size:9px;font-weight:900;letter-spacing:1.3px;color:var(--card-color)}
+.course-badge{padding:6px 9px;border-radius:999px;background:#fff;border:1px solid #edf1f6;color:#64748b;font-size:8px;font-weight:800;letter-spacing:.7px}
+.course h3{font-size:20px;line-height:1.2;letter-spacing:-.6px;margin:0 0 10px}
+.course p{font-size:12px;color:var(--muted);line-height:1.7;max-width:270px}
+.course-topics{display:flex;gap:6px;flex-wrap:wrap;margin-top:18px}
+.course-topics span{font-size:8px;font-weight:800;color:#64748b;background:#f3f6fa;border-radius:6px;padding:5px 7px}
+.course-bottom{position:absolute;bottom:20px;left:26px;right:26px;padding-top:14px;border-top:1px solid #edf1f6;display:flex;align-items:center;justify-content:space-between}
+.course-bottom small{font-size:8px;color:#94a3b8;font-weight:800;letter-spacing:.5px}
+.arrow{width:35px;height:35px;border-radius:50%;background:var(--card-color);color:#fff;display:grid;place-items:center;font-weight:900;font-size:15px;box-shadow:0 7px 15px color-mix(in srgb,var(--card-color) 25%,transparent)}
+
+@media(max-width:1000px){
+ .courses{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+ .course-section-intro{display:block}.course-count{margin-top:12px}
+ .courses{grid-template-columns:1fr}
+}
 /* APPROACH */
 .approach{background:#fff}
 .approach-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:65px;align-items:center}
@@ -293,32 +314,63 @@ border-radius:999px;background:#ffffff0a;color:#dce9fa;font-size:9px;font-weight
 
 <section class="content-section" id="courses">
   <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">OUR COURSES</div>
-      <h2>Learning paths for <span>every stage</span></h2>
-      <div class="accent-line"></div>
-      <p>Well-structured mathematics courses designed for school, intermediate and engineering students.</p>
+    <div class="course-section-intro">
+      <div class="section-head">
+        <div class="eyebrow">OUR COURSES</div>
+        <h2>Choose your <span>learning path.</span></h2>
+        <div class="accent-line"></div>
+        <p>Focused mathematics learning for every stage — from school foundations to engineering mathematics.</p>
+      </div>
+      <div class="course-count">01 — 04 &nbsp; • &nbsp; LEARNING LEVELS</div>
     </div>
+
     <div class="courses">
       <div class="course">
-        <div class="course-icon">📖</div><div class="num">01 / SCHOOL</div>
-        <h3>Classes 5–7</h3><p>Build strong foundations through simple explanations, examples and regular practice.</p>
-        <div class="course-bottom"><small>Basics • Concepts • Practice</small><a class="arrow" href="classes-5-7-mathematics.html">→</a></div>
+        <div class="course-top">
+          <div class="course-icon">📐</div>
+          <div class="course-badge">FOUNDATION</div>
+        </div>
+        <div class="num">01 / SCHOOL</div>
+        <h3>Classes 5–7</h3>
+        <p>Build a strong mathematical foundation with simple explanations, visual examples and guided practice.</p>
+        <div class="course-topics"><span>Basics</span><span>Fractions</span><span>Practice</span></div>
+        <div class="course-bottom"><small>BUILD YOUR FOUNDATION</small><a class="arrow" href="classes-5-7-mathematics.html">→</a></div>
       </div>
+
       <div class="course">
-        <div class="course-icon">✏️</div><div class="num">02 / SCHOOL</div>
-        <h3>Class 8–10</h3><p>Strengthen concepts, improve problem solving and prepare with guided practice.</p>
-        <div class="course-bottom"><small>Concepts • Examples • Tests</small><a class="arrow" href="class-10-mathematics.html">→</a></div>
+        <div class="course-top">
+          <div class="course-icon">📊</div>
+          <div class="course-badge">CORE SKILLS</div>
+        </div>
+        <div class="num">02 / SCHOOL</div>
+        <h3>Class 8–10</h3>
+        <p>Strengthen concepts, develop problem-solving skills and prepare for important mathematics topics.</p>
+        <div class="course-topics"><span>Algebra</span><span>Geometry</span><span>Problems</span></div>
+        <div class="course-bottom"><small>LEARN • PRACTICE • REVISE</small><a class="arrow" href="class-10-mathematics.html">→</a></div>
       </div>
+
       <div class="course">
-        <div class="course-icon">🎓</div><div class="num">03 / INTERMEDIATE</div>
-        <h3>Intermediate Mathematics</h3><p>Structured lessons, formulas and exam-oriented practice for higher-level mathematics.</p>
-        <div class="course-bottom"><small>Formulas • Problems • Exams</small><a class="arrow" href="intermediate-mathematics.html">→</a></div>
+        <div class="course-top">
+          <div class="course-icon">∫</div>
+          <div class="course-badge">ADVANCED</div>
+        </div>
+        <div class="num">03 / INTERMEDIATE</div>
+        <h3>Intermediate Mathematics</h3>
+        <p>Structured lessons, important formulas and problem-solving practice for higher-level mathematics.</p>
+        <div class="course-topics"><span>Calculus</span><span>Vectors</span><span>Probability</span></div>
+        <div class="course-bottom"><small>CONCEPTS • FORMULAS • EXAMS</small><a class="arrow" href="intermediate-mathematics.html">→</a></div>
       </div>
+
       <div class="course">
-        <div class="course-icon">⚙️</div><div class="num">04 / ENGINEERING</div>
-        <h3>B.Tech Mathematics</h3><p>Understand core engineering mathematics through clear concepts and worked problems.</p>
-        <div class="course-bottom"><small>Theory • Applications • Problems</small><a class="arrow" href="btech-mathematics.html">→</a></div>
+        <div class="course-top">
+          <div class="course-icon">Σ</div>
+          <div class="course-badge">ENGINEERING</div>
+        </div>
+        <div class="num">04 / B.TECH</div>
+        <h3>B.Tech Mathematics</h3>
+        <p>Understand engineering mathematics through clear theory, worked examples and exam-focused problems.</p>
+        <div class="course-topics"><span>Calculus</span><span>Transforms</span><span>Problems</span></div>
+        <div class="course-bottom"><small>THEORY • APPLICATION • PRACTICE</small><a class="arrow" href="btech-mathematics.html">→</a></div>
       </div>
     </div>
   </div>
