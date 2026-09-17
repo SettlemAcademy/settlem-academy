@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=sXuNbsDi6rAUxx4Mb_p7q_dmGgLl02fKsYODwqp5wHtWYYLSI-b9N-gtbeAFNlekuPBt2sOnSfDJJzj3I-Z0R-HQXdra-88m01INrpfLFxRXoHLGb1kZ8jI54fi7qaONdiUKUn5No-dJkakcLU8mFHZV1lZsTRxVKNooU6JlmOWLhQT1dleFIJBvW7pGQ0rqYqq0kQ7ckWm-JKp8eKciZ0i8AzdMLXwet1b7pUrgXtAJDdP7zw9QOcRMhu4tC-7KLZGDs6EuyHa2Znv0tHykDb4refBskD1OGpb3GaT_N2J_4UgSX-Pirg_JkIx0DAV3" charset="UTF-8"></script><style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=GV0tXV6Bnm-5saa6GjPCwZwuNdq84unjmS8TrU4oaDjt76bsLbfJu-ZcIps1o8RcRj5u-AgLklM2H4PtrDryl_PAt2DfSXPtlNlfC4YES7ECUgCtQFWttX7fsitSt_aV8uejMOAMptJJGEtSeZn_ZCjBo_0snaFqsbaqeqvOVl59V6iR35s03RoD6kyfVGumG9INzL7jiB4H4DOGtXjtpSL5UQCKZOdt6yUzZZdgnONjCRlDOqHDRq-zFqUvuIN2ePmDvLfYwv_nwVEn9hSPQqDOBql-stu020PJE2YlCte1PJ_n1GBEJIhkCPghxZjE" charset="UTF-8"></script><style>
 :root{
   --navy:#0b1738;--navy2:#122653;--blue:#2563eb;--cyan:#38bdf8;
   --gold:#f5b942;--ink:#14213d;--muted:#64748b;--line:#e5eaf2;
@@ -27,6 +27,7 @@ position:sticky;top:0;z-index:100;backdrop-filter:blur(16px)}
 .brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px;letter-spacing:-.7px;white-space:nowrap;margin-right:auto}
 .brand-logo{width:54px;height:54px;object-fit:contain;border-radius:50%}
 .brand-academy{color:var(--blue)}
+.brand-name{color:var(--gold)}
 .links{display:flex;align-items:center;gap:22px;font-size:13px;font-weight:700}
 .links a{position:relative;padding:28px 0}
 .links a:hover{color:var(--blue)}
@@ -92,7 +93,7 @@ box-shadow:0 30px 80px #0005;position:relative;overflow:hidden;padding:26px}
 .stat small{display:block;color:#94a3b8;font-size:9px;margin-top:3px}
 
 /* SECTIONS */
-section.content-section{padding:86px 0}
+section.content-section{padding:78px 0}
 .section-head{text-align:center;max-width:720px;margin:0 auto 42px}
 .section-head .eyebrow{color:var(--blue);margin-bottom:8px}
 .section-head h2{font-size:clamp(31px,4vw,45px);line-height:1.12;letter-spacing:-1.8px}
@@ -138,16 +139,34 @@ box-shadow:0 9px 22px #14213d12;border:1px solid #edf1f6}
  .course-section-intro{display:block}.course-count{margin-top:12px}
  .courses{grid-template-columns:1fr}
 }
-/* APPROACH */
-.approach{background:#fff}
-.approach-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:65px;align-items:center}
-.approach-copy h2{font-size:42px;line-height:1.12;letter-spacing:-1.7px}
-.approach-copy p{color:var(--muted);margin-top:14px}
+/* PREMIUM LEARNING JOURNEY */
+.approach{background:linear-gradient(180deg,#fff 0%,#f5f8fd 100%);position:relative;overflow:hidden}
+.approach:before{content:"∑  ∫  π  √  Δ";position:absolute;right:-25px;top:35px;font-size:105px;font-weight:900;letter-spacing:25px;color:#0b173806;white-space:nowrap}
+.approach-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:65px;align-items:center;position:relative;z-index:2}
+.approach-copy{position:relative}
+.approach-copy .journey-label{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;background:#eaf2ff;color:var(--blue);font-size:9px;font-weight:900;letter-spacing:1px;margin-bottom:16px}
+.approach-copy .journey-label i{width:6px;height:6px;background:var(--blue);border-radius:50%;display:block}
+.approach-copy h2{font-size:clamp(35px,4vw,48px);line-height:1.08;letter-spacing:-2px}
+.approach-copy h2 span{color:var(--blue)}
+.approach-copy p{color:var(--muted);margin-top:15px;max-width:480px;font-size:14px}
+.journey-visual{margin-top:28px;width:min(100%,470px);height:95px;border-radius:18px;background:#0b1738;position:relative;overflow:hidden;box-shadow:0 18px 38px #0b173820}
+.journey-visual:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff12 1px,transparent 1px),linear-gradient(90deg,#ffffff12 1px,transparent 1px);background-size:28px 28px}
+.journey-line{position:absolute;left:35px;right:35px;top:47px;height:2px;background:linear-gradient(90deg,#38bdf8,#f5b942,#10b981)}
+.journey-dot{position:absolute;top:39px;width:18px;height:18px;border:3px solid #0b1738;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #ffffff44}
+.journey-dot:nth-child(2){left:29px}.journey-dot:nth-child(3){left:32%}.journey-dot:nth-child(4){left:57%}.journey-dot:nth-child(5){right:29px}
+.journey-text{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:space-around;color:#c9d8ed;font-size:8px;font-weight:800;letter-spacing:.7px}
 .steps{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
-.step{padding:22px;border:1px solid var(--line);border-radius:18px;background:#f8faff}
-.step b{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#e8f1ff;color:var(--blue);font-size:11px}
-.step h3{font-size:17px;margin:13px 0 3px}
-.step p{font-size:12px;color:var(--muted)}
+.step{padding:23px;border:1px solid #e0e7f0;border-radius:20px;background:#fff;min-height:158px;position:relative;overflow:hidden;transition:.22s;box-shadow:0 10px 25px #0b173808}
+.step:hover{transform:translateY(-5px);box-shadow:0 20px 38px #0b173814}
+.step:after{content:"";position:absolute;right:-28px;bottom:-28px;width:90px;height:90px;border-radius:50%;background:var(--step-color);opacity:.07}
+.step b{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:color-mix(in srgb,var(--step-color) 10%,white);color:var(--step-color);font-size:10px}
+.step h3{font-size:18px;margin:13px 0 4px;letter-spacing:-.4px}
+.step p{font-size:11px;color:var(--muted);line-height:1.65;max-width:190px}
+.step:nth-child(1){--step-color:#2563eb}.step:nth-child(2){--step-color:#8b5cf6}
+.step:nth-child(3){--step-color:#f59e0b}.step:nth-child(4){--step-color:#10b981}
+.step .step-arrow{position:absolute;right:18px;top:23px;font-size:15px;color:var(--step-color);font-weight:900}
+@media(max-width:1000px){.approach-grid{grid-template-columns:1fr}.journey-visual{width:100%}}
+@media(max-width:650px){.steps{grid-template-columns:1fr}.approach:before{display:none}.journey-visual{height:85px}}
 
 /* LEARNING */
 .learning-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
@@ -197,7 +216,7 @@ footer{background:#061027;color:#a9b8cf;padding:45px 0;margin-top:80px}
  .features{grid-template-columns:1fr 1fr}.statbar{grid-template-columns:repeat(2,1fr)}
  .stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
  .courses,.learning-grid,.mission-grid,.steps{grid-template-columns:1fr}
- section.content-section{padding:65px 0}
+ section.content-section{padding:58px 0}
  .math-board{min-height:300px;padding:20px}.eq1{font-size:23px}.eq2{font-size:16px}
  .graph{width:150px}.books{transform:scale(.75);transform-origin:bottom right}
  .foot{flex-direction:column}
@@ -233,6 +252,23 @@ border-radius:999px;background:#ffffff0a;color:#dce9fa;font-size:9px;font-weight
  .hero-trust{flex-wrap:wrap}
 }
 
+
+/* FINAL BRAND & PREMIUM POLISH */
+.brand-name{font-weight:900}
+.brand-name .brand-academy{font-weight:900}
+.navcta{border:1px solid #ffffff10}
+.hero .wrap{max-width:1240px}
+.hero-geometry{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.geo-cube,.geo-ring,.geo-orbit{position:absolute;border:1px solid #7dd3fc22}
+.geo-cube{width:105px;height:105px;right:4%;top:12%;transform:rotate(30deg) skew(-8deg)}
+.geo-cube:before,.geo-cube:after{content:"";position:absolute;inset:15px;border:1px solid #7dd3fc18}
+.geo-cube:after{inset:30px}
+.geo-ring{width:180px;height:180px;border-radius:50%;right:-55px;bottom:8%;box-shadow:0 0 0 22px #ffffff03,0 0 0 45px #ffffff02}
+.geo-orbit{width:250px;height:80px;border-radius:50%;left:46%;top:8%;transform:rotate(-18deg)}
+.hero-micro{display:flex;gap:8px;align-items:center;margin-top:14px;font-size:9px;color:#9eb3cf;font-weight:700}
+.hero-micro b{color:#f5b942}
+@media(max-width:650px){.geo-cube{right:-45px}.geo-orbit{left:45%}}
+
 </style>
 </head>
 <body>
@@ -241,7 +277,7 @@ border-radius:999px;background:#ffffff0a;color:#dce9fa;font-size:9px;font-weight
   <div class="wrap navin">
     <a class="brand" href="#home">
       <img class="brand-logo" src="settlem-academy-logo.png" alt="Settlem Academy logo">
-      <span>SETTLEM <span class="brand-academy">ACADEMY</span></span>
+      <span class="brand-name">SETTLEM <span class="brand-academy">ACADEMY</span></span>
     </a>
     <div class="links">
       <a href="#home">Home</a>
@@ -263,6 +299,7 @@ border-radius:999px;background:#ffffff0a;color:#dce9fa;font-size:9px;font-weight
 <main id="home">
 
 <section class="hero">
+  <div class="hero-geometry"><div class="geo-cube"></div><div class="geo-ring"></div><div class="geo-orbit"></div></div>
   <div class="wrap hero-grid">
     <div>
       <div class="hero-badge"><i></i> CLASS 5 → B.TECH &nbsp; • &nbsp; ONLINE + OFFLINE LEARNING</div>
@@ -274,6 +311,7 @@ border-radius:999px;background:#ffffff0a;color:#dce9fa;font-size:9px;font-weight
         <a class="btn btn-light" href="video-lessons.html">▶ Watch Lessons</a>
       </div>
       <div class="hero-trust">✦ <span>Concept-focused learning</span> • Structured practice • Student progress</div>
+      <div class="hero-micro"><b>SETTLEM</b> • MATHEMATICS • CLARITY • PRACTICE • CONFIDENCE</div>
       <div class="features">
         <div class="feature-mini"><span class="ico">∑</span>Concept Clarity</div>
         <div class="feature-mini"><span class="ico">↗</span>Step-by-Step</div>
@@ -379,15 +417,21 @@ border-radius:999px;background:#ffffff0a;color:#dce9fa;font-size:9px;font-weight
 <section class="content-section approach" id="learning">
   <div class="wrap approach-grid">
     <div class="approach-copy">
+      <div class="journey-label"><i></i> THE SETTLEM LEARNING METHOD</div>
       <div class="eyebrow">OUR APPROACH</div>
-      <h2>From concepts to confidence.</h2>
-      <p>We focus on understanding mathematics rather than memorising steps. Each learning journey moves from a clear concept to examples, practice and revision.</p>
+      <h2>From concepts to <span>confidence.</span></h2>
+      <p>Mathematics becomes easier when every idea has a clear path. Learn the concept, understand the method, practise with purpose and build lasting confidence.</p>
+      <div class="journey-visual" aria-label="Learning journey">
+        <div class="journey-line"></div>
+        <div class="journey-dot"></div><div class="journey-dot"></div><div class="journey-dot"></div><div class="journey-dot"></div>
+        <div class="journey-text"><span>LEARN</span><span>UNDERSTAND</span><span>PRACTICE</span><span>SUCCEED</span></div>
+      </div>
     </div>
     <div class="steps">
-      <div class="step"><b>01</b><h3>Learn</h3><p>Start with a clear explanation of the concept.</p></div>
-      <div class="step"><b>02</b><h3>Understand</h3><p>See how the concept works through examples.</p></div>
-      <div class="step"><b>03</b><h3>Practice</h3><p>Apply the idea through carefully selected problems.</p></div>
-      <div class="step"><b>04</b><h3>Succeed</h3><p>Build confidence through revision and consistency.</p></div>
+      <div class="step"><b>01</b><span class="step-arrow">↗</span><h3>Learn</h3><p>Start with a clear, simple explanation of the mathematical concept.</p></div>
+      <div class="step"><b>02</b><span class="step-arrow">↗</span><h3>Understand</h3><p>See the method through worked examples and logical steps.</p></div>
+      <div class="step"><b>03</b><span class="step-arrow">↗</span><h3>Practice</h3><p>Apply what you learned with carefully selected problems.</p></div>
+      <div class="step"><b>04</b><span class="step-arrow">↗</span><h3>Succeed</h3><p>Revise consistently and turn understanding into confidence.</p></div>
     </div>
   </div>
 </section>
