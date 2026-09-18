@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=Dj0sWdTq6poltiIQrXTPMCV02fgRmOKnSYpITCVmtBDsM5HuNAs1As8le7D4UuRhmwwhZG-XCynTyk633WJqrtI2dDzJf7Ukn4xFq0tVvkQOcZZLopHjPI8vTewSLwNj_6ype7_ItRBoiZW_wbj6ZQ5cwMYTR0-U5G9LCDQ5KOJCHZND48_DV6SzJezq-vu3ci9FuItd29kyPjIawiuRdqJWtnQMU7xsRYtb0uX0thbDZHemh7rpHDJFoGEzCZ-ubqa-tDGZW6h4-_4AjNVV_Z2oLpM1CkAyfhfhKsBMcsHIb5O5jRElJhhFSVrxKtUe2BI7Cc3WIxJzgkIiJYpQ4A" charset="UTF-8"></script><style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=kN_eIcsZE7X2jFfUYLJ_pa0ki1wbhfzCWCq3HEIW59fsl7WNIwFxqjmSYXPYhiy3Mpbk7Ax9QDJY0mJs6s-8VD8W3VlErpjtrL9dvAuwVhUgxTLQVU2KQXB-nymekuNbs4zne7SkOmq6TamfBSKFzgsdckzxXehJpEJrl1QSq35l5kn_4JPXWWM7nbPAykgsgiPSggI85nN1fiCWajmOYTNr3yIX4eY-YsOfi1Y7B4gooFnidbnE1hbTy4ZDaAT_kcguqgfg2OMTSanxJz3dZP-xsysSjVNFLdQtaXuR4pvGYVEa9CvgwkdNl5y8oVtGAF6MsrwL6heXqrRYxFuLlw" charset="UTF-8"></script><style>
 
 :root{
   --navy:#071634;--navy2:#0d2a60;--blue:#1769e8;--cyan:#52c7ff;
@@ -399,6 +399,36 @@ nav{height:76px!important}
 @media(max-width:1000px){.brand{width:245px!important}.brand-full-logo{width:245px!important}.links{gap:12px!important;font-size:11px!important}.hero-grid{grid-template-columns:1fr!important}.hero-art-space{min-height:430px!important;height:430px!important}.hero-copy{padding-top:0!important}}
 @media(max-width:650px){nav{height:64px!important}.brand{width:205px!important}.brand-full-logo{width:205px!important;height:48px!important}.hero{padding-top:22px!important}.hero-art-space{min-height:330px!important;height:330px!important}.hero-art-image{width:110%!important;right:-5%!important}}
 
+
+/* APPROVED HERO — final clean implementation */
+nav{height:76px!important;background:#fff!important;border-bottom:1px solid #e7edf5!important}
+.navin{width:min(1440px,94%)!important;margin:auto!important;display:flex!important;align-items:center!important;gap:24px!important}
+.brand{width:auto!important;flex:0 0 auto!important;margin-right:20px!important;display:flex!important;align-items:center!important}
+.brand-full-logo{width:285px!important;height:auto!important;max-height:50px!important;object-fit:contain!important;object-position:left center!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
+.links{gap:18px!important;font-size:12px!important;flex:1!important;justify-content:flex-end!important}
+.links a{padding:28px 0!important}
+.navcta{white-space:nowrap!important}
+.hero{padding:34px 0 0!important;min-height:552px!important;background:
+ radial-gradient(circle at 76% 38%,rgba(28,117,207,.36),transparent 35%),
+ linear-gradient(135deg,#061634 0%,#08275b 56%,#0d3a77 100%)!important}
+.hero:before{opacity:.09!important;background-size:52px 52px!important}
+.hero-grid{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;gap:24px!important;align-items:center!important}
+.hero-copy{position:relative!important;z-index:3!important}
+.hero-art-space{position:relative!important;height:520px!important;min-height:520px!important;overflow:hidden!important;background:transparent!important;display:block!important;filter:none!important}
+.hero-art-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;filter:none!important;mix-blend-mode:normal!important;transform:none!important;mask:none!important;-webkit-mask:none!important}
+.hero-art-space:after{display:none!important}
+@media(max-width:1100px){
+ .brand-full-logo{width:245px!important;max-height:46px!important}
+ .navin{gap:14px!important}.links{gap:12px!important;font-size:11px!important}
+ .hero-grid{grid-template-columns:1fr!important;gap:0!important}
+ .hero-art-space{height:420px!important;min-height:420px!important;margin-top:10px!important}
+}
+@media(max-width:650px){
+ nav{height:64px!important}.brand-full-logo{width:205px!important;max-height:44px!important}
+ .hero{padding-top:24px!important}.hero h1{font-size:48px!important;letter-spacing:-2.5px!important}
+ .hero-art-space{height:320px!important;min-height:320px!important}
+}
+
 </style>
 
 <style>
@@ -411,6 +441,36 @@ nav{height:76px!important}
 @media(min-width:1051px){.hero-grid{grid-template-columns:1fr 1fr!important;gap:46px!important;align-items:center!important}.hero-grid>div:first-child{max-width:680px}.hero-art-space{min-height:500px!important}}
 @media(max-width:1050px){.hero{min-height:auto!important;background-position:58% top!important}.hero-art-space{min-height:360px!important;margin-top:8px}}
 @media(max-width:650px){.brand-full-logo{width:205px!important;height:48px!important}.hero{padding-top:30px!important;background-size:auto 620px!important;background-position:62% top!important}.hero-art-space{min-height:300px!important}}
+
+/* APPROVED HERO — final clean implementation */
+nav{height:76px!important;background:#fff!important;border-bottom:1px solid #e7edf5!important}
+.navin{width:min(1440px,94%)!important;margin:auto!important;display:flex!important;align-items:center!important;gap:24px!important}
+.brand{width:auto!important;flex:0 0 auto!important;margin-right:20px!important;display:flex!important;align-items:center!important}
+.brand-full-logo{width:285px!important;height:auto!important;max-height:50px!important;object-fit:contain!important;object-position:left center!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
+.links{gap:18px!important;font-size:12px!important;flex:1!important;justify-content:flex-end!important}
+.links a{padding:28px 0!important}
+.navcta{white-space:nowrap!important}
+.hero{padding:34px 0 0!important;min-height:552px!important;background:
+ radial-gradient(circle at 76% 38%,rgba(28,117,207,.36),transparent 35%),
+ linear-gradient(135deg,#061634 0%,#08275b 56%,#0d3a77 100%)!important}
+.hero:before{opacity:.09!important;background-size:52px 52px!important}
+.hero-grid{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;gap:24px!important;align-items:center!important}
+.hero-copy{position:relative!important;z-index:3!important}
+.hero-art-space{position:relative!important;height:520px!important;min-height:520px!important;overflow:hidden!important;background:transparent!important;display:block!important;filter:none!important}
+.hero-art-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;filter:none!important;mix-blend-mode:normal!important;transform:none!important;mask:none!important;-webkit-mask:none!important}
+.hero-art-space:after{display:none!important}
+@media(max-width:1100px){
+ .brand-full-logo{width:245px!important;max-height:46px!important}
+ .navin{gap:14px!important}.links{gap:12px!important;font-size:11px!important}
+ .hero-grid{grid-template-columns:1fr!important;gap:0!important}
+ .hero-art-space{height:420px!important;min-height:420px!important;margin-top:10px!important}
+}
+@media(max-width:650px){
+ nav{height:64px!important}.brand-full-logo{width:205px!important;max-height:44px!important}
+ .hero{padding-top:24px!important}.hero h1{font-size:48px!important;letter-spacing:-2.5px!important}
+ .hero-art-space{height:320px!important;min-height:320px!important}
+}
+
 </style>
 
 <style>
@@ -437,6 +497,36 @@ nav{height:76px!important}
   .brand-full-logo{width:205px!important;max-height:50px!important}
   .visual-board{min-height:320px!important}
 }
+
+/* APPROVED HERO — final clean implementation */
+nav{height:76px!important;background:#fff!important;border-bottom:1px solid #e7edf5!important}
+.navin{width:min(1440px,94%)!important;margin:auto!important;display:flex!important;align-items:center!important;gap:24px!important}
+.brand{width:auto!important;flex:0 0 auto!important;margin-right:20px!important;display:flex!important;align-items:center!important}
+.brand-full-logo{width:285px!important;height:auto!important;max-height:50px!important;object-fit:contain!important;object-position:left center!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
+.links{gap:18px!important;font-size:12px!important;flex:1!important;justify-content:flex-end!important}
+.links a{padding:28px 0!important}
+.navcta{white-space:nowrap!important}
+.hero{padding:34px 0 0!important;min-height:552px!important;background:
+ radial-gradient(circle at 76% 38%,rgba(28,117,207,.36),transparent 35%),
+ linear-gradient(135deg,#061634 0%,#08275b 56%,#0d3a77 100%)!important}
+.hero:before{opacity:.09!important;background-size:52px 52px!important}
+.hero-grid{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;gap:24px!important;align-items:center!important}
+.hero-copy{position:relative!important;z-index:3!important}
+.hero-art-space{position:relative!important;height:520px!important;min-height:520px!important;overflow:hidden!important;background:transparent!important;display:block!important;filter:none!important}
+.hero-art-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;filter:none!important;mix-blend-mode:normal!important;transform:none!important;mask:none!important;-webkit-mask:none!important}
+.hero-art-space:after{display:none!important}
+@media(max-width:1100px){
+ .brand-full-logo{width:245px!important;max-height:46px!important}
+ .navin{gap:14px!important}.links{gap:12px!important;font-size:11px!important}
+ .hero-grid{grid-template-columns:1fr!important;gap:0!important}
+ .hero-art-space{height:420px!important;min-height:420px!important;margin-top:10px!important}
+}
+@media(max-width:650px){
+ nav{height:64px!important}.brand-full-logo{width:205px!important;max-height:44px!important}
+ .hero{padding-top:24px!important}.hero h1{font-size:48px!important;letter-spacing:-2.5px!important}
+ .hero-art-space{height:320px!important;min-height:320px!important}
+}
+
 </style>
 
 
@@ -452,6 +542,36 @@ nav{height:76px!important}
 .hero-grid{z-index:2!important}
 @media(max-width:1050px){.brand-full-logo{width:260px!important}.hero-grid{grid-template-columns:1fr!important;gap:12px!important}.hero-art-space{height:420px!important;min-height:420px!important;margin-top:0!important}.hero-art-image{width:100%!important;transform:none!important}}
 @media(max-width:650px){.brand-full-logo{width:205px!important;max-height:48px!important}.hero-art-space{height:320px!important;min-height:320px!important}.hero-art-image{width:108%!important;transform:translateX(-4%)!important}}
+
+/* APPROVED HERO — final clean implementation */
+nav{height:76px!important;background:#fff!important;border-bottom:1px solid #e7edf5!important}
+.navin{width:min(1440px,94%)!important;margin:auto!important;display:flex!important;align-items:center!important;gap:24px!important}
+.brand{width:auto!important;flex:0 0 auto!important;margin-right:20px!important;display:flex!important;align-items:center!important}
+.brand-full-logo{width:285px!important;height:auto!important;max-height:50px!important;object-fit:contain!important;object-position:left center!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
+.links{gap:18px!important;font-size:12px!important;flex:1!important;justify-content:flex-end!important}
+.links a{padding:28px 0!important}
+.navcta{white-space:nowrap!important}
+.hero{padding:34px 0 0!important;min-height:552px!important;background:
+ radial-gradient(circle at 76% 38%,rgba(28,117,207,.36),transparent 35%),
+ linear-gradient(135deg,#061634 0%,#08275b 56%,#0d3a77 100%)!important}
+.hero:before{opacity:.09!important;background-size:52px 52px!important}
+.hero-grid{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;gap:24px!important;align-items:center!important}
+.hero-copy{position:relative!important;z-index:3!important}
+.hero-art-space{position:relative!important;height:520px!important;min-height:520px!important;overflow:hidden!important;background:transparent!important;display:block!important;filter:none!important}
+.hero-art-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;filter:none!important;mix-blend-mode:normal!important;transform:none!important;mask:none!important;-webkit-mask:none!important}
+.hero-art-space:after{display:none!important}
+@media(max-width:1100px){
+ .brand-full-logo{width:245px!important;max-height:46px!important}
+ .navin{gap:14px!important}.links{gap:12px!important;font-size:11px!important}
+ .hero-grid{grid-template-columns:1fr!important;gap:0!important}
+ .hero-art-space{height:420px!important;min-height:420px!important;margin-top:10px!important}
+}
+@media(max-width:650px){
+ nav{height:64px!important}.brand-full-logo{width:205px!important;max-height:44px!important}
+ .hero{padding-top:24px!important}.hero h1{font-size:48px!important;letter-spacing:-2.5px!important}
+ .hero-art-space{height:320px!important;min-height:320px!important}
+}
+
 </style>
 <style>
 /* FINAL VISUAL POLISH — integrated logo + seamless hero artwork */
@@ -478,6 +598,102 @@ nav{height:76px!important}
 .hero-art-space:after{display:none!important;}
 @media(max-width:1050px){.brand-full-logo{width:250px!important;height:52px!important}.hero-grid{grid-template-columns:1fr!important;gap:0!important}.hero-art-space{min-height:430px!important}.hero-art-image{width:106%!important;right:-3%!important;top:0!important;height:100%!important;}}
 @media(max-width:650px){.brand-full-logo{width:205px!important;height:48px!important}.navin{gap:8px!important}.hero-art-space{min-height:330px!important}.hero-art-image{width:112%!important;right:-6%!important;}}
+
+/* APPROVED HERO — final clean implementation */
+nav{height:76px!important;background:#fff!important;border-bottom:1px solid #e7edf5!important}
+.navin{width:min(1440px,94%)!important;margin:auto!important;display:flex!important;align-items:center!important;gap:24px!important}
+.brand{width:auto!important;flex:0 0 auto!important;margin-right:20px!important;display:flex!important;align-items:center!important}
+.brand-full-logo{width:285px!important;height:auto!important;max-height:50px!important;object-fit:contain!important;object-position:left center!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
+.links{gap:18px!important;font-size:12px!important;flex:1!important;justify-content:flex-end!important}
+.links a{padding:28px 0!important}
+.navcta{white-space:nowrap!important}
+.hero{padding:34px 0 0!important;min-height:552px!important;background:
+ radial-gradient(circle at 76% 38%,rgba(28,117,207,.36),transparent 35%),
+ linear-gradient(135deg,#061634 0%,#08275b 56%,#0d3a77 100%)!important}
+.hero:before{opacity:.09!important;background-size:52px 52px!important}
+.hero-grid{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;gap:24px!important;align-items:center!important}
+.hero-copy{position:relative!important;z-index:3!important}
+.hero-art-space{position:relative!important;height:520px!important;min-height:520px!important;overflow:hidden!important;background:transparent!important;display:block!important;filter:none!important}
+.hero-art-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;filter:none!important;mix-blend-mode:normal!important;transform:none!important;mask:none!important;-webkit-mask:none!important}
+.hero-art-space:after{display:none!important}
+@media(max-width:1100px){
+ .brand-full-logo{width:245px!important;max-height:46px!important}
+ .navin{gap:14px!important}.links{gap:12px!important;font-size:11px!important}
+ .hero-grid{grid-template-columns:1fr!important;gap:0!important}
+ .hero-art-space{height:420px!important;min-height:420px!important;margin-top:10px!important}
+}
+@media(max-width:650px){
+ nav{height:64px!important}.brand-full-logo{width:205px!important;max-height:44px!important}
+ .hero{padding-top:24px!important}.hero h1{font-size:48px!important;letter-spacing:-2.5px!important}
+ .hero-art-space{height:320px!important;min-height:320px!important}
+}
+
+</style>
+
+<style>
+/* LOCKED FINAL HERO — rebuilt from the approved reference composition */
+nav{height:84px!important;background:#fff!important;border-bottom:1px solid #e6ebf3!important;}
+.navin{height:84px!important;gap:26px!important;}
+.brand{width:360px!important;margin-right:0!important;flex:0 0 360px!important;overflow:visible!important;}
+.brand-full-logo{width:360px!important;height:66px!important;max-height:66px!important;object-fit:contain!important;object-position:left center!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important;}
+.links{gap:22px!important;font-size:12px!important;justify-content:flex-end!important;}
+.links a{padding:31px 0!important;}
+.links a:first-child:after{bottom:18px!important;}
+.navcta{padding:13px 20px!important;border-radius:12px!important;white-space:nowrap!important;}
+.hero{min-height:653px!important;padding:42px 0 0!important;overflow:hidden!important;background:radial-gradient(circle at 72% 32%,#11579c 0,#0b326f 35%,transparent 63%),linear-gradient(135deg,#061634 0%,#08285f 55%,#0e3a73 100%)!important;}
+.hero:before{opacity:.085!important;background-size:52px 52px!important;}
+.hero-grid{grid-template-columns:minmax(0,46%) minmax(0,54%)!important;gap:0!important;align-items:stretch!important;}
+.hero-grid>div:first-child{max-width:690px!important;padding-top:6px!important;position:relative!important;z-index:4!important;}
+.hero-art-space{height:611px!important;min-height:611px!important;position:relative!important;overflow:visible!important;background:transparent!important;display:block!important;filter:none!important;z-index:2!important;}
+.hero-art-image{position:absolute!important;right:-2%!important;top:0!important;width:104%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;filter:none!important;mix-blend-mode:normal!important;mask-image:none!important;-webkit-mask-image:none!important;}
+.hero-art-space:after{display:none!important;}
+.stats{position:relative!important;z-index:10!important;margin-top:-1px!important;}
+.statbar{box-shadow:0 18px 45px rgba(12,35,80,.10)!important;}
+@media(max-width:1200px){
+ .brand{width:310px!important;flex-basis:310px!important}.brand-full-logo{width:310px!important}
+ .links{gap:15px!important;font-size:11px!important}.navin{gap:16px!important}
+ .hero-grid{grid-template-columns:48% 52%!important}
+}
+@media(max-width:1050px){
+ nav,.navin{height:72px!important}.brand{width:250px!important;flex-basis:250px!important}.brand-full-logo{width:250px!important;height:54px!important}
+ .links{display:none!important}.navcta{display:none!important}.hamb{display:block!important;margin-left:auto!important}
+ .hero{min-height:auto!important;padding:32px 0 0!important}.hero-grid{grid-template-columns:1fr!important;gap:0!important}.hero-grid>div:first-child{max-width:none!important}
+ .hero-art-space{height:420px!important;min-height:420px!important;margin-top:10px!important}.hero-art-image{right:0!important;width:100%!important;object-fit:cover!important}
+}
+@media(max-width:650px){
+ .brand{width:205px!important;flex-basis:205px!important}.brand-full-logo{width:205px!important;height:48px!important}
+ .hero{padding-top:25px!important}.hero h1{font-size:48px!important;letter-spacing:-2.5px!important}.hero-art-space{height:310px!important;min-height:310px!important}
+}
+
+/* APPROVED HERO — final clean implementation */
+nav{height:76px!important;background:#fff!important;border-bottom:1px solid #e7edf5!important}
+.navin{width:min(1440px,94%)!important;margin:auto!important;display:flex!important;align-items:center!important;gap:24px!important}
+.brand{width:auto!important;flex:0 0 auto!important;margin-right:20px!important;display:flex!important;align-items:center!important}
+.brand-full-logo{width:285px!important;height:auto!important;max-height:50px!important;object-fit:contain!important;object-position:left center!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
+.links{gap:18px!important;font-size:12px!important;flex:1!important;justify-content:flex-end!important}
+.links a{padding:28px 0!important}
+.navcta{white-space:nowrap!important}
+.hero{padding:34px 0 0!important;min-height:552px!important;background:
+ radial-gradient(circle at 76% 38%,rgba(28,117,207,.36),transparent 35%),
+ linear-gradient(135deg,#061634 0%,#08275b 56%,#0d3a77 100%)!important}
+.hero:before{opacity:.09!important;background-size:52px 52px!important}
+.hero-grid{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;gap:24px!important;align-items:center!important}
+.hero-copy{position:relative!important;z-index:3!important}
+.hero-art-space{position:relative!important;height:520px!important;min-height:520px!important;overflow:hidden!important;background:transparent!important;display:block!important;filter:none!important}
+.hero-art-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;filter:none!important;mix-blend-mode:normal!important;transform:none!important;mask:none!important;-webkit-mask:none!important}
+.hero-art-space:after{display:none!important}
+@media(max-width:1100px){
+ .brand-full-logo{width:245px!important;max-height:46px!important}
+ .navin{gap:14px!important}.links{gap:12px!important;font-size:11px!important}
+ .hero-grid{grid-template-columns:1fr!important;gap:0!important}
+ .hero-art-space{height:420px!important;min-height:420px!important;margin-top:10px!important}
+}
+@media(max-width:650px){
+ nav{height:64px!important}.brand-full-logo{width:205px!important;max-height:44px!important}
+ .hero{padding-top:24px!important}.hero h1{font-size:48px!important;letter-spacing:-2.5px!important}
+ .hero-art-space{height:320px!important;min-height:320px!important}
+}
+
 </style>
 </head>
 <body>
@@ -485,7 +701,7 @@ nav{height:76px!important}
 <nav>
   <div class="wrap navin">
     <a class="brand" href="#home" aria-label="Settlem Academy Home">
-<img src="settlem-academy-logo-final-clean.png" alt="Settlem Academy" class="brand-full-logo">
+<img src="settlem-academy-logo-original-clean.png" alt="Settlem Academy" class="brand-full-logo">
     </a>
     <div class="links">
       <a href="#home">Home</a>
@@ -528,7 +744,7 @@ nav{height:76px!important}
       </div>
     </div>
 
-    <div class="hero-art-space" aria-hidden="true"><img src="hero-graphics-final.png" alt="" class="hero-art-image"></div>
+    <div class="hero-art-space" aria-hidden="true"><img src="hero-approved-right.png" alt="" class="hero-art-image"></div>
   </div>
 </section>
 
