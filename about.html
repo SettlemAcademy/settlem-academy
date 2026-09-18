@@ -1,31 +1,595 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About Settlem Academy | Mathematics Learning</title>
-<meta name="description" content="Learn about Settlem Academy, our mission, teaching approach, courses and commitment to helping students build stronger mathematics skills.">
-<style>
-:root{--navy:#101a43;--navy2:#17265c;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--ink:#18233f;--muted:#64748b;--line:#e5eaf3;--bg:#f7f9fc;--white:#fff}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:Inter,ui-sans-serif,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}a{text-decoration:none;color:inherit}.wrap{width:min(1160px,92%);margin:auto}
-nav{height:78px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.96);backdrop-filter:blur(12px);position:sticky;top:0;z-index:50}.navin{height:100%;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.7px;font-size:21px}.brand-logo{width:58px;height:58px;object-fit:contain;border-radius:50%;background:transparent}.brand-name{color:var(--ink);white-space:nowrap}.brand-academy{color:var(--blue)}.links{display:flex;gap:27px;font-size:14px;font-weight:750}.links a:hover,.links a.active{color:var(--blue)}.navcta{padding:10px 16px;border-radius:9px;background:var(--navy);color:#fff;font-size:13px;font-weight:800}.hamb{display:none;font-size:25px}
-.hero{padding:82px 0 70px;background:linear-gradient(135deg,#fff 0%,#eef4ff 55%,#f5efff 100%)}.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:65px;align-items:center}.eyebrow{font-size:12px;letter-spacing:1.5px;font-weight:900;color:var(--blue);margin-bottom:12px}.hero h1{font-size:clamp(44px,6vw,68px);line-height:1.03;letter-spacing:-3px;margin-bottom:20px;background:linear-gradient(90deg,#101a43,#2563eb,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{font-size:18px;color:var(--muted);max-width:690px}.hero-card{background:var(--navy);color:#fff;border-radius:25px;padding:34px;box-shadow:0 28px 65px rgba(16,26,67,.18);position:relative;overflow:hidden}.hero-card:after{content:'∑  π  ∫  √  Δ';position:absolute;right:-10px;bottom:0;font-size:38px;letter-spacing:10px;color:#83adff22;transform:rotate(-8deg)}.hero-card h2{font-size:25px;margin:14px 0 8px}.hero-card p{font-size:14px;color:#cbd5e1;position:relative;z-index:2}.badge{display:inline-block;padding:7px 11px;border-radius:999px;background:#ffffff14;color:#a9c4ff;font-size:11px;font-weight:900;letter-spacing:1px}
-section{padding:78px 0}.head{max-width:720px;margin:0 auto 40px;text-align:center}.head h2{font-size:38px;line-height:1.15;letter-spacing:-1.2px}.head p{color:var(--muted);margin-top:10px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:27px;box-shadow:0 10px 30px rgba(16,26,67,.05)}.icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:18px;margin-bottom:17px}.blue{background:#eaf1ff;color:var(--blue)}.violet{background:#f1eaff;color:var(--violet)}.teal{background:#e7faf7;color:var(--teal)}.card h3{font-size:20px;margin-bottom:8px}.card p{font-size:14px;color:var(--muted)}
-.mission{background:#fff}.mission-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center}.mission-copy h2{font-size:40px;line-height:1.12;letter-spacing:-1.4px}.mission-copy p{color:var(--muted);margin-top:14px}.points{display:grid;gap:13px}.point{display:flex;gap:14px;padding:18px;border:1px solid var(--line);border-radius:15px;background:var(--bg)}.check{width:30px;height:30px;border-radius:9px;background:#eaf1ff;color:var(--blue);display:grid;place-items:center;font-weight:900;flex:0 0 auto}.point h3{font-size:16px}.point p{font-size:13px;color:var(--muted)}
-.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.level{background:#fff;border:1px solid var(--line);border-radius:16px;padding:23px}.level small{color:var(--blue);font-weight:900;letter-spacing:1px}.level h3{margin:9px 0 5px;font-size:18px}.level p{font-size:13px;color:var(--muted)}
-.cta{background:linear-gradient(135deg,var(--navy),#4338ca);color:#fff;border-radius:25px;text-align:center;padding:55px 25px}.cta h2{font-size:38px;letter-spacing:-1px}.cta p{color:#cbd5e1;max-width:650px;margin:8px auto 22px}.btn{display:inline-block;padding:13px 19px;border-radius:9px;font-weight:850;font-size:14px;background:#fff;color:var(--navy)}
-footer{background:#061326;color:#aebbd0;padding:42px 0}.foot{display:flex;justify-content:space-between;gap:30px}.foot strong{color:#fff;font-size:19px}.foot p{font-size:12px;margin-top:5px}.flinks{display:flex;gap:20px;font-size:12px}.flinks a:hover{color:#fff}
-@media(max-width:900px){.brand-logo{width:50px;height:50px}.brand{font-size:19px;gap:9px}.links{display:none}.navcta{display:none}.hamb{display:block}.hero-grid,.mission-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.levels{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.cards,.levels{grid-template-columns:1fr}.hero{padding-top:60px}.hero h1{letter-spacing:-2px}.head h2,.mission-copy h2,.cta h2{font-size:31px}.foot{flex-direction:column}.flinks{flex-wrap:wrap}}
-</style><link rel="icon" type="image/png" href="settlem-academy-logo.png">
+<meta name="description" content="Learn about Settlem Academy, a focused mathematics learning platform for students from Class 5 to B.Tech.">
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=LEatP1zUZt8k5I6Ftx4UkVS79kgmoi36OSHjdttxb45ynrZwQu1_76hN_Ya5CjWayYdWWy8eheS-GawYltjOQFxUVyZygqjFKUm0IbGrYb11XsviZL_dGK2RSptRcS2RoO0Xu9F15QairAtJWBCvgWHoFuzJr8KiUwUA2Bjzc_ucC4GZ7CcLLQVKxIhgHTNtkKpamgyqnj5a1lp-njXpLsLQ-8YyhMpMydijEn0wTEZRo168W4bx2EiEaoexpfOCCe11UPSGxMFEsnEnkuzE9vay2Os3cwvYM7N9LVc1rwKpBbNBvCx-27bnF6G-CHZU" charset="UTF-8"></script><style>
+:root{
+  --navy:#081b45;
+  --navy2:#102b62;
+  --blue:#2878e8;
+  --sky:#52c7ff;
+  --gold:#f7b928;
+  --text:#17284b;
+  --muted:#65728a;
+  --bg:#f6f8ff;
+  --white:#fff;
+  --line:#e5eaf4;
+  --shadow:0 18px 45px rgba(15,39,86,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  line-height:1.6;
+}
+a{text-decoration:none;color:inherit}
+.wrap{width:min(1120px,calc(100% - 40px));margin:auto}
+
+/* Header — kept visually consistent with the main site */
+nav{
+  height:76px;
+  background:#fff;
+  border-bottom:1px solid #e7ebf3;
+  display:flex;
+  align-items:center;
+  position:relative;
+  z-index:10;
+}
+.nav-inner{
+  width:min(1120px,calc(100% - 40px));
+  margin:auto;
+  display:flex;
+  align-items:center;
+  gap:28px;
+}
+.brand{display:flex;align-items:center;flex:0 0 auto}
+.brand-full-logo{
+  width:285px;
+  max-height:58px;
+  height:auto;
+  object-fit:contain;
+  object-position:left center;
+  display:block;
+}
+.links{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:25px;
+  font-size:14px;
+  font-weight:750;
+}
+.links a{color:#15223e;transition:.2s}
+.links a:hover,.links a.active{color:var(--blue)}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 21px;
+  border-radius:13px;
+  font-weight:800;
+  font-size:14px;
+}
+.btn-dark{background:#07183d;color:#fff;box-shadow:0 8px 20px rgba(8,27,69,.16)}
+.menu{display:none}
+
+/* Hero */
+.about-hero{
+  padding:76px 0 78px;
+  background:
+    radial-gradient(circle at 82% 30%,rgba(82,199,255,.13),transparent 28%),
+    linear-gradient(135deg,#f8faff 0%,#eef3ff 100%);
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.08fr .92fr;
+  gap:64px;
+  align-items:center;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:#2168d4;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  margin-bottom:15px;
+}
+.eyebrow:before{
+  content:"";
+  width:28px;
+  height:3px;
+  border-radius:3px;
+  background:var(--gold);
+}
+h1{
+  margin:0;
+  font-size:clamp(48px,6vw,72px);
+  line-height:1.02;
+  letter-spacing:-2.8px;
+  color:#102653;
+}
+h1 span{
+  background:linear-gradient(90deg,#2878e8,#6a4de8);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.lead{
+  max-width:680px;
+  margin:24px 0 0;
+  font-size:18px;
+  color:#5f6e86;
+}
+.hero-points{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:26px;
+}
+.pill{
+  padding:9px 13px;
+  border:1px solid #dce5f5;
+  background:#fff;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  color:#315074;
+}
+
+/* Right hero card */
+.hero-card{
+  position:relative;
+  min-height:320px;
+  border-radius:28px;
+  padding:34px;
+  overflow:hidden;
+  color:#fff;
+  background:
+    radial-gradient(circle at 85% 20%,rgba(82,199,255,.22),transparent 24%),
+    linear-gradient(145deg,#0a1b48,#152e67);
+  box-shadow:0 24px 55px rgba(11,31,72,.18);
+}
+.hero-card:after{
+  content:"∑   π   ∞   f(x)";
+  position:absolute;
+  right:20px;
+  bottom:10px;
+  color:rgba(82,199,255,.10);
+  font-size:58px;
+  font-weight:900;
+  letter-spacing:8px;
+}
+.card-tag{
+  display:inline-block;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(82,199,255,.13);
+  border:1px solid rgba(82,199,255,.18);
+  color:#bdeaff;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+.hero-card h2{
+  margin:24px 0 10px;
+  font-size:29px;
+  line-height:1.15;
+}
+.hero-card p{
+  margin:0;
+  color:#d8e2f4;
+  font-size:15px;
+  max-width:470px;
+}
+.formula-row{
+  display:flex;
+  gap:10px;
+  margin-top:26px;
+  flex-wrap:wrap;
+}
+.formula{
+  padding:9px 13px;
+  border-radius:10px;
+  border:1px solid rgba(82,199,255,.28);
+  background:rgba(255,255,255,.05);
+  color:#d9f5ff;
+  font-family:Georgia,serif;
+}
+
+/* Who we are */
+.section{padding:82px 0}
+.section-head{text-align:center;max-width:780px;margin:0 auto 42px}
+.section-label{
+  color:#2878e8;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:1.7px;
+}
+.section h2{
+  margin:10px 0 12px;
+  font-size:42px;
+  line-height:1.12;
+  letter-spacing:-1.4px;
+  color:#142a53;
+}
+.section-head p{margin:0;color:var(--muted);font-size:17px}
+
+/* Three approach cards */
+.approach-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.approach-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:28px;
+  box-shadow:var(--shadow);
+}
+.num{
+  width:48px;height:48px;
+  display:grid;place-items:center;
+  border-radius:14px;
+  background:#eef5ff;
+  color:#2878e8;
+  font-weight:900;
+  font-size:16px;
+}
+.approach-card:nth-child(2) .num{background:#f3efff;color:#704ce5}
+.approach-card:nth-child(3) .num{background:#eafbf7;color:#11a889}
+.approach-card h3{margin:22px 0 8px;font-size:22px}
+.approach-card p{margin:0;color:var(--muted);font-size:15px}
+
+/* Mission / vision */
+.mv{
+  background:#fff;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.mv-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+.mv-card{
+  padding:34px;
+  border-radius:24px;
+  background:#f7f9ff;
+  border:1px solid #e2e9f7;
+}
+.mv-card.dark{
+  color:#fff;
+  background:linear-gradient(145deg,#0a1c49,#173a78);
+  border-color:transparent;
+}
+.mv-icon{font-size:27px}
+.mv-card h3{font-size:25px;margin:13px 0 8px}
+.mv-card p{margin:0;color:var(--muted)}
+.mv-card.dark p{color:#dbe6f8}
+
+/* Values */
+.values-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+.value{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px 20px;
+  text-align:center;
+}
+.value-icon{
+  width:46px;height:46px;
+  margin:auto;
+  border-radius:13px;
+  display:grid;place-items:center;
+  background:#eef5ff;
+  color:#2878e8;
+  font-size:21px;
+}
+.value h3{font-size:16px;margin:14px 0 5px}
+.value p{font-size:13px;color:var(--muted);margin:0}
+
+/* Audience */
+.audience{
+  padding:82px 0;
+  background:linear-gradient(135deg,#091c49,#12326d);
+  color:#fff;
+}
+.audience-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:55px;
+  align-items:center;
+}
+.audience h2{font-size:42px;line-height:1.1;margin:10px 0 15px}
+.audience p{color:#d7e2f4;font-size:16px}
+.audience-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.audience-item{
+  padding:18px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:15px;
+  background:rgba(255,255,255,.05);
+}
+.audience-item strong{display:block;font-size:15px}
+.audience-item span{font-size:12px;color:#b9c9e2}
+
+/* CTA */
+.cta{
+  margin:70px auto 80px;
+  width:min(1120px,calc(100% - 40px));
+  padding:42px 48px;
+  border-radius:27px;
+  background:linear-gradient(100deg,#f5b923,#ffca45);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+  box-shadow:0 20px 45px rgba(190,133,0,.15);
+}
+.cta h2{margin:0;font-size:32px;line-height:1.15;color:#17284b}
+.cta p{margin:8px 0 0;color:#5c4a1b}
+.cta .btn{background:#081b45;color:#fff}
+
+/* Footer */
+footer{
+  background:#071733;
+  color:#fff;
+  padding:34px 0;
+}
+.footer-inner{
+  width:min(1120px,calc(100% - 40px));
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  gap:25px;
+  align-items:center;
+}
+.footer-inner strong{font-size:16px}
+.footer-inner p{margin:5px 0 0;color:#9fb0ca;font-size:13px}
+.footer-links{display:flex;gap:18px;font-size:13px;color:#c7d3e7}
+.footer-links a:hover{color:#fff}
+
+@media(max-width:950px){
+  .links{gap:14px}
+  .nav-inner{gap:15px}
+  .brand-full-logo{width:235px}
+  .hero-grid,.audience-grid{grid-template-columns:1fr;gap:30px}
+  .approach-grid{grid-template-columns:1fr}
+  .values-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+  nav{height:68px}
+  .links{display:none}
+  .menu{display:block;margin-left:auto}
+  .brand-full-logo{width:210px;max-height:48px}
+  .about-hero{padding:50px 0}
+  h1{font-size:46px;letter-spacing:-2px}
+  .lead{font-size:16px}
+  .hero-card{padding:27px;min-height:auto}
+  .section{padding:62px 0}
+  .section h2,.audience h2{font-size:34px}
+  .mv-grid{grid-template-columns:1fr}
+  .values-grid{grid-template-columns:1fr 1fr}
+  .audience-list{grid-template-columns:1fr}
+  .cta{padding:32px 25px;display:block}
+  .cta .btn{margin-top:20px}
+  .footer-inner{display:block}
+  .footer-links{margin-top:18px;flex-wrap:wrap}
+}
+@media(max-width:440px){
+  .wrap,.nav-inner,.footer-inner{width:calc(100% - 28px)}
+  .brand-full-logo{width:190px}
+  h1{font-size:39px}
+  .values-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
-<nav><div class="wrap navin"><a class="brand" href="index.html"><img class="brand-logo" src="settlem-academy-logo.png" alt="Settlem Academy logo"><span class="brand-name">SETTLEM <span class="brand-academy">ACADEMY</span></span></a><div class="links"><a href="index.html">Home</a><a href="index.html#courses">Courses</a><a href="video-lessons.html">Learning</a><a href="study-materials.html">Resources</a><a href="practice-tests.html">Tests</a><a href="student-dashboard.html">Dashboard</a><a class="active" href="about.html">About</a></div><a class="navcta" href="course-enrollment.html">Start Learning</a><div class="hamb">☰</div></div></nav>
+
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="index.html" aria-label="Settlem Academy Home">
+      <img src="settlem-academy-logo-original-clean.png" alt="Settlem Academy" class="brand-full-logo">
+    </a>
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="index.html#courses">Courses</a>
+      <a href="video-lessons.html">Learning</a>
+      <a href="study-materials.html">Resources</a>
+      <a href="practice-tests.html">Tests</a>
+      <a href="student-dashboard.html">Dashboard</a>
+      <a href="about.html" class="active">About</a>
+      <a href="index.html#start-learning" class="btn btn-dark">Start Learning</a>
+    </div>
+    <a class="menu" href="index.html">☰</a>
+  </div>
+</nav>
+
 <main>
-<section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">ABOUT SETTLEM ACADEMY</div><h1>Making mathematics easier to understand.</h1><p>Settlem Academy is a mathematics learning platform built around one simple idea: when students understand the concept clearly, practice it consistently and revise with purpose, confidence follows.</p></div><div class="hero-card"><span class="badge">LEARN • PRACTICE • SUCCEED</span><h2>More than memorising formulas.</h2><p>Our learning journey connects concepts, worked examples, practice questions and revision so students can approach mathematics with greater clarity and confidence.</p></div></div></section>
-<section><div class="wrap"><div class="head"><div class="eyebrow">WHO WE ARE</div><h2>A focused learning space for students at every stage.</h2><p>Settlem Academy brings structured mathematics learning into one place, from school foundations to higher-level B.Tech mathematics.</p></div><div class="cards"><div class="card"><div class="icon blue">01</div><h3>Clear Concepts</h3><p>Lessons are designed to explain the idea first, so students know why a method works before applying it.</p></div><div class="card"><div class="icon violet">02</div><h3>Guided Practice</h3><p>Worked examples and carefully selected problems help students turn understanding into problem-solving ability.</p></div><div class="card"><div class="icon teal">03</div><h3>Exam Confidence</h3><p>Revision-focused resources and important problems help learners prepare with a more organised approach.</p></div></div></div></section>
-<section class="mission"><div class="wrap mission-grid"><div class="mission-copy"><div class="eyebrow">OUR MISSION</div><h2>Build stronger maths skills, one concept at a time.</h2><p>We want mathematics to feel approachable, structured and achievable. The goal is not simply to finish a chapter, but to help students develop understanding they can use in the next chapter, the next exam and beyond.</p></div><div class="points"><div class="point"><div class="check">✓</div><div><h3>Understand before memorising</h3><p>Start with the meaning, method and logic behind each topic.</p></div></div><div class="point"><div class="check">✓</div><div><h3>Practice with purpose</h3><p>Use examples and important questions to strengthen application.</p></div></div><div class="point"><div class="check">✓</div><div><h3>Revise systematically</h3><p>Keep formulas, notes and practice resources organised for revision.</p></div></div><div class="point"><div class="check">✓</div><div><h3>Grow confidence</h3><p>Build consistency so students can face mathematics with less hesitation.</p></div></div></div></div></section>
-<section><div class="wrap"><div class="head"><div class="eyebrow">WHAT WE TEACH</div><h2>Learning paths for different stages.</h2><p>Our current academy structure supports these four learner groups.</p></div><div class="levels"><div class="level"><small>01 / B.TECH</small><h3>B.Tech Mathematics</h3><p>Higher-level mathematics with structured modules, examples and exam-oriented practice.</p></div><div class="level"><small>02 / INTERMEDIATE</small><h3>Intermediate Mathematics</h3><p>Core concepts, problem solving and preparation support for intermediate learners.</p></div><div class="level"><small>03 / CLASS 10</small><h3>Class 10 Mathematics</h3><p>Conceptual learning and guided practice for stronger school-level foundations.</p></div><div class="level"><small>04 / SCHOOL</small><h3>Classes 5–7</h3><p>Simple explanations and regular practice to build essential mathematics skills.</p></div></div></div></section>
-<section><div class="wrap"><div class="cta"><h2>Ready to start learning?</h2><p>Explore the courses, choose your learning path and take the next step with Settlem Academy.</p><a class="btn" href="course-enrollment.html">Explore Learning →</a></div></div></section>
+<section class="about-hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">ABOUT SETTLEM ACADEMY</div>
+      <h1>Making mathematics <span>easier</span> to understand.</h1>
+      <p class="lead">
+        Settlem Academy is a mathematics learning platform built around one simple idea:
+        when students understand the concept clearly, practice it consistently and revise
+        with purpose, confidence follows.
+      </p>
+      <div class="hero-points">
+        <span class="pill">Class 5–7</span>
+        <span class="pill">Class 10</span>
+        <span class="pill">Intermediate</span>
+        <span class="pill">B.Tech Mathematics</span>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <span class="card-tag">LEARN • PRACTICE • SUCCEED</span>
+      <h2>More than memorising formulas.</h2>
+      <p>
+        Our learning journey connects concepts, worked examples, practice questions
+        and revision so students can approach mathematics with greater clarity and confidence.
+      </p>
+      <div class="formula-row">
+        <span class="formula">∫ x² dx</span>
+        <span class="formula">P(A)</span>
+        <span class="formula">f(x)</span>
+        <span class="formula">a² + b²</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-label">WHO WE ARE</div>
+      <h2>A focused learning space for students at every stage.</h2>
+      <p>
+        Settlem Academy brings structured mathematics learning into one place,
+        from school foundations to higher-level B.Tech mathematics.
+      </p>
+    </div>
+
+    <div class="approach-grid">
+      <article class="approach-card">
+        <div class="num">01</div>
+        <h3>Understand</h3>
+        <p>Build strong foundations by learning what a concept means, why it works and where it is used.</p>
+      </article>
+      <article class="approach-card">
+        <div class="num">02</div>
+        <h3>Practice</h3>
+        <p>Strengthen understanding through worked examples, focused questions and structured practice.</p>
+      </article>
+      <article class="approach-card">
+        <div class="num">03</div>
+        <h3>Progress</h3>
+        <p>Revise, test and improve consistently so students can develop confidence in their mathematics.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section mv">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-label">OUR PURPOSE</div>
+      <h2>Learning with clarity. Growing with confidence.</h2>
+      <p>Everything we build is centred around meaningful understanding and steady progress.</p>
+    </div>
+
+    <div class="mv-grid">
+      <article class="mv-card">
+        <div class="mv-icon">🎯</div>
+        <h3>Our Mission</h3>
+        <p>
+          Make mathematics simple, accessible and meaningful for every learner through
+          clear explanations, structured learning and regular practice.
+        </p>
+      </article>
+      <article class="mv-card dark">
+        <div class="mv-icon">✦</div>
+        <h3>Our Vision</h3>
+        <p>
+          Build confident mathematical thinkers who understand what they learn and can
+          apply their knowledge in academics and beyond.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-label">WHAT WE VALUE</div>
+      <h2>A better way to learn mathematics.</h2>
+      <p>Four principles guide the Settlem Academy learning experience.</p>
+    </div>
+
+    <div class="values-grid">
+      <article class="value">
+        <div class="value-icon">∑</div>
+        <h3>Concept Clarity</h3>
+        <p>Understand the idea before applying the formula.</p>
+      </article>
+      <article class="value">
+        <div class="value-icon">↗</div>
+        <h3>Step-by-Step</h3>
+        <p>Break challenging problems into manageable steps.</p>
+      </article>
+      <article class="value">
+        <div class="value-icon">✓</div>
+        <h3>Regular Practice</h3>
+        <p>Turn understanding into skill through focused practice.</p>
+      </article>
+      <article class="value">
+        <div class="value-icon">★</div>
+        <h3>Build Confidence</h3>
+        <p>Use revision and testing to recognise progress.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="audience">
+  <div class="wrap audience-grid">
+    <div>
+      <div class="section-label" style="color:#79d6ff">WHO WE SERVE</div>
+      <h2>Mathematics learning for different stages.</h2>
+      <p>
+        Our content is designed to support learners as they move from foundational
+        school mathematics to higher-level academic mathematics.
+      </p>
+    </div>
+    <div class="audience-list">
+      <div class="audience-item"><strong>Class 5–7</strong><span>Build strong fundamentals.</span></div>
+      <div class="audience-item"><strong>Class 10</strong><span>Strengthen concepts and exam preparation.</span></div>
+      <div class="audience-item"><strong>Intermediate</strong><span>Develop deeper mathematical understanding.</span></div>
+      <div class="audience-item"><strong>B.Tech Mathematics</strong><span>Learn engineering mathematics with structure and clarity.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div>
+    <h2>Ready to strengthen your mathematics?</h2>
+    <p>Explore courses, lessons and practice resources from Settlem Academy.</p>
+  </div>
+  <a class="btn" href="index.html#courses">Explore Courses →</a>
+</section>
 </main>
-<footer><div class="wrap foot"><div><strong>SETTLEM ACADEMY</strong><p>Learn Mathematics • Build Confidence • Achieve Success</p></div><div class="flinks"><a href="index.html">Home</a><a href="index.html#courses">Courses</a><a href="study-materials.html">Resources</a><a href="about.html">About</a><a href="contact.html">Contact</a></div><p>© 2026 Settlem Academy</p></div></footer>
-<div style="text-align:center;padding:18px;font-size:13px"><a href="faq.html">FAQ</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a></div></body></html>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <strong>SETTLEM ACADEMY</strong>
+      <p>Learn Mathematics • Build Confidence • Achieve Success</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#courses">Courses</a>
+      <a href="video-lessons.html">Learning</a>
+      <a href="study-materials.html">Resources</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
