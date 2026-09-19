@@ -58,9 +58,51 @@ nav{height:73px;background:#fff;border-bottom:1px solid #e6eef7;position:sticky;
 .hero{background:#eef8ff;overflow:hidden;padding:0!important}
 .hero-full{position:relative;width:100%;line-height:0}
 .hero-full img{display:block;width:100%;height:auto;margin:0}
-.hero-hit{position:absolute;display:block;z-index:4}
-.hero-hit.explore{left:5.5%;top:75%;width:15.5%;height:14%}
-.hero-hit.video{left:22%;top:75%;width:17%;height:14%}
+.hero-button{
+  position:absolute;
+  z-index:4;
+  top:79.3%;
+  height:13.5%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.65em;
+  border-radius:9px;
+  font-weight:800;
+  font-size:clamp(10px,1.2vw,17px);
+  line-height:1;
+  box-sizing:border-box;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.hero-button.explore{
+  left:5.65%;
+  width:15.85%;
+  background:#063c99;
+  color:#fff;
+  box-shadow:0 5px 14px rgba(6,60,153,.18);
+}
+.hero-button.video{
+  left:22.85%;
+  width:16.8%;
+  background:#fff;
+  color:#073a8e;
+  box-shadow:0 4px 16px rgba(35,85,140,.10);
+}
+.hero-button span{font-size:1.1em}
+.hero-button .play{
+  width:1.65em;
+  height:1.65em;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#0754a8;
+  color:#fff;
+  font-size:.62em;
+}
+.hero-button:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(20,70,130,.18)}
+@media(max-width:560px){
+  .hero-button{border-radius:7px;font-size:10px}
+}
 
 /* FEATURES */
 .features{margin-top:-1px;background:#fff;border-radius:13px;box-shadow:0 7px 24px rgba(29,74,125,.11);display:grid;grid-template-columns:repeat(6,1fr);padding:12px 10px;position:relative;z-index:5}
@@ -180,9 +222,9 @@ footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
 <main id="home">
 <section class="hero" aria-label="Settlem Academy introduction">
   <div class="hero-full">
-    <img src="hero-full.png" alt="Settlem Academy — Concepts Today, Confidence Tomorrow">
-    <a class="hero-hit explore" href="#courses" aria-label="Explore Courses"></a>
-    <a class="hero-hit video" href="video-lessons.html" aria-label="Watch Intro Video"></a>
+    <img src="hero-full-clean.png" alt="Settlem Academy — Concepts Today, Confidence Tomorrow">
+    <a class="hero-button explore" href="#courses">Explore Courses <span>→</span></a>
+    <a class="hero-button video" href="video-lessons.html"><span class="play">▶</span> Watch Intro Video</a>
   </div>
 </section>
 
