@@ -592,6 +592,83 @@ nav .enroll{
   nav .links{display:none!important}
 }
 </style>
+
+<style id="settlem-floating-nav-final">
+/* FINAL FLOATING NAVIGATION — elevated above hero */
+nav{
+  height:78px!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  padding:7px 0!important;
+  position:relative!important;
+  z-index:50!important;
+}
+nav .nav-inner{
+  width:96%!important;
+  max-width:1750px!important;
+  height:64px!important;
+  margin:0 auto!important;
+  padding:5px 12px!important;
+  display:grid!important;
+  grid-template-columns:255px minmax(0,1fr) 190px!important;
+  gap:16px!important;
+  align-items:center!important;
+  background:rgba(255,255,255,.98)!important;
+  border:1px solid #d6e6f5!important;
+  border-radius:18px!important;
+  box-shadow:0 10px 28px rgba(24,79,135,.16),0 2px 6px rgba(24,79,135,.08)!important;
+}
+nav .brand-wrap{
+  width:238px!important;height:52px!important;padding:2px 5px!important;
+  border-radius:13px!important;background:#fff!important;
+  border:1px solid #c5ddf3!important;
+  box-shadow:0 5px 14px rgba(15,94,173,.13)!important;
+}
+nav .logo{width:228px!important;height:48px!important;object-fit:contain!important}
+nav .links{
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  gap:9px!important;width:100%!important;min-width:0!important;
+}
+nav .links .nav-btn{
+  flex:1 1 0!important;min-width:0!important;height:45px!important;
+  padding:0 13px!important;gap:8px!important;
+  border:1px solid #a9cdef!important;border-radius:12px!important;
+  background:linear-gradient(180deg,#ffffff 0%,#f4f9ff 100%)!important;
+  color:#0b376d!important;font-size:15px!important;font-weight:800!important;
+  box-shadow:0 5px 12px rgba(19,101,183,.16),inset 0 1px 0 #fff!important;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease!important;
+}
+nav .links .nav-btn:hover{
+  transform:translateY(-2px)!important;
+  border-color:#58a4ea!important;
+  background:linear-gradient(180deg,#fff 0%,#eaf5ff 100%)!important;
+  box-shadow:0 9px 18px rgba(12,99,183,.22),inset 0 1px 0 #fff!important;
+}
+nav .links .nav-btn.active{
+  color:#fff!important;
+  background:linear-gradient(135deg,#167de3 0%,#0757b8 100%)!important;
+  border-color:#0b67ca!important;
+  box-shadow:0 7px 16px rgba(5,88,183,.30),inset 0 1px 0 rgba(255,255,255,.25)!important;
+}
+nav .links .nav-btn.active .nav-icon svg{stroke:#fff!important}
+nav .nav-icon{width:19px!important;height:19px!important;flex:0 0 19px!important}
+nav .nav-icon svg{width:18px!important;height:18px!important;stroke:#0866bd!important}
+nav .nav-actions{width:190px!important;gap:10px!important;justify-content:flex-end!important;margin:0!important}
+nav .search{font-size:21px!important;color:#0b376d!important}
+nav .enroll{min-width:128px!important;padding:13px 19px!important;border-radius:12px!important;box-shadow:0 7px 16px rgba(7,104,204,.22)!important}
+@media(max-width:1200px){
+ nav .nav-inner{grid-template-columns:220px minmax(0,1fr) 165px!important;gap:10px!important}
+ nav .brand-wrap{width:210px!important}.logo{width:200px!important}
+ nav .links{gap:5px!important}.links .nav-btn{font-size:13px!important;padding:0 8px!important}
+ nav .nav-actions{width:165px!important}
+}
+@media(max-width:900px){
+ nav{height:68px!important;padding:5px 0!important}
+ nav .nav-inner{height:58px!important;grid-template-columns:1fr auto!important}
+ nav .links{display:none!important}
+}
+</style>
 </head>
 <body>
 
@@ -608,7 +685,7 @@ nav .enroll{
 <nav>
   <div class="container nav-inner">
     <a href="index.html" class="brand-wrap" aria-label="Settlem Academy Home">
-      <img src="settlem-academy-styled-button-logo.png" class="logo approved-logo" alt="Settlem Academy">
+      <img src="settlem-academy-logo.svg" class="logo approved-logo" alt="Settlem Academy">
     </a>
     <div class="links" aria-label="Primary navigation">
       <a class="nav-btn active" href="#home"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1z"/></svg></span><span>Home</span></a>
