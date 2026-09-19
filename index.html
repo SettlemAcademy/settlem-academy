@@ -407,6 +407,90 @@ nav .nav-actions{gap:14px!important}
 @media(max-width:1150px){nav .nav-inner{grid-template-columns:270px minmax(0,1fr) auto!important}nav .brand-wrap,nav .logo{width:260px!important;height:54px!important}nav .links{gap:6px!important}nav .links .nav-btn{min-width:0!important;padding:0 10px!important;font-size:13px!important}nav .nav-icon{width:18px!important;height:18px!important;flex-basis:18px!important}}
 @media(max-width:900px){nav .nav-inner{grid-template-columns:1fr auto!important}nav .links{display:none!important}}
 </style>
+
+<style id="settlem-nav-interesting-final">
+/* FINAL INTERESTING NAVIGATION — all buttons consistent, Home not permanently blue */
+nav .nav-inner{
+  grid-template-columns:300px minmax(0,1fr) auto!important;
+  gap:20px!important;
+  align-items:center!important;
+}
+nav .brand-wrap{
+  width:286px!important;height:58px!important;padding:4px 10px!important;
+  border-radius:16px!important;
+  background:linear-gradient(145deg,#ffffff 0%,#f4f9ff 100%)!important;
+  border:1px solid #cfe2f5!important;
+  box-shadow:0 5px 16px rgba(13,73,135,.12)!important;
+}
+nav .logo{width:270px!important;height:52px!important;object-fit:contain!important}
+nav .links{
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  gap:10px!important;width:auto!important;min-width:0!important;
+}
+nav .links .nav-btn{
+  height:46px!important;min-height:46px!important;
+  padding:0 15px!important;gap:8px!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  border:1px solid #cfe0f1!important;
+  border-radius:13px!important;
+  background:linear-gradient(180deg,#ffffff 0%,#f6faff 100%)!important;
+  color:#123b70!important;
+  font-size:14px!important;font-weight:750!important;
+  letter-spacing:.05px!important;white-space:nowrap!important;
+  box-shadow:0 3px 10px rgba(20,70,130,.09), inset 0 1px 0 rgba(255,255,255,.95)!important;
+  position:relative!important;overflow:hidden!important;
+  transform:none!important;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease!important;
+}
+nav .links .nav-btn:before{
+  content:"";position:absolute;left:10px;right:10px;top:0;height:2px;border-radius:99px;
+  background:linear-gradient(90deg,transparent,#5ba7ef,transparent);opacity:.0;transition:opacity .18s ease!important;
+}
+nav .links .nav-btn:hover{
+  background:linear-gradient(180deg,#ffffff 0%,#edf7ff 100%)!important;
+  border-color:#8fc2ee!important;
+  color:#0759aa!important;
+  transform:translateY(-2px)!important;
+  box-shadow:0 7px 16px rgba(18,88,155,.15),inset 0 1px 0 #fff!important;
+}
+nav .links .nav-btn:hover:before{opacity:1!important}
+/* No permanent blue Home button. Active state is a refined outline/underline only. */
+nav .links .nav-btn.active{
+  color:#0a579f!important;
+  background:linear-gradient(180deg,#ffffff 0%,#f3f9ff 100%)!important;
+  border-color:#9bc8ef!important;
+  box-shadow:0 4px 12px rgba(18,88,155,.12), inset 0 -3px 0 #1673d1!important;
+}
+nav .links .nav-btn.active:after{display:none!important}
+nav .nav-icon{
+  width:19px!important;height:19px!important;flex:0 0 19px!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+}
+nav .nav-icon svg{
+  width:18px!important;height:18px!important;display:block!important;
+  fill:none!important;stroke:#0866bd!important;stroke-width:1.9!important;
+  stroke-linecap:round!important;stroke-linejoin:round!important;
+}
+nav .nav-btn:hover .nav-icon svg{stroke:#0757a5!important}
+nav .links .nav-btn:nth-child(1){min-width:88px!important}
+nav .links .nav-btn:nth-child(2){min-width:102px!important}
+nav .links .nav-btn:nth-child(3){min-width:91px!important}
+nav .links .nav-btn:nth-child(4){min-width:142px!important}
+nav .links .nav-btn:nth-child(5){min-width:139px!important}
+nav .links .nav-btn:nth-child(6){min-width:106px!important}
+nav .nav-actions{gap:15px!important;margin-left:10px!important}
+nav .search{font-size:20px!important;color:#123b70!important}
+nav .enroll{padding:13px 23px!important;border-radius:12px!important}
+@media(max-width:1150px){
+ nav .nav-inner{grid-template-columns:260px minmax(0,1fr) auto!important;gap:12px!important}
+ nav .brand-wrap{width:250px!important;height:54px!important}
+ nav .logo{width:235px!important;height:48px!important}
+ nav .links{gap:6px!important}
+ nav .links .nav-btn{min-width:0!important;padding:0 10px!important;font-size:13px!important}
+ nav .nav-icon{width:18px!important;height:18px!important;flex-basis:18px!important}
+ nav .nav-icon svg{width:17px!important;height:17px!important}
+}
+@media(max-width:900px){nav .links{display:none!important}}
+</style>
 </head>
 <body>
 
