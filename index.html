@@ -311,6 +311,71 @@ nav .nav-actions{gap:14px!important}
  nav .links{display:none!important}
 }
 </style>
+
+/* FINAL PRIMARY NAVIGATION — SEPARATE BUTTONS */
+nav .links{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:10px!important;
+  min-width:0!important;
+  width:100%!important;
+  font-size:15px!important;
+}
+nav .links .nav-btn{
+  height:48px!important;
+  min-height:48px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  padding:0 15px!important;
+  border:1px solid #d6e5f5!important;
+  border-radius:12px!important;
+  background:linear-gradient(180deg,#ffffff 0%,#f5faff 100%)!important;
+  color:#092d64!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+  box-shadow:0 3px 9px rgba(20,70,130,.08)!important;
+  position:relative!important;
+  transition:all .18s ease!important;
+}
+nav .links .nav-btn:hover{
+  background:#eef7ff!important;
+  border-color:#8fc1f5!important;
+  transform:translateY(-1px)!important;
+  box-shadow:0 5px 14px rgba(20,70,130,.13)!important;
+}
+nav .links .nav-btn.active{
+  color:#fff!important;
+  background:linear-gradient(135deg,#0b70df 0%,#0752b9 100%)!important;
+  border-color:#0b67cf!important;
+  box-shadow:0 6px 15px rgba(7,88,185,.22)!important;
+}
+nav .links .nav-btn.active:after{display:none!important}
+.nav-icon{
+  width:20px!important;
+  height:20px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:15px!important;
+  font-weight:900!important;
+  line-height:1!important;
+}
+nav .nav-inner{
+  grid-template-columns:300px minmax(0,1fr) auto!important;
+  gap:18px!important;
+}
+@media(max-width:1150px){
+  nav .links{gap:6px!important}
+  nav .links .nav-btn{padding:0 11px!important;font-size:14px!important}
+  nav .nav-inner{grid-template-columns:270px minmax(0,1fr) auto!important}
+}
+@media(max-width:900px){
+  nav .links{display:none!important}
+}
+
 </head>
 <body>
 
@@ -329,13 +394,13 @@ nav .nav-actions{gap:14px!important}
     <a href="index.html" class="brand-wrap" aria-label="Settlem Academy Home">
       <img src="settlem-academy-styled-button-logo.png" class="logo approved-logo" alt="Settlem Academy">
     </a>
-    <div class="links">
-      <a class="active" href="#home">Home</a>
-      <a href="#courses">Courses</a>
-      <a href="about.html">About</a>
-      <a href="study-materials.html">Free Resources</a>
-      <a href="student-dashboard.html">Student Zone</a>
-      <a href="contact.html">Contact</a>
+    <div class="links" aria-label="Primary navigation">
+      <a class="nav-btn active" href="#home"><span class="nav-icon">⌂</span><span>Home</span></a>
+      <a class="nav-btn" href="#courses"><span class="nav-icon">▤</span><span>Courses</span></a>
+      <a class="nav-btn" href="about.html"><span class="nav-icon">●</span><span>About</span></a>
+      <a class="nav-btn" href="study-materials.html"><span class="nav-icon">▱</span><span>Free Resources</span></a>
+      <a class="nav-btn" href="student-zone.html"><span class="nav-icon">◆</span><span>Student Zone</span></a>
+      <a class="nav-btn" href="contact.html"><span class="nav-icon">☎</span><span>Contact</span></a>
     </div>
     <div class="nav-actions"><span class="search">⌕</span><a class="enroll" href="course-enrollment.html">Enroll Now</a></div>
     <div class="menu">☰</div>
