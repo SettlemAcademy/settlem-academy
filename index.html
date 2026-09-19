@@ -15,7 +15,7 @@
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:linear-gradient(#f7fbff,#fff);line-height:1.45}
 a{text-decoration:none;color:inherit}
-.container{width:min(1088px,calc(100% - 48px));margin:auto}
+.container{width:94%;max-width:1450px;margin:auto}
 
 /* TOP BAR */
 .topbar{height:31px;background:linear-gradient(90deg,#0862a9,#063d83);color:#fff;font-size:12px}
@@ -37,7 +37,7 @@ nav{height:73px;background:#fff;border-bottom:1px solid #e6eef7;position:sticky;
 
 /* HERO */
 .hero{background:linear-gradient(105deg,#eef8ff 0%,#f9fcff 62%,#eaf6ff 100%);overflow:hidden}
-.hero-inner{min-height:332px;display:grid;grid-template-columns:52% 48%;position:relative}
+.hero-inner{min-height:332px;display:grid;grid-template-columns:47% 53%;position:relative}
 .hero-copy{padding:29px 0 22px;position:relative;z-index:2}
 .kicker{font-size:14px;letter-spacing:1.7px;font-weight:900;color:#0754a8}
 .hero h1{font-size:45px;line-height:1.03;letter-spacing:-1.7px;margin:10px 0 10px;font-weight:900}
@@ -50,8 +50,8 @@ nav{height:73px;background:#fff;border-bottom:1px solid #e6eef7;position:sticky;
 .btn-primary{background:#063c99;color:white}
 .btn-light{background:white;color:#073a8e;box-shadow:0 4px 16px rgba(35,85,140,.08)}
 .hero-art{position:absolute;right:-18px;bottom:0;width:61%;height:100%;object-fit:cover;object-position:left center}
-.checks{position:absolute;right:18px;top:44px;width:145px;z-index:3;font-size:11px;font-weight:700;line-height:2.35}
-.checks div:before{content:"✓";display:inline-grid;place-items:center;width:18px;height:18px;margin-right:7px;border-radius:50%;background:#159765;color:white}
+.checks{display:none!important}
+
 
 /* FEATURES */
 .features{margin-top:-1px;background:#fff;border-radius:13px;box-shadow:0 7px 24px rgba(29,74,125,.11);display:grid;grid-template-columns:repeat(6,1fr);padding:12px 10px;position:relative;z-index:5}
