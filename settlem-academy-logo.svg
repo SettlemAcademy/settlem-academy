@@ -1,22 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="180" viewBox="0 0 900 180" role="img" aria-labelledby="title desc">
-<title id="title">Settlem Academy</title><desc id="desc">Settlem Academy logo with SA education mark</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 180" width="1640" height="360" role="img" aria-labelledby="t d">
+<title id="t">Settlem Academy</title>
+<desc id="d">Settlem Academy SA education logo</desc>
 <defs>
-  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7b928"/><stop offset="1" stop-color="#e88a13"/></linearGradient>
-  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1679dc"/><stop offset="1" stop-color="#064ca8"/></linearGradient>
+  <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC83D"/><stop offset="1" stop-color="#E88908"/></linearGradient>
+  <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1682E8"/><stop offset="1" stop-color="#0750B7"/></linearGradient>
 </defs>
-<rect x="4" y="4" width="892" height="172" rx="38" fill="#fff" stroke="#c8dff4" stroke-width="7"/>
-<rect x="14" y="14" width="872" height="152" rx="31" fill="#f7fbff"/>
-<!-- open-book / SA mark -->
-<path d="M48 118c25-25 53-35 82-25v45c-30-11-57-8-82 13z" fill="url(#blue)"/>
-<path d="M129 93c28-10 56 0 82 25v31c-26-21-54-24-82-13z" fill="url(#blue)"/>
-<path d="M59 111c21-19 42-25 64-19v31c-23-6-44-2-64 13z" fill="#fff" opacity=".95"/>
-<path d="M139 92l22-24 22 24-22 18z" fill="#0a63bd"/>
-<path d="M145 87h32l-5-17h-22z" fill="#176fca"/>
-<path d="M151 65h20l-5-10h-10z" fill="#f2ad1c"/>
-<text x="56" y="115" font-family="Arial,Helvetica,sans-serif" font-size="57" font-weight="900" fill="url(#gold)">S</text>
-<text x="101" y="120" font-family="Arial,Helvetica,sans-serif" font-size="58" font-weight="900" fill="url(#blue)">A</text>
-<rect x="217" y="49" width="4" height="84" rx="2" fill="#c9d8e7"/>
-<text x="245" y="100" font-family="Arial,Helvetica,sans-serif" font-size="50" font-weight="900" letter-spacing="-.8" fill="url(#gold)">SETTLEM</text>
-<text x="495" y="100" font-family="Arial,Helvetica,sans-serif" font-size="50" font-weight="900" letter-spacing="-.8" fill="url(#blue)">ACADEMY</text>
-<text x="247" y="133" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" fill="#315579" letter-spacing="2.8">LEARN  •  PRACTICE  •  EXCEL</text>
+<!-- clean SA education mark -->
+<g transform="translate(12 18)">
+  <!-- book -->
+  <path d="M10 104 Q55 68 99 82 L99 139 Q55 122 10 151 Z" fill="url(#gBlue)"/>
+  <path d="M105 82 Q149 68 194 104 L194 151 Q149 122 105 139 Z" fill="url(#gBlue)"/>
+  <path d="M21 104 Q57 82 91 91 L91 126 Q57 116 21 137 Z" fill="#fff" opacity=".95"/>
+  <path d="M113 91 Q147 82 183 104 L183 137 Q147 116 113 126 Z" fill="#fff" opacity=".95"/>
+  <!-- SA letters -->
+  <text x="27" y="117" font-family="Arial,Helvetica,sans-serif" font-size="82" font-weight="900" fill="url(#gGold)">S</text>
+  <text x="78" y="123" font-family="Arial,Helvetica,sans-serif" font-size="84" font-weight="900" fill="url(#gBlue)">A</text>
+  <!-- graduation cap -->
+  <path d="M72 35 L119 12 L166 35 L119 58 Z" fill="#0750B7"/>
+  <path d="M88 42 L88 61 Q119 78 150 61 L150 42 L119 57 Z" fill="#1682E8"/>
+  <path d="M164 35 L164 64" stroke="#E88908" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="164" cy="67" r="6" fill="#E88908"/>
+</g>
+<!-- wordmark -->
+<text x="225" y="91" font-family="Arial,Helvetica,sans-serif" font-size="58" font-weight="900" letter-spacing="-1.2" fill="url(#gGold)">SETTLEM</text>
+<text x="486" y="91" font-family="Arial,Helvetica,sans-serif" font-size="58" font-weight="900" letter-spacing="-1.2" fill="url(#gBlue)">ACADEMY</text>
+<rect x="228" y="108" width="520" height="3" rx="1.5" fill="#D7E5F2"/>
+<text x="229" y="140" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="#315579">LEARN  •  PRACTICE  •  EXCEL</text>
 </svg>
