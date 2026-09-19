@@ -53,6 +53,15 @@ nav{height:73px;background:#fff;border-bottom:1px solid #e6eef7;position:sticky;
 .checks{display:none!important}
 
 
+
+/* FINAL COMPOSITE HERO — one continuous image, no separate rectangle */
+.hero{background:#eef8ff;overflow:hidden;padding:0!important}
+.hero-full{position:relative;width:100%;line-height:0}
+.hero-full img{display:block;width:100%;height:auto;margin:0}
+.hero-hit{position:absolute;display:block;z-index:4}
+.hero-hit.explore{left:5.5%;top:75%;width:15.5%;height:14%}
+.hero-hit.video{left:22%;top:75%;width:17%;height:14%}
+
 /* FEATURES */
 .features{margin-top:-1px;background:#fff;border-radius:13px;box-shadow:0 7px 24px rgba(29,74,125,.11);display:grid;grid-template-columns:repeat(6,1fr);padding:12px 10px;position:relative;z-index:5}
 .feature{text-align:center;padding:4px 7px;border-right:1px solid #edf2f8}
@@ -169,20 +178,11 @@ footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
 </nav>
 
 <main id="home">
-<section class="hero">
-  <div class="container hero-inner">
-    <div class="hero-copy">
-      <div class="kicker">WELCOME TO SETTLEM ACADEMY</div>
-      <h1>Concepts Today<br><span class="orange">Confidence</span> Tomorrow</h1>
-      <div class="underline"></div>
-      <div class="subline">Clear explanations &nbsp;|&nbsp; Practice oriented &nbsp;|&nbsp; Exam focused</div>
-      <p class="lead">Quality maths education for School, Intermediate and B.Tech students. Learn at your own pace with structured courses, solved problems and expert guidance.</p>
-      <div class="actions"><a class="btn btn-primary" href="#courses">Explore Courses &nbsp;→</a><a class="btn btn-light" href="video-lessons.html">▶ &nbsp; Watch Intro Video</a></div>
-    </div>
-    <img class="hero-art" src="hero-art.png" alt="Mathematics student learning">
-    <div class="checks">
-      <div>Structured Learning</div><div>Easy Explanation</div><div>Solved Examples</div><div>Practice Materials</div><div>Exam Tips</div><div>Learn Anytime, Anywhere</div>
-    </div>
+<section class="hero" aria-label="Settlem Academy introduction">
+  <div class="hero-full">
+    <img src="hero-full.png" alt="Settlem Academy — Concepts Today, Confidence Tomorrow">
+    <a class="hero-hit explore" href="#courses" aria-label="Explore Courses"></a>
+    <a class="hero-hit video" href="video-lessons.html" aria-label="Watch Intro Video"></a>
   </div>
 </section>
 
