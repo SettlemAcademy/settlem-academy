@@ -3,839 +3,257 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Settlem Academy | Mathematics Learning</title>
-<meta name="description" content="Settlem Academy — mathematics learning for Class 5 to B.Tech through clear lessons, practice, study resources and tests.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=jwOK0IYfepdxe71Tp0L63Za_zuskkAID4MhE87_g_hcoU56v6UR9OosCf79NNnxTBPEb2oYV4wdiQ5C-OQzegKHpqgKXiut6IhTfyaGTzqZ3SqvL-77wignnWij-7wwz9ZBfrvXYoNiosJ5XBX4zxTeSdcyPI63KAkrs05UYCMoDjhAj3IQBnl5O7lxTqr2FlGGDj_19gYGLzNjQnxx4JVMiK0nuS2QeMxONcuHi4dcxdUK-hchDZTh-F8HIkee6-LFS1nPONYALq2VmlgusUBEuafb5zaBIzJUYK5OsTegjcgm02HcFpvFmef8NMxJGRG-fu_UA36v_1DO4bGZlQA" charset="UTF-8"></script><style>
-
+<title>Settlem Academy | Learn • Practice • Excel</title>
+<meta name="description" content="Settlem Academy - clear mathematics learning for School, Intermediate and B.Tech students.">
+<style>
 :root{
-  --navy:#071634;--navy2:#0d2a60;--blue:#1769e8;--cyan:#52c7ff;
-  --gold:#f7b92e;--ink:#102451;--muted:#60749a;--line:#dfe7f2;
-  --bg:#f5f8fd;--white:#fff;--green:#13b981;--purple:#875cf6;
+  --navy:#06245c; --blue:#0869d9; --deep:#05265f; --orange:#f58218;
+  --green:#159765; --purple:#5c39d6; --ink:#102c5c; --muted:#526b8e;
+  --bg:#f5faff; --white:#fff; --line:#dce8f5;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:Inter,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:linear-gradient(#f7fbff,#fff);line-height:1.45}
 a{text-decoration:none;color:inherit}
-.wrap{width:min(1440px,94%);margin:auto}
+.container{width:min(1088px,calc(100% - 48px));margin:auto}
 
-/* HEADER */
-nav{height:78px;background:#fff;border-bottom:1px solid #e6ebf3;position:sticky;top:0;z-index:100}
-.navin{height:100%;display:flex;align-items:center;gap:24px}
-.brand{display:flex;align-items:center;gap:0;margin-right:14px;white-space:nowrap;flex:0 0 auto}
-.brand-full-logo{width:290px;height:58px;object-fit:contain;display:block;border:0;border-radius:0;box-shadow:none;background:transparent}
-.brand-name{font-size:22px;font-weight:950;letter-spacing:-1px;color:var(--gold)}
-.brand-academy{color:var(--blue)}
-.brand-tag{display:block;font-size:7px;letter-spacing:1.2px;color:#65799d;font-weight:800;margin-top:-2px}
-.links{display:flex;align-items:center;gap:17px;font-size:12px;font-weight:750;flex:1;justify-content:flex-end}
-.links a{padding:29px 0;position:relative}
-.links a:hover{color:var(--blue)}
-.links a:first-child{color:var(--blue)}
-.links a:first-child:after{content:"";position:absolute;left:0;right:0;bottom:18px;height:2px;background:var(--blue);border-radius:4px}
-.navcta{background:var(--navy);color:#fff;padding:13px 19px;border-radius:11px;font-size:12px;font-weight:850;box-shadow:0 10px 25px #07163420}
-.hamb{display:none;font-size:25px}
+/* TOP BAR */
+.topbar{height:31px;background:linear-gradient(90deg,#0862a9,#063d83);color:#fff;font-size:12px}
+.topbar .container{height:100%;display:flex;align-items:center;justify-content:space-between}
+.top-left{opacity:.95}.top-right{display:flex;gap:18px;align-items:center}
+.social{display:flex;gap:11px}.social span{font-size:12px}
+
+/* NAV */
+nav{height:73px;background:#fff;border-bottom:1px solid #e6eef7;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(20,60,110,.05)}
+.nav-inner{height:100%;display:flex;align-items:center;gap:28px}
+.logo{width:285px;height:68px;object-fit:contain;object-position:left center;display:block}
+.links{display:flex;align-items:center;gap:27px;font-size:14px;font-weight:700;white-space:nowrap}
+.links a{height:73px;display:flex;align-items:center;position:relative}
+.links a.active:after{content:"";position:absolute;bottom:13px;left:0;right:0;margin:auto;width:27px;height:3px;border-radius:5px;background:#0c65d7}
+.nav-actions{margin-left:auto;display:flex;align-items:center;gap:15px}
+.search{font-size:22px}
+.enroll{background:#0875df;color:white;padding:13px 22px;border-radius:10px;font-weight:800;box-shadow:0 5px 14px rgba(8,117,223,.2)}
+.menu{display:none;font-size:27px}
 
 /* HERO */
-.hero{position:relative;overflow:hidden;color:#fff;padding:48px 0 0;
-background:radial-gradient(circle at 75% 35%,#145095 0,#0d326d 32%,transparent 60%),
-linear-gradient(135deg,#061432 0%,#09245a 58%,#123e78 100%)}
-.hero:before{content:"";position:absolute;inset:0;opacity:.105;background-image:
-linear-gradient(rgba(255,255,255,.8) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,255,255,.8) 1px,transparent 1px);background-size:52px 52px}
-.hero-geometry{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.geo-cube{position:absolute;left:-20px;top:230px;width:115px;height:115px;border:1px solid #52c7ff66;transform:rotate(30deg) skew(-8deg)}
-.geo-cube:before,.geo-cube:after{content:"";position:absolute;border:1px solid #52c7ff44}
-.geo-cube:before{inset:17px}.geo-cube:after{inset:34px}
-.geo-ring{position:absolute;right:-70px;bottom:70px;width:190px;height:190px;border:1px solid #52c7ff38;border-radius:50%;box-shadow:0 0 0 20px #52c7ff07,0 0 0 42px #52c7ff04}
-.geo-orbit{position:absolute;right:31%;top:40px;width:220px;height:72px;border:1px solid #52c7ff20;border-radius:50%;transform:rotate(-17deg)}
-.geo-cone{position:absolute;right:5%;top:110px;width:90px;height:115px;border:1px solid #52c7ff4a;clip-path:polygon(50% 0,100% 72%,0 72%);opacity:.9}
-.geo-cross{position:absolute;right:3%;top:365px;width:100px;height:100px;border:1px solid #52c7ff2a;border-radius:50%}
-.geo-cross:before,.geo-cross:after{content:"";position:absolute;background:#52c7ff35}
-.geo-cross:before{height:1px;left:-15px;right:-15px;top:50%}.geo-cross:after{width:1px;top:-15px;bottom:-15px;left:50%}
-.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
-.hero-art-space{min-height:560px;position:relative;overflow:visible;filter:saturate(1.03);background:transparent;}
-.hero-art-image{position:absolute;z-index:1;right:-8%;top:0;width:122%;height:100%;object-fit:cover;object-position:center center;display:block;filter:saturate(1.04) contrast(1.01);pointer-events:none;mix-blend-mode:normal;}
-.hero-art-space:after{content:"";position:absolute;z-index:2;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(6,20,50,.98) 0%,rgba(6,20,50,.72) 8%,rgba(6,20,50,0) 25%),linear-gradient(180deg,rgba(6,20,50,.05),rgba(6,20,50,0) 25%,rgba(6,20,50,.08) 100%);}
+.hero{background:linear-gradient(105deg,#eef8ff 0%,#f9fcff 62%,#eaf6ff 100%);overflow:hidden}
+.hero-inner{min-height:332px;display:grid;grid-template-columns:52% 48%;position:relative}
+.hero-copy{padding:29px 0 22px;position:relative;z-index:2}
+.kicker{font-size:14px;letter-spacing:1.7px;font-weight:900;color:#0754a8}
+.hero h1{font-size:45px;line-height:1.03;letter-spacing:-1.7px;margin:10px 0 10px;font-weight:900}
+.hero h1 .orange{color:var(--orange)}
+.underline{width:250px;height:5px;background:var(--orange);border-radius:99px;margin:4px 0 10px}
+.subline{font-size:16px;font-weight:800;margin:0 0 10px}
+.lead{font-size:13.5px;color:#183b68;max-width:520px;margin:0 0 16px}
+.actions{display:flex;gap:15px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:9px;font-size:14px;font-weight:800}
+.btn-primary{background:#063c99;color:white}
+.btn-light{background:white;color:#073a8e;box-shadow:0 4px 16px rgba(35,85,140,.08)}
+.hero-art{position:absolute;right:-18px;bottom:0;width:61%;height:100%;object-fit:cover;object-position:left center}
+.checks{position:absolute;right:18px;top:44px;width:145px;z-index:3;font-size:11px;font-weight:700;line-height:2.35}
+.checks div:before{content:"✓";display:inline-grid;place-items:center;width:18px;height:18px;margin-right:7px;border-radius:50%;background:#159765;color:white}
 
-.eyebrow{font-size:10px;letter-spacing:1.8px;font-weight:900;color:#59c8ff;margin-bottom:12px}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border:1px solid #ffffff2c;border-radius:999px;background:#ffffff0b;color:#dce9fa;font-size:9px;font-weight:850;letter-spacing:.8px;margin-bottom:14px}
-.hero-badge i{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px #52c7ff;display:block}
-.hero h1{font-size:clamp(47px,5.15vw,76px);line-height:.98;letter-spacing:-4px;margin-bottom:20px}
-.hero h1 .gold{color:var(--gold)}.hero h1 .cyan{color:#69d2ff}
-.hero-lead{font-size:15px;line-height:1.72;color:#d0def2;max-width:600px;margin-bottom:22px}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:10px;font-size:12px;font-weight:900}
-.btn-gold{background:var(--gold);color:#0b1738;box-shadow:0 10px 25px #0005}
-.btn-light{border:1px solid #ffffff3c;background:#ffffff08;color:#fff}
-.hero-trust{display:flex;align-items:center;gap:9px;margin-top:14px;color:#a8bdd8;font-size:9px;font-weight:750}
-.hero-trust span{color:#fff}
-.hero-micro{display:flex;gap:6px;align-items:center;margin-top:10px;font-size:8px;color:#9eb3cf;font-weight:750}
-.hero-micro b{color:var(--gold)}
-.features{display:flex;gap:9px;flex-wrap:wrap;margin-top:19px}
-.feature-mini{display:flex;align-items:center;gap:7px;color:#dce7f6;font-size:9px;font-weight:750}
-.feature-mini .ico{width:29px;height:29px;border:1px solid #52c7ff35;border-radius:9px;display:grid;place-items:center;background:#ffffff08;color:#69d2ff;font-size:13px}
+/* FEATURES */
+.features{margin-top:-1px;background:#fff;border-radius:13px;box-shadow:0 7px 24px rgba(29,74,125,.11);display:grid;grid-template-columns:repeat(6,1fr);padding:12px 10px;position:relative;z-index:5}
+.feature{text-align:center;padding:4px 7px;border-right:1px solid #edf2f8}
+.feature:last-child{border:0}
+.feature-icon{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;color:white;margin:0 auto 6px;font-size:19px}
+.feature:nth-child(1) .feature-icon{background:#7046d8}.feature:nth-child(2) .feature-icon{background:#139768}
+.feature:nth-child(3) .feature-icon{background:#f28b17}.feature:nth-child(4) .feature-icon{background:#d92d65}
+.feature:nth-child(5) .feature-icon{background:#0876dc}.feature:nth-child(6) .feature-icon{background:#5d3bd5}
+.feature strong{display:block;font-size:12px}.feature small{font-size:10px;color:#58708f}
 
-/* HERO BOARD */
-.math-board{min-height:380px;border-radius:25px;border:1px solid #ffffff30;background:linear-gradient(145deg,#ffffff18,#ffffff07);
-box-shadow:0 30px 70px #0005;position:relative;overflow:hidden;padding:26px}
-.math-board:after{content:"";position:absolute;width:210px;height:210px;right:-90px;top:-95px;border:1px solid #ffffff18;border-radius:50%;box-shadow:0 0 0 25px #ffffff05,0 0 0 50px #ffffff03}
-.board-top{display:flex;justify-content:space-between;color:#a9c0df;font-size:9px;font-weight:850;letter-spacing:1.4px}
-.board-note{position:absolute;right:24px;top:23px;padding:9px 12px;border-radius:9px;background:var(--gold);color:#0b1738;font-size:9px;font-weight:950;transform:rotate(1deg)}
-.board-grid-label{position:absolute;left:26px;top:52px;font-size:8px;color:#91a9c8;letter-spacing:1px;font-weight:800}
-.equation{position:absolute;font-weight:900;letter-spacing:-.5px}
-.eq1{top:80px;left:28px;font-size:27px;color:#fff}.eq2{top:137px;right:27px;font-size:20px;color:#68d3ff}
-.eq3{top:184px;left:35px;font-size:17px;color:var(--gold)}.eq4{bottom:101px;right:27px;font-size:26px;color:#c9b8ff}
-.graph{position:absolute;left:28px;bottom:26px;width:225px;height:120px;border-left:2px solid #ffffff70;border-bottom:2px solid #ffffff70}
-.graph:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 24%,#ffffff16 25%,transparent 26%,transparent 49%,#ffffff16 50%,transparent 51%,transparent 74%,#ffffff16 75%,transparent 76%),linear-gradient(0deg,transparent 24%,#ffffff16 25%,transparent 26%,transparent 49%,#ffffff16 50%,transparent 51%,transparent 74%,#ffffff16 75%,transparent 76%)}
-.graph:after{content:"";position:absolute;left:0;top:33px;width:205px;height:75px;border-top:3px solid #6bd5ff;border-radius:50%;transform:rotate(-5deg)}
-.books{position:absolute;bottom:25px;right:25px}
-.book{height:17px;border-radius:4px;margin-top:3px;padding:1px 13px;font-size:7px;font-weight:950;letter-spacing:.9px}
-.book:nth-child(1){width:138px;background:#f3f5f8;color:#172554}.book:nth-child(2){width:124px;background:#60a5fa;color:#0b1738}
-.book:nth-child(3){width:148px;background:var(--gold);color:#172554}.book:nth-child(4){width:135px;background:#34d399;color:#064e3b}
-.floating-formula{position:absolute;font-weight:900;font-size:10px;color:#ffffff55}.ff1{left:27px;top:151px}.ff2{right:24px;top:201px}.ff3{left:238px;bottom:41px;color:#69d2ff55}
-
-
-/* PREMIUM MATHEMATICS VISUAL LAYER */
-.math-board{background:linear-gradient(145deg,rgba(72,145,235,.23),rgba(12,36,87,.42));backdrop-filter:blur(10px)}
-.board-glow{position:absolute;width:260px;height:260px;right:70px;top:25px;border-radius:50%;background:radial-gradient(circle,rgba(82,199,255,.18),transparent 68%);filter:blur(2px)}
-.orbit{position:absolute;border:1px solid rgba(105,210,255,.18);border-radius:50%;pointer-events:none}
-.orbit-a{width:320px;height:110px;right:-40px;top:70px;transform:rotate(-18deg)}
-.orbit-b{width:250px;height:85px;right:30px;top:90px;transform:rotate(28deg)}
-.formula-chip{position:absolute;padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#b9d8f7;font-size:7px;font-weight:900;letter-spacing:1px}
-.chip-a{left:38px;top:225px}.chip-b{left:132px;top:225px}.chip-c{left:226px;top:225px}
-.math-spark{position:absolute;font-size:24px;font-weight:900;color:rgba(105,210,255,.34)}
-.spark-a{right:205px;top:103px}.spark-b{right:52px;top:164px;color:rgba(247,185,46,.42)}.spark-c{left:250px;bottom:82px;color:rgba(255,255,255,.25)}
-.math-board:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,black,transparent 92%);pointer-events:none}
-@media(max-width:650px){.chip-c{left:180px}.chip-b{left:95px}.chip-a{left:20px}.orbit-a{right:-130px}.orbit-b{right:-80px}}
-
-
-/* NEXT-GEN MATHEMATICS HERO GRAPHICS */
-.premium-board{min-height:420px!important;padding:24px!important;background:
-  radial-gradient(circle at 68% 38%,rgba(82,199,255,.18),transparent 27%),
-  linear-gradient(145deg,rgba(53,126,221,.28),rgba(7,25,65,.58))!important;
-}
-.premium-board .board-glow{width:300px;height:300px;right:30px;top:55px}
-.math-core{position:absolute;left:25px;right:25px;top:92px;height:190px;border:1px solid rgba(255,255,255,.16);
-  border-radius:20px;background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.025));
-  box-shadow:inset 0 1px rgba(255,255,255,.12),0 18px 35px rgba(0,0,0,.16);overflow:hidden}
-.math-core:after{content:"";position:absolute;inset:0;background:linear-gradient(125deg,transparent 20%,rgba(105,210,255,.07),transparent 55%);pointer-events:none}
-.core-label{position:absolute;left:19px;top:15px;color:#9eb9d9;font-size:7px;font-weight:900;letter-spacing:1.2px}
-.core-equation{position:absolute;left:19px;top:43px;font-size:25px;font-weight:950;color:#fff;letter-spacing:-1px}
-.core-sub{position:absolute;left:20px;top:82px;color:#69d2ff;font-size:12px;font-weight:850}
-.core-graph{position:absolute;right:18px;bottom:17px;width:210px;height:92px;border-left:1px solid #ffffff50;border-bottom:1px solid #ffffff50}
-.axis-x,.axis-y{position:absolute;display:block;background:#ffffff25}
-.axis-x{left:0;right:0;bottom:23px;height:1px}.axis-y{top:0;bottom:0;left:31px;width:1px}
-.curve{position:absolute;left:8px;bottom:22px;width:180px;height:64px;border-top:3px solid #61d5ff;border-radius:50%;transform:rotate(-7deg);filter:drop-shadow(0 0 6px rgba(82,199,255,.4))}
-.point{position:absolute;width:7px;height:7px;border-radius:50%;background:#f7b92e;box-shadow:0 0 10px #f7b92e}
-.p1{left:52px;bottom:44px}.p2{left:94px;bottom:31px}.p3{left:139px;bottom:47px}
-.formula-card{position:absolute;z-index:4;padding:10px 12px 9px;border-radius:12px;background:rgba(7,24,61,.86);border:1px solid rgba(255,255,255,.17);
-  box-shadow:0 12px 24px rgba(0,0,0,.18);font-size:13px;font-weight:900;color:#fff;backdrop-filter:blur(8px)}
-.formula-card span{display:block;margin-top:3px;font-size:6px;letter-spacing:1px;text-transform:uppercase;color:#89b9e7}
-.card-pyth{left:8px;top:57px;border-left:3px solid #f7b92e}
-.card-calc{right:8px;top:74px;border-left:3px solid #69d2ff}
-.card-prob{right:16px;bottom:105px;border-left:3px solid #8b7cff}
-.math-orb{position:absolute;left:32px;bottom:82px;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;
-  background:radial-gradient(circle at 35% 30%,rgba(105,210,255,.28),rgba(10,35,82,.1) 62%);
-  border:1px solid rgba(105,210,255,.32);box-shadow:0 0 30px rgba(82,199,255,.08)}
-.orb-symbol{font-size:29px;font-weight:950;color:#69d2ff}
-.orb-ring{position:absolute;border:1px solid rgba(247,185,46,.35);border-radius:50%;inset:9px;transform:rotate(35deg)}
-.r2{inset:17px;border-color:rgba(105,210,255,.3);transform:rotate(-40deg)}
-.progress-card{position:absolute;left:125px;bottom:28px;width:175px;padding:11px 12px;border-radius:13px;
-  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.15);z-index:5}
-.progress-head,.progress-bottom{display:flex;justify-content:space-between;align-items:center}
-.progress-head{font-size:6px;color:#a9c0dc;letter-spacing:.9px}.progress-head span{color:#69d2ff}
-.progress-track{height:5px;background:#ffffff12;border-radius:99px;margin:9px 0 7px;overflow:hidden}
-.progress-track i{display:block;width:76%;height:100%;border-radius:99px;background:linear-gradient(90deg,#f7b92e,#69d2ff)}
-.progress-bottom{font-size:7px;color:#a9bdd6}.progress-bottom strong{color:#fff;font-size:8px}
-.mini-tag{position:absolute;bottom:16px;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
-  color:#bcd3ec;font-size:6px;font-weight:900;letter-spacing:.8px}
-.tag-one{left:25px}.tag-two{left:95px}.tag-three{right:90px}.tag-four{right:18px}
-.floating-symbol{position:absolute;font-weight:950;color:rgba(105,210,255,.3);font-size:25px}
-.sym-one{right:45px;top:133px}.sym-two{left:335px;top:62px;color:rgba(247,185,46,.35)}.sym-three{right:120px;bottom:33px}.sym-four{left:315px;bottom:65px}
-@media(max-width:650px){
- .premium-board{min-height:350px!important;padding:18px!important}
- .math-core{left:18px;right:18px;top:76px;height:160px}
- .core-equation{font-size:20px}.core-graph{width:145px;height:70px}
- .formula-card{font-size:10px;padding:8px}.card-pyth{left:4px;top:49px}.card-calc{right:4px;top:56px}
- .card-prob{right:8px;bottom:85px}.math-orb{left:18px;bottom:65px;width:54px;height:54px}
- .orb-symbol{font-size:21px}.progress-card{left:84px;bottom:18px;width:145px}
- .mini-tag{display:none}.sym-two{left:230px}.sym-four{left:220px}
-}
-
-/* STATS */
-.stats{position:relative;z-index:5;margin-top:-1px}
-.statbar{width:min(1440px,94%);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border:1px solid #e0e7f0;border-radius:21px;box-shadow:0 20px 45px #0b17381a;overflow:hidden}
-.stat{padding:20px 15px;text-align:center;border-right:1px solid var(--line);position:relative}
-.stat:last-child{border:0}.stat:before{content:"";display:block;width:25px;height:2px;margin:0 auto 8px;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:5px}
-.stat-icon{width:35px;height:35px;margin:0 auto 4px;display:grid;place-items:center;color:var(--blue);font-size:20px}
-.stat strong{display:block;font-size:23px;letter-spacing:-1px}.stat span{display:block;color:#2e4d83;font-size:11px;font-weight:800}.stat small{display:block;color:#91a0b8;font-size:8px;margin-top:2px}
-
-/* GENERAL SECTIONS */
-section.content-section{padding:76px 0}.section-head{text-align:center;max-width:760px;margin:0 auto 34px}
-.section-head .eyebrow{color:var(--blue);margin-bottom:7px}.section-head h2{font-size:clamp(32px,4vw,46px);line-height:1.08;letter-spacing:-2px}
-.section-head h2 span{color:var(--blue)}.section-head p{color:var(--muted);margin-top:10px;font-size:13px}
-.accent-line{width:50px;height:4px;border-radius:10px;background:linear-gradient(90deg,var(--blue),var(--cyan));margin:14px auto 0}
+/* SECTIONS */
+section.content{padding:23px 0}
+.section-title{display:flex;justify-content:space-between;align-items:end;margin-bottom:14px}
+.section-title h2{margin:0;font-size:25px;letter-spacing:-.5px}
+.section-title h2:after{content:"";display:block;width:82px;height:3px;background:var(--orange);border-radius:99px;margin-top:4px}
+.section-title p{margin:5px 0 0;font-size:12px}
+.view-all{border:1px solid #bdd2ea;padding:9px 16px;border-radius:8px;font-size:12px;font-weight:800;color:#174986;background:white}
 
 /* COURSES */
-.course-section-intro{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:30px}
-.course-section-intro .section-head{text-align:left;margin:0;max-width:700px}.course-section-intro .accent-line{margin:13px 0 0}
-.course-count{font-size:9px;font-weight:850;letter-spacing:1.1px;color:#92a2bb;padding-bottom:7px}
-.courses{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.course{min-height:318px;border:1px solid #dfe7f0;border-radius:21px;padding:25px;background:#fff;position:relative;overflow:hidden;transition:.25s;box-shadow:0 10px 28px #0b173809}
-.course:hover{transform:translateY(-7px);box-shadow:0 24px 48px #0b173818}
-.course:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--card-color)}
-.course:after{content:"";position:absolute;width:130px;height:130px;right:-70px;top:-70px;border-radius:50%;background:var(--card-color);opacity:.06}
-.course:nth-child(1){--card-color:#10b981;background:linear-gradient(145deg,#f6fffb,#fff)}
-.course:nth-child(2){--card-color:#2563eb;background:linear-gradient(145deg,#f4f8ff,#fff)}
-.course:nth-child(3){--card-color:#f59e0b;background:linear-gradient(145deg,#fffaf1,#fff)}
-.course:nth-child(4){--card-color:#875cf6;background:linear-gradient(145deg,#faf7ff,#fff)}
-.course-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:23px}
-.course-icon{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-size:23px;background:#fff;box-shadow:0 9px 22px #14213d12;border:1px solid #edf1f6;color:var(--card-color)}
-.course-badge{padding:5px 8px;border-radius:999px;background:#fff;border:1px solid #e8edf4;color:var(--card-color);font-size:7px;font-weight:900;letter-spacing:.7px}
-.course .num{font-size:8px;font-weight:900;letter-spacing:1.2px;color:var(--card-color)}
-.course h3{font-size:19px;line-height:1.2;letter-spacing:-.5px;margin:7px 0 9px}.course p{font-size:11px;color:var(--muted);line-height:1.65}
-.course-topics{display:flex;gap:5px;flex-wrap:wrap;margin-top:16px}.course-topics span{font-size:7px;font-weight:850;color:#526987;background:#f1f5f9;border-radius:6px;padding:5px 7px}
-.course-bottom{position:absolute;bottom:18px;left:25px;right:25px;padding-top:12px;border-top:1px solid #edf1f6;display:flex;align-items:center;justify-content:space-between}
-.course-bottom small{font-size:7px;color:#94a3b8;font-weight:850;letter-spacing:.45px}.arrow{width:34px;height:34px;border-radius:50%;background:var(--card-color);color:#fff;display:grid;place-items:center;font-weight:900;box-shadow:0 7px 15px #0b173825}
+.courses{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.course{border-radius:11px;padding:16px;min-height:148px;border:1px solid rgba(0,0,0,.03);position:relative;overflow:hidden}
+.course:nth-child(1){background:#e6f4ff}.course:nth-child(2){background:#eafbf5}
+.course:nth-child(3){background:#fff0f4}.course:nth-child(4){background:#f0edff}
+.course .tag{font-size:12px;font-weight:900}.course h3{font-size:17px;line-height:1.05;margin:4px 0 5px}
+.course p{font-size:11px;line-height:1.35;margin:0 0 10px;max-width:210px}
+.course button{border:0;border-radius:7px;padding:8px 12px;color:white;font-weight:800;font-size:10px}
+.course:nth-child(1) button{background:#0876dc}.course:nth-child(2) button{background:#0c9a67}
+.course:nth-child(3) button{background:#dc2f68}.course:nth-child(4) button{background:#5b36d5}
+.course-icon{position:absolute;right:13px;top:13px;font-size:31px}
 
-/* APPROACH */
-.approach{background:#fff;position:relative;overflow:hidden}.approach:before{content:"∑  ∫  π  √  Δ";position:absolute;right:-25px;top:35px;font-size:100px;font-weight:900;letter-spacing:24px;color:#0b173806;white-space:nowrap}
-.approach-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center;position:relative;z-index:2}
-.approach-copy .journey-label{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border-radius:999px;background:#eaf2ff;color:var(--blue);font-size:8px;font-weight:900;letter-spacing:.9px;margin-bottom:13px}
-.approach-copy .journey-label i{width:6px;height:6px;background:var(--blue);border-radius:50%;display:block}.approach-copy h2{font-size:clamp(35px,4vw,48px);line-height:1.08;letter-spacing:-2px}.approach-copy h2 span{color:var(--blue)}
-.approach-copy p{color:var(--muted);margin-top:13px;max-width:470px;font-size:13px}
-.journey-visual{margin-top:24px;width:min(100%,470px);height:88px;border-radius:17px;background:#0b1738;position:relative;overflow:hidden;box-shadow:0 18px 38px #0b173820}
-.journey-visual:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff12 1px,transparent 1px),linear-gradient(90deg,#ffffff12 1px,transparent 1px);background-size:27px 27px}
-.journey-line{position:absolute;left:35px;right:35px;top:43px;height:2px;background:linear-gradient(90deg,#38bdf8,#f5b942,#10b981)}
-.journey-dot{position:absolute;top:35px;width:18px;height:18px;border:3px solid #0b1738;border-radius:50%;background:#fff}.journey-dot:nth-child(2){left:29px}.journey-dot:nth-child(3){left:32%}.journey-dot:nth-child(4){left:57%}.journey-dot:nth-child(5){right:29px}
-.journey-text{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:space-around;color:#c9d8ed;font-size:7px;font-weight:850;letter-spacing:.6px}
-.steps{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.step{padding:21px;border:1px solid #dfe7f0;border-radius:19px;background:#f9fbfe;min-height:150px;position:relative;overflow:hidden;transition:.22s;box-shadow:0 9px 23px #0b173807}
-.step:hover{transform:translateY(-5px);box-shadow:0 18px 35px #0b173813}.step:after{content:"";position:absolute;right:-28px;bottom:-28px;width:90px;height:90px;border-radius:50%;background:var(--step-color);opacity:.07}
-.step b{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--step-color) 10%,white);color:var(--step-color);font-size:9px}.step h3{font-size:17px;margin:12px 0 3px}.step p{font-size:10px;color:var(--muted);line-height:1.6;max-width:190px}.step .step-arrow{position:absolute;right:17px;top:21px;font-size:14px;color:var(--step-color);font-weight:900}
-.step:nth-child(1){--step-color:#2563eb}.step:nth-child(2){--step-color:#875cf6}.step:nth-child(3){--step-color:#f59e0b}.step:nth-child(4){--step-color:#10b981}
+/* STATS */
+.stats{background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(28,66,115,.07);display:grid;grid-template-columns:repeat(4,1fr);padding:14px;margin-top:5px}
+.stat{display:flex;align-items:center;justify-content:center;gap:10px;border-right:1px solid #edf1f6}
+.stat:last-child{border:0}.stat-icon{font-size:28px;color:#0a55b5}
+.stat strong{display:block;font-size:20px}.stat span{display:block;font-size:11px}
 
-/* RESOURCES */
-.resource-strip{background:linear-gradient(135deg,#061432,#0c316b);color:#fff;position:relative;overflow:hidden}
-.resource-strip:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff0d 1px,transparent 1px),linear-gradient(90deg,#ffffff0d 1px,transparent 1px);background-size:48px 48px}
-.resource-inner{position:relative;z-index:2}.resource-title{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:28px}
-.resource-title h2{font-size:clamp(30px,4vw,43px);line-height:1.1;letter-spacing:-1.6px}.resource-title h2 span{color:#67d2ff}.resource-title p{font-size:12px;color:#b9cbe2;margin-top:7px}
-.resource-link{border:1px solid #f5b942;background:#ffffff08;color:var(--gold);padding:11px 16px;border-radius:10px;font-size:10px;font-weight:900;white-space:nowrap}
-.resource-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.resource-card{border:1px solid #ffffff25;background:#ffffff08;border-radius:15px;padding:18px;transition:.2s}.resource-card:hover{background:#ffffff12;transform:translateY(-4px)}
-.resource-icon{width:38px;height:38px;border-radius:11px;background:#f5b942;color:#0b1738;display:grid;place-items:center;font-size:18px;margin-bottom:12px}.resource-card h3{font-size:13px}.resource-card p{font-size:9px;color:#aebfd7;margin-top:3px}
+/* WHY */
+.why-grid{display:grid;grid-template-columns:2fr 1fr;gap:22px}
+.why-items{display:grid;grid-template-columns:repeat(4,1fr);background:white;border-radius:11px;padding:20px 12px;box-shadow:0 4px 18px rgba(20,65,120,.05)}
+.why-item{padding:0 12px;border-right:1px solid #e6edf5}.why-item:last-child{border:0}
+.why-icon{font-size:29px;margin-bottom:7px}.why-item h3{font-size:12px;margin:0 0 4px}.why-item p{font-size:10px;margin:0;color:#536b8c}
+.testimonial{background:white;border:1px solid #e1ebf5;border-radius:11px;padding:18px;box-shadow:0 4px 18px rgba(20,65,120,.05)}
+.testimonial h3{margin:0 0 14px;font-size:15px}.quote{font-size:11px}.stars{color:#f3a500;font-size:17px;margin-top:8px}
+
+/* CTA */
+.cta-row{display:grid;grid-template-columns:2.2fr 1fr;gap:15px}
+.cta{background:#d9ebff;border-radius:10px;padding:17px 24px;display:flex;align-items:center;justify-content:space-between}
+.cta h2{font-size:19px;color:#07398e;margin:0}.cta p{font-size:11px;margin:2px 0}
+.cta .enroll2{background:#073e9b;color:#fff;padding:12px 20px;border-radius:8px;font-weight:800}
+.download{background:white;border:1px solid #dce8f3;border-radius:10px;padding:16px}
+.download strong{color:#1261b8;font-size:12px}.download p{font-size:10px;margin:4px 0}
 
 /* FOOTER */
-footer{background:#041027;color:#a9b8cf;padding:42px 0;margin-top:0}.foot{display:flex;justify-content:space-between;gap:30px;align-items:flex-start}.foot strong{color:#fff;font-size:18px}.foot p{font-size:10px;margin-top:5px}.flink{display:flex;gap:18px;flex-wrap:wrap;font-size:10px;font-weight:750}.flink a:hover{color:#fff}
-
-
-/* WIDE DESKTOP BALANCE */
-@media(min-width:1200px){
-  .navin{width:min(1440px,94%);margin:auto}
-  .hero-grid{padding-left:8px;padding-right:8px}
-  .math-board{width:100%}
-  .statbar{margin-top:0}
-}
+footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
+.footer-top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.14);padding-bottom:17px}
+.footer-logo{width:205px;height:65px;object-fit:contain;object-position:left center;filter:brightness(1.04)}
+.footer-links{display:flex;gap:16px;font-size:11px}
+.footer-social{display:flex;gap:12px;font-size:14px}
+.footer-bottom{display:flex;justify-content:space-between;padding-top:13px;font-size:10px;color:#cad8ed}
 
 /* RESPONSIVE */
 @media(max-width:1050px){
- .links{display:none}.navcta{display:none}.hamb{display:block}
- .hero-grid,.approach-grid{grid-template-columns:1fr}.math-board{max-width:650px;width:100%;margin:auto}
- .courses{grid-template-columns:repeat(2,1fr)}.resource-cards{grid-template-columns:repeat(2,1fr)}
+ .links{gap:16px;font-size:12px}.logo{width:235px}.checks{right:8px;width:125px}
+ .hero h1{font-size:39px}.hero-art{width:59%}
 }
-@media(max-width:650px){
- nav{height:70px}.brand-full-logo{width:240px;max-height:52px}.brand-name{font-size:18px}
- .brand-tag{font-size:6px}.hero{padding:38px 0 0}.hero h1{font-size:48px;letter-spacing:-2.5px}
- .hero-lead{font-size:14px}.features{gap:8px}.math-board{min-height:310px;padding:20px}
- .eq1{font-size:22px}.eq2{font-size:15px}.eq3{font-size:14px}.eq4{font-size:22px}.graph{width:155px}
- .books{transform:scale(.75);transform-origin:bottom right}.statbar{grid-template-columns:repeat(2,1fr)}
- .stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
- .course-section-intro,.resource-title{display:block}.course-count{margin-top:10px}.courses,.resource-cards,.steps{grid-template-columns:1fr}
- section.content-section{padding:58px 0}.journey-visual{width:100%}.foot{flex-direction:column}
+@media(max-width:820px){
+ .top-right{display:none}.nav-inner{gap:10px}.logo{width:220px}
+ .links,.nav-actions .search{display:none}.menu{display:block;margin-left:auto}
+ .hero-inner{display:block;min-height:560px}.hero-copy{padding-bottom:0}
+ .hero-art{width:100%;height:360px;right:0;bottom:0;object-position:center}
+ .checks{top:auto;bottom:22px;right:12px}
+ .features{grid-template-columns:repeat(3,1fr);gap:8px}
+ .feature:nth-child(3){border:0}.feature:nth-child(n+4){margin-top:8px}
+ .courses{grid-template-columns:repeat(2,1fr)}.why-grid,.cta-row{grid-template-columns:1fr}
+ .stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border:0}.stat:nth-child(n+3){margin-top:12px}
 }
-
-
-/* PREMIUM VIDEO + RESOURCES */
-.resource-strip{padding:82px 0;background:linear-gradient(135deg,#061432 0%,#0a2556 58%,#123e78 100%);color:#fff;position:relative;overflow:hidden}
-.resource-strip:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff0c 1px,transparent 1px),linear-gradient(90deg,#ffffff0c 1px,transparent 1px);background-size:48px 48px}
-.resource-strip:after{content:"";position:absolute;width:420px;height:420px;right:-180px;top:-160px;border:1px solid #52c7ff22;border-radius:50%;box-shadow:0 0 0 35px #52c7ff04,0 0 0 75px #52c7ff03}
-.resource-inner{position:relative;z-index:2}
-.resource-title{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:30px}
-.resource-kicker{display:inline-flex;align-items:center;gap:7px;color:#69d2ff;font-size:9px;font-weight:900;letter-spacing:1.5px;margin-bottom:9px}
-.resource-kicker i{width:6px;height:6px;border-radius:50%;background:#69d2ff;box-shadow:0 0 10px #69d2ff}
-.resource-title h2{font-size:clamp(31px,4vw,45px);line-height:1.08;letter-spacing:-2px}
-.resource-title h2 span{color:#f7b92e}
-.resource-title p{font-size:12px;line-height:1.7;color:#b7c9e0;margin-top:8px;max-width:610px}
-.resource-link{display:inline-flex;align-items:center;gap:8px;border:1px solid #f7b92e;background:#f7b92e;color:#0b1738;padding:12px 16px;border-radius:10px;font-size:10px;font-weight:950;white-space:nowrap;box-shadow:0 10px 25px #0003}
-.resource-layout{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
-.feature-video{min-height:300px;border:1px solid #ffffff25;border-radius:22px;background:linear-gradient(145deg,#ffffff13,#ffffff07);position:relative;overflow:hidden;padding:25px;box-shadow:0 25px 55px #0003}
-.feature-video:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 75% 30%,#52c7ff17,transparent 40%)}
-.video-label{display:inline-flex;padding:6px 9px;border-radius:999px;background:#ffffff10;border:1px solid #ffffff1f;color:#bcd1eb;font-size:8px;font-weight:850;letter-spacing:.8px}
-.video-formula{position:absolute;right:26px;top:30px;font-size:32px;font-weight:950;color:#ffffff;letter-spacing:-2px}
-.video-formula span{color:#f7b92e}
-.video-chart{position:absolute;left:25px;right:25px;bottom:26px;height:135px;border-left:2px solid #ffffff55;border-bottom:2px solid #ffffff55}
-.video-chart:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 24%,#ffffff0d 25%,transparent 26%,transparent 49%,#ffffff0d 50%,transparent 51%,transparent 74%,#ffffff0d 75%,transparent 76%),linear-gradient(0deg,transparent 24%,#ffffff0d 25%,transparent 26%,transparent 49%,#ffffff0d 50%,transparent 51%,transparent 74%,#ffffff0d 75%,transparent 76%)}
-.video-chart:after{content:"";position:absolute;left:4%;bottom:22px;width:83%;height:70px;border-top:3px solid #63d2ff;border-radius:60% 40% 50% 30%;transform:rotate(-5deg)}
-.video-play{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:#f7b92e;color:#081634;font-size:20px;padding-left:3px;box-shadow:0 12px 30px #0005;z-index:3}
-.video-copy{position:absolute;left:25px;top:68px;max-width:360px;z-index:2}
-.video-copy h3{font-size:23px;letter-spacing:-.8px;margin-bottom:5px}.video-copy p{font-size:10px;color:#aebfd7;line-height:1.65}
-.resource-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.resource-card{border:1px solid #ffffff22;background:#ffffff08;border-radius:17px;padding:18px;min-height:144px;transition:.22s;position:relative;overflow:hidden}
-.resource-card:hover{transform:translateY(-5px);background:#ffffff10;border-color:#52c7ff55}
-.resource-card:after{content:"→";position:absolute;right:15px;bottom:13px;font-size:16px;color:#69d2ff;font-weight:900}
-.resource-icon{width:38px;height:38px;border-radius:11px;background:#f7b92e;color:#0b1738;display:grid;place-items:center;font-size:17px;margin-bottom:13px}
-.resource-card:nth-child(2) .resource-icon{background:#63d2ff}.resource-card:nth-child(3) .resource-icon{background:#34d399}.resource-card:nth-child(4) .resource-icon{background:#bca7ff}
-.resource-card h3{font-size:13px}.resource-card p{font-size:9px;color:#9fb3cf;margin-top:3px;max-width:150px;line-height:1.55}
-@media(max-width:800px){.resource-title{display:block}.resource-link{margin-top:18px}.resource-layout{grid-template-columns:1fr}.feature-video{min-height:330px}}
-@media(max-width:520px){.resource-grid{grid-template-columns:1fr}.feature-video{min-height:310px}.video-formula{font-size:25px}.resource-strip{padding:60px 0}}
-
-
-/* PREMIUM BRAND WORDMARK */
-.brand-name{
-  display:inline-flex;
-  align-items:center;
-  gap:0;
-  padding:8px 13px 7px;
-  border-radius:12px;
-  background:linear-gradient(135deg,#fff8df 0%,#eef6ff 52%,#e5f1ff 100%);
-  border:1px solid rgba(30,102,210,.22);
-  box-shadow:0 7px 20px rgba(18,54,108,.13), inset 0 1px 0 rgba(255,255,255,.95);
-  position:relative;
-  line-height:1;
-}
-.brand-name:after{
-  content:"";
-  position:absolute;
-  left:10px;
-  right:10px;
-  bottom:4px;
-  height:2px;
-  border-radius:99px;
-  background:linear-gradient(90deg,#f5b82e,#2f6fed);
-  opacity:.55;
-}
-.brand-name .settlem{
-  color:#e8a916;
-  text-shadow:0 1px 0 #fff;
-}
-.brand-name .academy{
-  color:#2864d8;
-}
-.brand-tagline{
-  margin-top:3px;
-}
-@media(max-width:720px){
-  .brand-name{padding:6px 9px 5px;border-radius:10px}
-}
-
-
-/* PREMIUM NO-HUMAN MATHEMATICS VISUAL */
-.visual-board{
-  min-height:420px!important;
-  overflow:hidden!important;
-  padding:0!important;
-  border:1px solid rgba(120,190,255,.28)!important;
-  background:#071a43!important;
-  box-shadow:0 28px 65px rgba(0,18,60,.28), inset 0 1px rgba(255,255,255,.16)!important;
-}
-.visual-backdrop{
-  position:absolute;inset:0;
-  background:
-    radial-gradient(circle at 60% 30%,rgba(82,199,255,.28),transparent 32%),
-    radial-gradient(circle at 85% 70%,rgba(247,185,46,.13),transparent 24%),
-    linear-gradient(135deg,#061638,#0b397d 60%,#062252);
-}
-.hero-math-art{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center center;
-  mix-blend-mode:normal;
-  opacity:1;
-}
-.visual-shine{
-  position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(115deg,rgba(255,255,255,.06),transparent 32%,transparent 70%,rgba(95,210,255,.07));
-}
-@media(max-width:650px){
-  .visual-board{min-height:340px!important;border-radius:18px!important}
-  .hero-math-art{object-position:58% center}
-}
-
-
-/* FINAL PREMIUM RESPONSIVE POLISH */
-.brand-full-logo{background:#fff;border:1px solid #dce8f7;box-shadow:0 8px 24px rgba(20,55,100,.12);}
-.visual-board{background:#061b46!important;}
-@media(max-width:900px){
-  .hero-grid{grid-template-columns:1fr!important;}
-  .visual-board{min-height:360px!important;max-width:720px;margin:28px auto 0;}
-}
-@media(max-width:650px){
-  .brand-full-logo{width:205px!important;max-height:48px!important;}
-  .hero{padding-top:38px!important;}
-  .hero-grid{gap:28px!important;}
-  .visual-board{min-height:300px!important;margin-top:8px!important;}
-  .hero-math-art{object-position:center center!important;}
-}
-
-</style>
-
-<style>
-/* FINAL HERO: integrated artwork, not a separate card */
-.brand-full-logo{width:330px!important;height:62px!important;max-height:none!important;display:block!important;object-fit:contain!important;border-radius:14px!important;box-shadow:0 7px 22px rgba(16,48,100,.12)!important}
-.hero{min-height:606px!important;padding:42px 0 0!important;background-image:radial-gradient(circle at 78% 28%, rgba(52,201,255,.20), transparent 32%),radial-gradient(circle at 18% 70%, rgba(245,180,35,.13), transparent 30%),linear-gradient(135deg,#04183d 0%,#082a63 52%,#061b46 100%)!important;background-size:auto!important;background-position:center!important;background-repeat:no-repeat!important}
-.hero:before{opacity:.06!important}
-.hero-geometry{opacity:.32!important}
-.hero-art-space{min-height:470px;width:100%;pointer-events:none}
-@media(min-width:1051px){.hero-grid{grid-template-columns:1fr 1fr!important;gap:46px!important;align-items:center!important}.hero-grid>div:first-child{max-width:680px}.hero-art-space{min-height:500px!important}}
-@media(max-width:1050px){.hero{min-height:auto!important;background-position:58% top!important}.hero-art-space{min-height:360px!important;margin-top:8px}}
-@media(max-width:650px){.brand-full-logo{width:205px!important;height:48px!important}.hero{padding-top:30px!important;background-size:auto 620px!important;background-position:62% top!important}.hero-art-space{min-height:300px!important}}
-</style>
-
-<style>
-/* Final logo + mathematics visual */
-.brand-full-logo{
-  width:330px!important;
-  max-height:64px!important;
-  object-fit:contain!important;
-  background:#fff!important;
-  border:1px solid #dce8f7!important;
-  border-radius:14px!important;
-  box-shadow:0 8px 24px rgba(17,55,110,.12)!important;
-}
-.visual-board{
-  min-height:420px!important;
-  background:#061b46!important;
-}
-.hero-math-art{
-  object-fit:cover!important;
-  object-position:center!important;
-  filter:saturate(1.05) contrast(1.03)!important;
-}
-@media(max-width:650px){
-  .brand-full-logo{width:205px!important;max-height:50px!important}
-  .visual-board{min-height:320px!important}
+@media(max-width:560px){
+ .container{width:min(100% - 26px,1088px)}.topbar{display:none}nav{height:67px}
+ .logo{width:205px;height:62px}.hero h1{font-size:34px}.hero-copy{padding-top:23px}
+ .hero-art{height:285px}.checks{display:none}.features{grid-template-columns:repeat(2,1fr)}
+ .feature:nth-child(2){border:0}.feature:nth-child(3){border-right:1px solid #edf2f8}
+ .courses,.why-items{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}
+ .section-title{display:block}.view-all{display:inline-block;margin-top:10px}
+ .footer-top,.footer-bottom{display:block}.footer-links{margin:12px 0;flex-wrap:wrap}
 }
 </style>
-
-
-<style>
-/* FINAL CLEAN HEADER + BLENDED HERO ART */
-.brand{margin-right:12px!important;flex:0 0 auto!important}
-.brand-full-logo{width:300px!important;height:auto!important;max-height:60px!important;display:block!important;object-fit:contain!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
-.links{gap:17px!important}
-.hero-grid{grid-template-columns:minmax(0,0.92fr) minmax(0,1.08fr)!important;gap:18px!important;align-items:center!important}
-.hero-art-space{position:relative!important;min-height:500px!important;height:500px!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;overflow:visible!important;background:none!important;filter:none!important}
-.hero-art-image{width:112%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;transform:translateX(3%)!important;mask-image:none!important;-webkit-mask-image:none!important}
-.hero:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(4,24,61,.10) 0%,transparent 30%,transparent 75%,rgba(6,27,70,.10) 100%);z-index:1}
-.hero-grid{z-index:2!important}
-@media(max-width:1050px){.brand-full-logo{width:260px!important}.hero-grid{grid-template-columns:1fr!important;gap:12px!important}.hero-art-space{height:420px!important;min-height:420px!important;margin-top:0!important}.hero-art-image{width:100%!important;transform:none!important}}
-@media(max-width:650px){.brand-full-logo{width:205px!important;max-height:48px!important}.hero-art-space{height:320px!important;min-height:320px!important}.hero-art-image{width:108%!important;transform:translateX(-4%)!important}}
-</style>
-<style>
-/* FINAL VISUAL POLISH — integrated logo + seamless hero artwork */
-.brand-full-logo{width:300px!important;height:58px!important;max-height:58px!important;object-fit:contain!important;display:block!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
-.navin{gap:20px!important}
-.brand{margin-right:8px!important}
-.links{gap:16px!important}
-.hero-grid{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)!important;gap:8px!important}
-.hero-art-space{position:relative!important;min-height:540px!important;height:540px!important;display:block!important;overflow:visible!important;background:transparent!important;filter:none!important}
-.hero-art-image{position:absolute!important;z-index:1!important;right:-9%!important;top:-8px!important;width:116%!important;height:calc(100% + 8px)!important;object-fit:cover!important;object-position:center center!important;display:block!important;transform:none!important;filter:saturate(1.03) contrast(1.01)!important;mix-blend-mode:normal!important;mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.18) 4%,#000 13%,#000 88%,rgba(0,0,0,.18) 97%,transparent 100%),linear-gradient(to bottom,transparent 0%,#000 8%,#000 93%,transparent 100%)!important;-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.18) 4%,#000 13%,#000 88%,rgba(0,0,0,.18) 97%,transparent 100%),linear-gradient(to bottom,transparent 0%,#000 8%,#000 93%,transparent 100%)!important;mask-composite:intersect!important;-webkit-mask-composite:source-in!important}
-.hero-art-space:after{content:""!important;position:absolute!important;z-index:2!important;inset:-2px 0!important;pointer-events:none!important;background:linear-gradient(90deg,rgba(6,20,50,.96) 0%,rgba(6,20,50,.72) 7%,rgba(6,20,50,0) 24%,rgba(6,20,50,0) 84%,rgba(6,20,50,.12) 100%)!important}
-@media(max-width:1050px){.brand-full-logo{width:255px!important;height:54px!important}.hero-grid{grid-template-columns:1fr!important;gap:0!important}.hero-art-space{height:430px!important;min-height:430px!important;margin-top:-10px!important}.hero-art-image{width:105%!important;right:-2%!important;height:100%!important}}
-@media(max-width:650px){.brand-full-logo{width:205px!important;height:48px!important}.hero-art-space{height:320px!important;min-height:320px!important}.hero-art-image{width:112%!important;right:-6%!important;height:100%!important}}
-
-/* FINAL HERO / HEADER OVERRIDES */
-.brand{margin-right:6px!important;}
-.brand-full-logo{width:285px!important;height:54px!important;max-height:54px!important;object-fit:contain!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important;}
-.navin{gap:14px!important;}
-.links{gap:18px!important;}
-.hero-grid{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr)!important;gap:30px!important;align-items:center!important;}
-.hero-art-space{min-height:560px!important;position:relative!important;overflow:hidden!important;background:transparent!important;filter:none!important;}
-.hero-art-image{position:absolute!important;z-index:1!important;right:-2%!important;top:-2%!important;width:112%!important;height:104%!important;object-fit:cover!important;object-position:center center!important;display:block!important;filter:saturate(1.03) contrast(1.01)!important;mix-blend-mode:normal!important;
-  -webkit-mask-image:radial-gradient(ellipse 76% 78% at 55% 50%,#000 58%,rgba(0,0,0,.96) 68%,rgba(0,0,0,.55) 80%,transparent 94%)!important;mask-image:radial-gradient(ellipse 76% 78% at 55% 50%,#000 58%,rgba(0,0,0,.96) 68%,rgba(0,0,0,.55) 80%,transparent 94%)!important;}
-.hero-art-space:after{display:none!important;}
-@media(max-width:1050px){.brand-full-logo{width:250px!important;height:52px!important}.hero-grid{grid-template-columns:1fr!important;gap:0!important}.hero-art-space{min-height:430px!important}.hero-art-image{width:106%!important;right:-3%!important;top:0!important;height:100%!important;}}
-@media(max-width:650px){.brand-full-logo{width:205px!important;height:48px!important}.navin{gap:8px!important}.hero-art-space{min-height:330px!important}.hero-art-image{width:112%!important;right:-6%!important;}}
-</style>
-
-<style>
-/* SETTLEM ACADEMY — PHASE 1 HERO POLISH
-   Preserves the approved logo, hero artwork, colors, copy and existing structure.
-*/
-nav{
-  box-shadow:0 5px 18px rgba(7,22,52,.06);
-}
-
-.hero{
-  padding-top:44px!important;
-  padding-bottom:0!important;
-}
-
-.hero-grid{
-  min-height:545px!important;
-}
-
-.hero h1{
-  font-size:clamp(45px,5vw,72px)!important;
-  line-height:.99!important;
-  letter-spacing:-3.6px!important;
-}
-
-.hero-lead{
-  max-width:570px!important;
-  margin-bottom:20px!important;
-}
-
-.hero-actions .btn{
-  min-height:46px!important;
-  padding:13px 19px!important;
-}
-
-.hero-trust{
-  margin-top:13px!important;
-}
-
-.features{
-  margin-top:17px!important;
-  gap:10px!important;
-}
-
-.feature-mini{
-  padding-right:10px!important;
-}
-
-.hero-art-space{
-  min-height:545px!important;
-  height:545px!important;
-}
-
-.hero-art-image{
-  width:114%!important;
-  height:103%!important;
-  right:-4%!important;
-  top:-3px!important;
-}
-
-.stats{
-  margin-top:-20px!important;
-}
-
-.statbar{
-  border-radius:24px!important;
-  box-shadow:0 22px 48px rgba(11,23,56,.15)!important;
-  min-height:142px!important;
-}
-
-.stat{
-  padding:22px 15px!important;
-}
-
-.stat strong{
-  font-size:25px!important;
-}
-
-.stat-icon{
-  font-size:21px!important;
-}
-
-@media(max-width:1050px){
-  .hero-grid{
-    min-height:auto!important;
-  }
-  .hero-art-space{
-    min-height:430px!important;
-    height:430px!important;
-  }
-  .stats{
-    margin-top:-12px!important;
-  }
-}
-
-@media(max-width:650px){
-  nav{
-    box-shadow:0 4px 14px rgba(7,22,52,.07);
-  }
-  .hero{
-    padding-top:30px!important;
-  }
-  .hero h1{
-    font-size:clamp(39px,10vw,52px)!important;
-    letter-spacing:-2.5px!important;
-  }
-  .hero-art-space{
-    min-height:330px!important;
-    height:330px!important;
-  }
-  .stats{
-    margin-top:-8px!important;
-  }
-  .statbar{
-    grid-template-columns:repeat(2,1fr)!important;
-    border-radius:18px!important;
-  }
-  .stat:nth-child(2){
-    border-right:0!important;
-  }
-  .stat:nth-child(-n+2){
-    border-bottom:1px solid var(--line)!important;
-  }
-  .stat{
-    padding:17px 10px!important;
-  }
-}
-</style>
-
 </head>
 <body>
 
+<div class="topbar">
+  <div class="container">
+    <div class="top-left">Learn Today&nbsp; | &nbsp;Build Tomorrow</div>
+    <div class="top-right">
+      <span>✉ support@settlemacademy.in</span><span>☎ +91 98765 43210</span>
+      <div class="social"><span>▶</span><span>◎</span><span>➤</span><span>◉</span></div>
+    </div>
+  </div>
+</div>
+
 <nav>
-  <div class="wrap navin">
-    <a class="brand" href="#home" aria-label="Settlem Academy Home">
-<img src="settlem-academy-logo-transparent-clean.png" alt="Settlem Academy" class="brand-full-logo">
-    </a>
+  <div class="container nav-inner">
+    <a href="index.html"><img src="settlem-logo.png" class="logo" alt="Settlem Academy"></a>
     <div class="links">
-      <a href="#home">Home</a>
-      <a href="#courses">Courses</a>
-      <a href="video-lessons.html">Learning</a>
-      <a href="study-materials.html">Resources</a>
-      <a href="practice-tests.html">Tests</a>
-      <a href="student-dashboard.html">Dashboard</a>
-      <a href="certificates.html">Certificates</a>
-      <a href="#plans">Plans</a>
+      <a class="active" href="#home">Home</a>
+      <a href="#courses">Courses⌄</a>
       <a href="about.html">About</a>
+      <a href="study-materials.html">Free Resources</a>
+      <a href="student-dashboard.html">Student Zone</a>
       <a href="contact.html">Contact</a>
     </div>
-    <a class="navcta" href="#courses">🚀 Start Learning</a>
-    <div class="hamb">☰</div>
+    <div class="nav-actions"><span class="search">⌕</span><a class="enroll" href="course-enrollment.html">Enroll Now</a></div>
+    <div class="menu">☰</div>
   </div>
 </nav>
 
 <main id="home">
-
 <section class="hero">
-  <div class="hero-geometry"><div class="geo-cube"></div><div class="geo-ring"></div><div class="geo-orbit"></div><div class="geo-cone"></div><div class="geo-cross"></div></div>
-  <div class="wrap hero-grid">
-    <div>
-      <div class="hero-badge"><i></i> CLASS 5 → B.TECH &nbsp; • &nbsp; ONLINE + OFFLINE LEARNING</div>
-      <div class="eyebrow">BUILD A STRONGER MATHEMATICAL FOUNDATION</div>
-      <h1>Master <span class="gold">Mathematics.</span><br>Learn with <span class="cyan">Clarity.</span></h1>
-      <p class="hero-lead">Settlem Academy helps students from Class 5 to B.Tech understand mathematics through clear explanations, structured courses, practice and consistent learning.</p>
-      <div class="hero-actions">
-        <a class="btn btn-gold" href="#courses">Explore Courses →</a>
-        <a class="btn btn-light" href="video-lessons.html">▶ Watch Lessons</a>
-      </div>
-      <div class="hero-trust">✦ <span>Concept-focused learning</span> • Structured practice • Student progress</div>
-      <div class="hero-micro"><b>SETTLEM</b> • MATHEMATICS • CLARITY • PRACTICE • CONFIDENCE</div>
-      <div class="features">
-        <div class="feature-mini"><span class="ico">∑</span>Concept Clarity</div>
-        <div class="feature-mini"><span class="ico">↗</span>Step-by-Step</div>
-        <div class="feature-mini"><span class="ico">✓</span>Practice & Tests</div>
-        <div class="feature-mini"><span class="ico">★</span>Build Confidence</div>
-      </div>
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <div class="kicker">WELCOME TO SETTLEM ACADEMY</div>
+      <h1>Concepts Today<br><span class="orange">Confidence</span> Tomorrow</h1>
+      <div class="underline"></div>
+      <div class="subline">Clear explanations &nbsp;|&nbsp; Practice oriented &nbsp;|&nbsp; Exam focused</div>
+      <p class="lead">Quality maths education for School, Intermediate and B.Tech students. Learn at your own pace with structured courses, solved problems and expert guidance.</p>
+      <div class="actions"><a class="btn btn-primary" href="#courses">Explore Courses &nbsp;→</a><a class="btn btn-light" href="video-lessons.html">▶ &nbsp; Watch Intro Video</a></div>
     </div>
-
-    <div class="hero-art-space" aria-hidden="true"><img src="hero-right-blended-final.png" alt="" class="hero-art-image"></div>
-  </div>
-</section>
-
-<section class="stats">
-  <div class="wrap">
-    <div class="statbar">
-      <div class="stat"><div class="stat-icon">▤</div><strong>4+</strong><span>Learning Levels</span><small>Class 5 – B.Tech</small></div>
-      <div class="stat"><div class="stat-icon">◎</div><strong>100%</strong><span>Concept Focused</span><small>Clear & Simple Learning</small></div>
-      <div class="stat"><div class="stat-icon">◷</div><strong>24/7</strong><span>Online Access</span><small>Learn Anytime, Anywhere</small></div>
-      <div class="stat"><div class="stat-icon">▥</div><strong>1 Goal</strong><span>Student Success</span><small>Your Growth, Our Commitment</small></div>
+    <img class="hero-art" src="hero-art.png" alt="Mathematics student learning">
+    <div class="checks">
+      <div>Structured Learning</div><div>Easy Explanation</div><div>Solved Examples</div><div>Practice Materials</div><div>Exam Tips</div><div>Learn Anytime, Anywhere</div>
     </div>
   </div>
 </section>
 
-<section class="content-section" id="courses">
-  <div class="wrap">
-    <div class="course-section-intro">
-      <div class="section-head">
-        <div class="eyebrow">OUR COURSES</div>
-        <h2>Choose your <span>learning path.</span></h2>
-        <div class="accent-line"></div>
-        <p>Focused mathematics learning for every stage — from school foundations to engineering mathematics.</p>
-      </div>
-      <div class="course-count">01 — 04 &nbsp; • &nbsp; LEARNING LEVELS</div>
-    </div>
+<div class="container">
+  <div class="features">
+    <div class="feature"><div class="feature-icon">▣</div><strong>Expert Faculty</strong><small>Clear & Simple Teaching</small></div>
+    <div class="feature"><div class="feature-icon">▤</div><strong>Well Structured</strong><small>Topic-wise Learning</small></div>
+    <div class="feature"><div class="feature-icon">☑</div><strong>Practice Materials</strong><small>Questions & Solutions</small></div>
+    <div class="feature"><div class="feature-icon">♧</div><strong>For All Levels</strong><small>School to B.Tech</small></div>
+    <div class="feature"><div class="feature-icon">▣</div><strong>Learn Anywhere</strong><small>On Any Device</small></div>
+    <div class="feature"><div class="feature-icon">★</div><strong>Student Support</strong><small>We Are With You</small></div>
+  </div>
 
+  <section class="content" id="courses">
+    <div class="section-title">
+      <div><h2>Popular Courses</h2><p>Start learning with our most popular courses</p></div>
+      <a class="view-all" href="courses.html">View All Courses →</a>
+    </div>
     <div class="courses">
-      <div class="course">
-        <div class="course-top">
-          <div class="course-icon">📐</div>
-          <div class="course-badge">FOUNDATION</div>
-        </div>
-        <div class="num">01 / SCHOOL</div>
-        <h3>Classes 5–7</h3>
-        <p>Build a strong mathematical foundation with simple explanations, visual examples and guided practice.</p>
-        <div class="course-topics"><span>Basics</span><span>Fractions</span><span>Practice</span></div>
-        <div class="course-bottom"><small>BUILD YOUR FOUNDATION</small><a class="arrow" href="classes-5-7-mathematics.html">→</a></div>
-      </div>
-
-      <div class="course">
-        <div class="course-top">
-          <div class="course-icon">📊</div>
-          <div class="course-badge">CORE SKILLS</div>
-        </div>
-        <div class="num">02 / SCHOOL</div>
-        <h3>Class 8–10</h3>
-        <p>Strengthen concepts, develop problem-solving skills and prepare for important mathematics topics.</p>
-        <div class="course-topics"><span>Algebra</span><span>Geometry</span><span>Problems</span></div>
-        <div class="course-bottom"><small>LEARN • PRACTICE • REVISE</small><a class="arrow" href="class-10-mathematics.html">→</a></div>
-      </div>
-
-      <div class="course">
-        <div class="course-top">
-          <div class="course-icon">∫</div>
-          <div class="course-badge">ADVANCED</div>
-        </div>
-        <div class="num">03 / INTERMEDIATE</div>
-        <h3>Intermediate Mathematics</h3>
-        <p>Structured lessons, important formulas and problem-solving practice for higher-level mathematics.</p>
-        <div class="course-topics"><span>Calculus</span><span>Vectors</span><span>Probability</span></div>
-        <div class="course-bottom"><small>CONCEPTS • FORMULAS • EXAMS</small><a class="arrow" href="intermediate-mathematics.html">→</a></div>
-      </div>
-
-      <div class="course">
-        <div class="course-top">
-          <div class="course-icon">Σ</div>
-          <div class="course-badge">ENGINEERING</div>
-        </div>
-        <div class="num">04 / B.TECH</div>
-        <h3>B.Tech Mathematics</h3>
-        <p>Understand engineering mathematics through clear theory, worked examples and exam-focused problems.</p>
-        <div class="course-topics"><span>Calculus</span><span>Transforms</span><span>Problems</span></div>
-        <div class="course-bottom"><small>THEORY • APPLICATION • PRACTICE</small><a class="arrow" href="btech-mathematics.html">→</a></div>
-      </div>
+      <div class="course"><div class="course-icon">▦</div><div class="tag" style="color:#0876dc">B.Tech</div><h3>Mathematics &<br>Science Foundation</h3><p>Complete syllabus with solved problems and important questions.</p><a href="btech-mathematics.html"><button>View Course →</button></a></div>
+      <div class="course"><div class="course-icon">▤</div><div class="tag" style="color:#0b9666">Intermediate</div><h3>Maths 1A & 1B</h3><p>Concept wise explanation, formulas and practice papers.</p><a href="intermediate-mathematics.html"><button>View Course →</button></a></div>
+      <div class="course"><div class="course-icon">✎</div><div class="tag" style="color:#d62960">School (Class 5–10)</div><h3>Maths Basics</h3><p>Build strong fundamentals with easy explanations.</p><a href="classes-5-7-mathematics.html"><button>View Course →</button></a></div>
+      <div class="course"><div class="course-icon">▤</div><div class="tag" style="color:#5c38d5">Exam Preparation</div><h3>Important Problems</h3><p>Most important questions with step by step solutions.</p><a href="practice-tests.html"><button>View Course →</button></a></div>
     </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-icon">♟</div><div><strong>10K+</strong><span>Happy Students</span></div></div>
+    <div class="stat"><div class="stat-icon">▶</div><div><strong>500+</strong><span>Video Lessons</span></div></div>
+    <div class="stat"><div class="stat-icon">▥</div><div><strong>95%</strong><span>Positive Feedback</span></div></div>
+    <div class="stat"><div class="stat-icon">◷</div><div><strong>24/7</strong><span>Learning Access</span></div></div>
   </div>
-</section>
 
-<section class="content-section approach" id="learning">
-  <div class="wrap approach-grid">
-    <div class="approach-copy">
-      <div class="journey-label"><i></i> THE SETTLEM LEARNING METHOD</div>
-      <div class="eyebrow">OUR APPROACH</div>
-      <h2>From concepts to <span>confidence.</span></h2>
-      <p>Mathematics becomes easier when every idea has a clear path. Learn the concept, understand the method, practise with purpose and build lasting confidence.</p>
-      <div class="journey-visual" aria-label="Learning journey">
-        <div class="journey-line"></div>
-        <div class="journey-dot"></div><div class="journey-dot"></div><div class="journey-dot"></div><div class="journey-dot"></div>
-        <div class="journey-text"><span>LEARN</span><span>UNDERSTAND</span><span>PRACTICE</span><span>SUCCEED</span></div>
-      </div>
-    </div>
-    <div class="steps">
-      <div class="step"><b>01</b><span class="step-arrow">↗</span><h3>Learn</h3><p>Start with a clear, simple explanation of the mathematical concept.</p></div>
-      <div class="step"><b>02</b><span class="step-arrow">↗</span><h3>Understand</h3><p>See the method through worked examples and logical steps.</p></div>
-      <div class="step"><b>03</b><span class="step-arrow">↗</span><h3>Practice</h3><p>Apply what you learned with carefully selected problems.</p></div>
-      <div class="step"><b>04</b><span class="step-arrow">↗</span><h3>Succeed</h3><p>Revise consistently and turn understanding into confidence.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="content-section" id="plans">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">LEARN ANYWHERE</div>
-      <h2>One place for your <span>mathematics journey</span></h2>
-      <p>Learn from video lessons and strengthen your preparation with organised study resources.</p>
-    </div>
-    <div class="learning-grid">
-      <div class="learning-card dark">
-        <div class="mini-label">VIDEO LESSONS</div><h3>Learn. Watch. Understand.</h3>
-        <p>Explore step-by-step mathematics lessons designed to make difficult topics easier to understand.</p>
-        <a class="learning-link" href="video-lessons.html">Browse Video Lessons →</a>
-        <div class="decor">▶</div>
-      </div>
-      <div class="learning-card light">
-        <div class="mini-label">STUDY RESOURCES</div><h3>Revise with confidence.</h3>
-        <p>Keep chapter notes, formula sheets, important questions and revision resources organised in one place.</p>
-        <a class="learning-link" href="study-materials.html">Explore Resources →</a>
-        <div class="decor">∑</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="content-section resource-strip" id="resources">
-  <div class="wrap resource-inner">
-    <div class="resource-title">
+  <section class="content">
+    <div class="why-grid">
       <div>
-        <div class="resource-kicker"><i></i> LEARNING HUB</div>
-        <h2>Learn more. <span>Practice better.</span></h2>
-        <p>Bring lessons, notes, practice tests and worksheets together in one focused learning experience.</p>
-      </div>
-      <a class="resource-link" href="study-materials.html">Explore Resources →</a>
-    </div>
-
-    <div class="resource-layout">
-      <a class="feature-video" href="video-lessons.html">
-        <span class="video-label">FEATURED • VIDEO LESSONS</span>
-        <div class="video-copy">
-          <h3>Understand the idea. Then solve it.</h3>
-          <p>Structured mathematics lessons designed to make difficult concepts clearer, step by step.</p>
+        <div class="section-title"><div><h2>Why Choose Settlem Academy?</h2></div></div>
+        <div class="why-items">
+          <div class="why-item"><div class="why-icon">🎓</div><h3>Concept Clarity</h3><p>Learn from basics to advanced level</p></div>
+          <div class="why-item"><div class="why-icon">🎯</div><h3>Exam Focused</h3><p>Important questions & exam strategies</p></div>
+          <div class="why-item"><div class="why-icon">💡</div><h3>Practical Approach</h3><p>Real world examples and applications</p></div>
+          <div class="why-item"><div class="why-icon">👥</div><h3>Student Support</h3><p>Doubts & guidance whenever you need</p></div>
         </div>
-        <div class="video-formula">f(x) <span>→</span> y</div>
-        <div class="video-chart"></div>
-        <div class="video-play">▶</div>
-      </a>
-
-      <div class="resource-grid">
-        <a class="resource-card" href="video-lessons.html">
-          <div class="resource-icon">▶</div><h3>Video Lessons</h3><p>Clear explanations from basics to advanced topics.</p>
-        </a>
-        <a class="resource-card" href="study-materials.html">
-          <div class="resource-icon">▤</div><h3>Study Notes</h3><p>Organised notes for learning and revision.</p>
-        </a>
-        <a class="resource-card" href="practice-tests.html">
-          <div class="resource-icon">✓</div><h3>Practice Tests</h3><p>Build speed, accuracy and confidence.</p>
-        </a>
-        <a class="resource-card" href="study-materials.html">
-          <div class="resource-icon">▦</div><h3>Worksheets</h3><p>Topic-wise questions for focused practice.</p>
-        </a>
+      </div>
+      <div class="testimonial">
+        <h3>What Students Say</h3>
+        <div class="quote">“Explanation is very clear and easy to understand. Settlem Academy really helped me in my exams!”</div>
+        <div class="stars">★★★★★</div>
+        <small>– B.Tech Student</small>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="content-section mission">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">WHY SETTLEM ACADEMY</div>
-      <h2>Mathematics made <span>clearer.</span></h2>
-      <p>A focused learning platform built around understanding, practice and progress.</p>
+  <section class="content">
+    <div class="cta-row">
+      <div class="cta"><div><h2>Start Your Learning Journey Today!</h2><p>Join students who are building their future with Settlem Academy.</p></div><a class="enroll2" href="course-enrollment.html">Enroll Now →</a></div>
+      <a class="download" href="study-materials.html"><strong>⬇ &nbsp; Download Free Study Materials</strong><p>Notes &nbsp;|&nbsp; Worksheets &nbsp;|&nbsp; Previous Papers</p></a>
     </div>
-    <div class="mission-grid">
-      <div class="mission-card"><div class="symbol">🎯</div><h3>Our Mission</h3><p>To make mathematics simple, interesting and accessible for every learner.</p></div>
-      <div class="mission-card"><div class="symbol">💎</div><h3>Our Vision</h3><p>To be a trusted platform for quality mathematics education and meaningful student growth.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="wrap">
-  <div class="final-cta">
-    <h2>Ready to strengthen your maths?</h2>
-    <p>Choose your learning level and start building stronger mathematical skills with Settlem Academy.</p>
-    <a class="btn btn-gold" href="course-enrollment.html">Choose Your Courses →</a>
-  </div>
-</section>
-
+  </section>
+</div>
 </main>
 
 <footer>
-  <div class="wrap foot">
-    <div><strong>SETTLEM ACADEMY</strong><p>Learn Mathematics • Build Confidence • Achieve Success</p><p>© 2026 Settlem Academy</p></div>
-    <div class="flink">
-      <a href="#home">Home</a><a href="#courses">Courses</a><a href="video-lessons.html">Learning</a>
-      <a href="study-materials.html">Resources</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+  <div class="container">
+    <div class="footer-top">
+      <img src="footer-logo.png" class="footer-logo" alt="Settlem Academy">
+      <div class="footer-links"><a href="#home">Home</a><a href="#courses">Courses</a><a href="about.html">About</a><a href="study-materials.html">Free Resources</a><a href="contact.html">Contact</a></div>
+      <div class="footer-social">▶ &nbsp; ◎ &nbsp; f &nbsp; ➤ &nbsp; ◉</div>
     </div>
+    <div class="footer-bottom"><span>© 2026 Settlem Academy. All rights reserved.</span><span>Privacy Policy &nbsp;|&nbsp; Terms & Conditions</span></div>
   </div>
 </footer>
-
 </body>
 </html>
