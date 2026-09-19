@@ -156,6 +156,13 @@ section.content{padding:23px 0}
 .download{background:white;border:1px solid #dce8f3;border-radius:10px;padding:16px}
 .download strong{color:#1261b8;font-size:12px}.download p{font-size:10px;margin:4px 0}
 
+
+.why-img{width:42px;height:42px;object-fit:contain;display:block;margin:0 0 7px}
+.testimonial-body{display:flex;align-items:center;gap:12px}.student-photo{width:62px;height:62px;border-radius:50%;object-fit:cover}
+.testimonial-dots{text-align:center;margin-top:9px}.testimonial-dots span{display:inline-block;width:7px;height:7px;border-radius:50%;background:#d6e1ee;margin:0 3px}.testimonial-dots .on{background:#145ac2}
+.cta-img{width:88px;height:68px;object-fit:contain;align-self:end;margin-right:10px}
+.download{display:flex;align-items:center;gap:12px}.download-img{width:43px;height:43px;object-fit:contain}
+
 /* FOOTER */
 footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
 .footer-top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.14);padding-bottom:17px}
@@ -263,25 +270,24 @@ footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
       <div>
         <div class="section-title"><div><h2>Why Choose Settlem Academy?</h2></div></div>
         <div class="why-items">
-          <div class="why-item"><div class="why-icon">🎓</div><h3>Concept Clarity</h3><p>Learn from basics to advanced level</p></div>
-          <div class="why-item"><div class="why-icon">🎯</div><h3>Exam Focused</h3><p>Important questions & exam strategies</p></div>
-          <div class="why-item"><div class="why-icon">💡</div><h3>Practical Approach</h3><p>Real world examples and applications</p></div>
-          <div class="why-item"><div class="why-icon">👥</div><h3>Student Support</h3><p>Doubts & guidance whenever you need</p></div>
+          <div class="why-item"><img class="why-img" src="why-clarity.png" alt=""><h3>Concept Clarity</h3><p>Learn from basics to advanced level</p></div>
+          <div class="why-item"><img class="why-img" src="why-exam.png" alt=""><h3>Exam Focused</h3><p>Important questions & exam strategies</p></div>
+          <div class="why-item"><img class="why-img" src="why-practical.png" alt=""><h3>Practical Approach</h3><p>Real world examples and applications</p></div>
+          <div class="why-item"><img class="why-img" src="why-support.png" alt=""><h3>Student Support</h3><p>Doubts & guidance whenever you need</p></div>
         </div>
       </div>
       <div class="testimonial">
         <h3>What Students Say</h3>
-        <div class="quote">“Explanation is very clear and easy to understand. Settlem Academy really helped me in my exams!”</div>
-        <div class="stars">★★★★★</div>
-        <small>– B.Tech Student</small>
+        <div class="testimonial-body"><img class="student-photo" src="testimonial-student.png" alt="Student"><div><div class="quote">“Explanation is very clear and easy to understand. Settlem Academy really helped me in my exams!”</div><div class="stars">★★★★★</div><small>– B.Tech Student</small></div></div>
+        <div class="testimonial-dots"><span class="on"></span><span></span><span></span></div>
       </div>
     </div>
   </section>
 
   <section class="content">
     <div class="cta-row">
-      <div class="cta"><div><h2>Start Your Learning Journey Today!</h2><p>Join students who are building their future with Settlem Academy.</p></div><a class="enroll2" href="course-enrollment.html">Enroll Now →</a></div>
-      <a class="download" href="study-materials.html"><strong>⬇ &nbsp; Download Free Study Materials</strong><p>Notes &nbsp;|&nbsp; Worksheets &nbsp;|&nbsp; Previous Papers</p></a>
+      <div class="cta"><img class="cta-img" src="cta-learning.png" alt=""><div><h2>Start Your Learning Journey Today!</h2><p>Join students who are building their future with Settlem Academy.</p></div><a class="enroll2" href="course-enrollment.html">Enroll Now →</a></div>
+      <a class="download" href="study-materials.html"><img class="download-img" src="download-materials.png" alt=""><div><strong>Download Free Study Materials</strong><p>Notes &nbsp;|&nbsp; Worksheets &nbsp;|&nbsp; Previous Papers</p></div></a>
     </div>
   </section>
 </div>
