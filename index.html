@@ -312,6 +312,7 @@ nav .nav-actions{gap:14px!important}
 }
 </style>
 
+<style>
 /* FINAL PRIMARY NAVIGATION — SEPARATE BUTTONS */
 nav .links{
   display:flex!important;
@@ -375,7 +376,14 @@ nav .nav-inner{
 @media(max-width:900px){
   nav .links{display:none!important}
 }
+</style>
 
+<style>
+/* FINAL NAV BUTTON POLISH */
+nav .links .nav-btn .nav-icon{color:#0b5fbe!important;flex:0 0 20px!important}
+nav .links .nav-btn.active .nav-icon{color:#fff!important}
+nav .links .nav-btn span:last-child{letter-spacing:.05px!important}
+</style>
 </head>
 <body>
 
@@ -395,12 +403,12 @@ nav .nav-inner{
       <img src="settlem-academy-styled-button-logo.png" class="logo approved-logo" alt="Settlem Academy">
     </a>
     <div class="links" aria-label="Primary navigation">
-      <a class="nav-btn active" href="#home"><span class="nav-icon">⌂</span><span>Home</span></a>
-      <a class="nav-btn" href="#courses"><span class="nav-icon">▤</span><span>Courses</span></a>
-      <a class="nav-btn" href="about.html"><span class="nav-icon">●</span><span>About</span></a>
-      <a class="nav-btn" href="study-materials.html"><span class="nav-icon">▱</span><span>Free Resources</span></a>
-      <a class="nav-btn" href="student-zone.html"><span class="nav-icon">◆</span><span>Student Zone</span></a>
-      <a class="nav-btn" href="contact.html"><span class="nav-icon">☎</span><span>Contact</span></a>
+      <a class="nav-btn active" href="#home"><span class="nav-icon" aria-hidden="true">⌂</span><span>Home</span></a>
+      <a class="nav-btn" href="#courses"><span class="nav-icon" aria-hidden="true">▤</span><span>Courses</span></a>
+      <a class="nav-btn" href="about.html"><span class="nav-icon" aria-hidden="true">●</span><span>About</span></a>
+      <a class="nav-btn" href="study-materials.html"><span class="nav-icon" aria-hidden="true">▱</span><span>Free Resources</span></a>
+      <a class="nav-btn" href="student-zone.html"><span class="nav-icon" aria-hidden="true">◆</span><span>Student Zone</span></a>
+      <a class="nav-btn" href="contact.html"><span class="nav-icon" aria-hidden="true">☎</span><span>Contact</span></a>
     </div>
     <div class="nav-actions"><span class="search">⌕</span><a class="enroll" href="course-enrollment.html">Enroll Now</a></div>
     <div class="menu">☰</div>
