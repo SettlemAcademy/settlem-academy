@@ -84,10 +84,11 @@ nav{height:73px;background:#fff;border-bottom:1px solid #e6eef7;position:sticky;
 .hero-button.video{
   left:22.85%;
   width:16.8%;
-  background:#fff;
+  background:#ffd43b;
   color:#073a8e;
-  box-shadow:0 4px 16px rgba(35,85,140,.10);
+  box-shadow:0 5px 14px rgba(245,176,0,.18);
 }
+.hero-button.video:hover{background:#ffcf22}
 .hero-button span{font-size:1.1em}
 .hero-button .play{
   width:1.65em;
@@ -158,10 +159,10 @@ section.content{padding:23px 0}
 
 
 .why-img{width:42px;height:42px;object-fit:contain;display:block;margin:0 0 7px}
-.testimonial-body{display:flex;align-items:center;gap:12px}.student-photo{width:62px;height:62px;border-radius:50%;object-fit:cover}
+.testimonial-body{display:flex;align-items:center}
 .testimonial-dots{text-align:center;margin-top:9px}.testimonial-dots span{display:inline-block;width:7px;height:7px;border-radius:50%;background:#d6e1ee;margin:0 3px}.testimonial-dots .on{background:#145ac2}
-.cta-img{width:88px;height:68px;object-fit:contain;align-self:end;margin-right:10px}
-.download{display:flex;align-items:center;gap:12px}.download-img{width:43px;height:43px;object-fit:contain}
+.cta-img{display:none}
+.download{display:flex;align-items:center;gap:12px}
 
 /* FOOTER */
 footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
@@ -229,7 +230,7 @@ footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
 <main id="home">
 <section class="hero" aria-label="Settlem Academy introduction">
   <div class="hero-full">
-    <img src="hero-full-clean.png" alt="Settlem Academy — Concepts Today, Confidence Tomorrow">
+    <img src="hero-final-clean.png" alt="Settlem Academy — Concepts Today, Confidence Tomorrow">
     <a class="hero-button explore" href="#courses">Explore Courses <span>→</span></a>
     <a class="hero-button video" href="video-lessons.html"><span class="play">▶</span> Watch Intro Video</a>
   </div>
@@ -258,13 +259,6 @@ footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
     </div>
   </section>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-icon">♟</div><div><strong>10K+</strong><span>Happy Students</span></div></div>
-    <div class="stat"><div class="stat-icon">▶</div><div><strong>500+</strong><span>Video Lessons</span></div></div>
-    <div class="stat"><div class="stat-icon">▥</div><div><strong>95%</strong><span>Positive Feedback</span></div></div>
-    <div class="stat"><div class="stat-icon">◷</div><div><strong>24/7</strong><span>Learning Access</span></div></div>
-  </div>
-
   <section class="content">
     <div class="why-grid">
       <div>
@@ -278,7 +272,7 @@ footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
       </div>
       <div class="testimonial">
         <h3>What Students Say</h3>
-        <div class="testimonial-body"><img class="student-photo" src="testimonial-student.png" alt="Student"><div><div class="quote">“Explanation is very clear and easy to understand. Settlem Academy really helped me in my exams!”</div><div class="stars">★★★★★</div><small>– B.Tech Student</small></div></div>
+        <div class="testimonial-body"><div><div class="quote">“Explanation is very clear and easy to understand. Settlem Academy really helped me in my exams!”</div><div class="stars">★★★★★</div><small>– B.Tech Student</small></div></div>
         <div class="testimonial-dots"><span class="on"></span><span></span><span></span></div>
       </div>
     </div>
@@ -286,8 +280,8 @@ footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
 
   <section class="content">
     <div class="cta-row">
-      <div class="cta"><img class="cta-img" src="cta-learning.png" alt=""><div><h2>Start Your Learning Journey Today!</h2><p>Join students who are building their future with Settlem Academy.</p></div><a class="enroll2" href="course-enrollment.html">Enroll Now →</a></div>
-      <a class="download" href="study-materials.html"><img class="download-img" src="download-materials.png" alt=""><div><strong>Download Free Study Materials</strong><p>Notes &nbsp;|&nbsp; Worksheets &nbsp;|&nbsp; Previous Papers</p></div></a>
+      <div class="cta"><div><h2>Start Your Learning Journey Today!</h2><p>Join students who are building their future with Settlem Academy.</p></div><a class="enroll2" href="course-enrollment.html">Enroll Now →</a></div>
+      <a class="download" href="study-materials.html"><div><strong>Download Free Study Materials</strong><p>Notes &nbsp;|&nbsp; Worksheets &nbsp;|&nbsp; Previous Papers</p></div></a>
     </div>
   </section>
 </div>
