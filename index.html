@@ -25,12 +25,12 @@ a{text-decoration:none;color:inherit}
 
 /* NAV */
 nav{height:73px;background:#fff;border-bottom:1px solid #e6eef7;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(20,60,110,.05)}
-.nav-inner{height:100%;display:flex;align-items:center;gap:28px}
-.logo{width:285px;height:68px;object-fit:contain;object-position:left center;display:block}
-.links{display:flex;align-items:center;gap:27px;font-size:14px;font-weight:700;white-space:nowrap}
+.nav-inner{height:100%;display:flex;align-items:center;gap:22px}
+.logo{width:265px;height:62px;object-fit:contain;object-position:left center;display:block}.approved-logo{border:0}
+.links{display:flex;align-items:center;gap:24px;font-size:14px;font-weight:700;white-space:nowrap}
 .links a{height:73px;display:flex;align-items:center;position:relative}
 .links a.active:after{content:"";position:absolute;bottom:13px;left:0;right:0;margin:auto;width:27px;height:3px;border-radius:5px;background:#0c65d7}
-.nav-actions{margin-left:auto;display:flex;align-items:center;gap:11px}.search{font-size:21px;margin-right:2px}
+.nav-actions{margin-left:8px;display:flex;align-items:center;gap:16px}.search{font-size:21px;margin-right:2px}
 .search{font-size:22px}
 .enroll{background:#0875df;color:white;padding:13px 22px;border-radius:10px;font-weight:800;box-shadow:0 5px 14px rgba(8,117,223,.2)}
 .menu{display:none;font-size:27px}
@@ -174,11 +174,11 @@ footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
 
 /* RESPONSIVE */
 @media(max-width:1050px){
- .links{gap:16px;font-size:12px}.logo{width:215px}.sa-logo{width:34px;height:34px}.brand-divider{margin:0 7px}.checks{right:8px;width:125px}
+ .links{gap:16px;font-size:12px}.logo{width:215px}.checks{right:8px;width:125px}
  .hero h1{font-size:39px}.hero-art{width:59%}
 }
 @media(max-width:820px){
- .top-right{display:none}.nav-inner{gap:10px}.brand-wrap{height:67px}.logo{width:190px}.sa-logo{width:32px;height:32px}.brand-divider{margin:0 6px}
+ .top-right{display:none}.nav-inner{gap:10px}.brand-wrap{height:67px}.logo{width:215px}
  .links,.nav-actions .search{display:none}.menu{display:block;margin-left:auto}
  .hero-inner{display:block;min-height:560px}.hero-copy{padding-bottom:0}
  .hero-art{width:100%;max-width:none;height:300px;right:0;bottom:0;object-fit:contain;object-position:center bottom}
@@ -190,7 +190,7 @@ footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
 }
 @media(max-width:560px){
  .container{width:min(100% - 26px,1088px)}.topbar{display:none}nav{height:67px}
- .logo{width:175px;height:62px}.sa-logo{width:29px;height:29px}.brand-divider{display:none}.hero h1{font-size:34px}.hero-copy{padding-top:23px}
+ .logo{width:205px;height:62px}.hero h1{font-size:34px}.hero-copy{padding-top:23px}
  .hero-art{height:285px}.checks{display:none}.features{grid-template-columns:repeat(2,1fr)}
  .feature:nth-child(2){border:0}.feature:nth-child(3){border-right:1px solid #edf2f8}
  .courses,.why-items{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}
@@ -214,9 +214,7 @@ footer{margin-top:10px;background:#061e45;color:white;padding:25px 0 16px}
 <nav>
   <div class="container nav-inner">
     <a href="index.html" class="brand-wrap" aria-label="Settlem Academy Home">
-      <img src="sa-logo.jpg" class="sa-logo" alt="SA">
-      <span class="brand-divider" aria-hidden="true"></span>
-      <img src="settlem-logo.png" class="logo" alt="Settlem Academy">
+      <img src="settlem-approved-logo.jpg" class="logo approved-logo" alt="Settlem Academy">
     </a>
     <div class="links">
       <a class="active" href="#home">Home</a>
