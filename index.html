@@ -384,6 +384,29 @@ nav .links .nav-btn .nav-icon{color:#0b5fbe!important;flex:0 0 20px!important}
 nav .links .nav-btn.active .nav-icon{color:#fff!important}
 nav .links .nav-btn span:last-child{letter-spacing:.05px!important}
 </style>
+
+<style>
+/* APPROVED NAVIGATION — MATCH REFERENCE */
+nav .nav-inner{grid-template-columns:300px minmax(0,1fr) auto!important;gap:18px!important;align-items:center!important}
+nav .brand-wrap{width:286px!important;height:58px!important}
+nav .logo{width:286px!important;height:58px!important}
+nav .links{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;width:auto!important;min-width:0!important;font-size:14px!important}
+nav .links .nav-btn{height:44px!important;min-height:44px!important;padding:0 13px!important;gap:7px!important;border:1px solid #d5e3f2!important;border-radius:11px!important;background:linear-gradient(180deg,#fff 0%,#f6faff 100%)!important;color:#123768!important;font-size:14px!important;font-weight:700!important;letter-spacing:0!important;box-shadow:0 2px 7px rgba(20,70,130,.10)!important;transform:none!important}
+nav .links .nav-btn:hover{background:#f2f8ff!important;border-color:#9cc6ee!important;box-shadow:0 3px 9px rgba(20,70,130,.13)!important;transform:translateY(-1px)!important}
+nav .links .nav-btn.active{color:#fff!important;background:linear-gradient(180deg,#1978dc 0%,#0963c7 100%)!important;border-color:#0d67ca!important;box-shadow:0 4px 10px rgba(7,88,185,.22)!important}
+nav .nav-icon{width:19px!important;height:19px!important;flex:0 0 19px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+nav .nav-icon svg{width:18px!important;height:18px!important;display:block!important;fill:none!important;stroke:#0b63bd!important;stroke-width:1.9!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+nav .nav-btn.active .nav-icon svg{stroke:#fff!important}
+nav .links .nav-btn:nth-child(1){min-width:91px!important}
+nav .links .nav-btn:nth-child(2){min-width:99px!important}
+nav .links .nav-btn:nth-child(3){min-width:89px!important}
+nav .links .nav-btn:nth-child(4){min-width:136px!important}
+nav .links .nav-btn:nth-child(5){min-width:132px!important}
+nav .links .nav-btn:nth-child(6){min-width:101px!important}
+nav .nav-actions{gap:14px!important}
+@media(max-width:1150px){nav .nav-inner{grid-template-columns:270px minmax(0,1fr) auto!important}nav .brand-wrap,nav .logo{width:260px!important;height:54px!important}nav .links{gap:6px!important}nav .links .nav-btn{min-width:0!important;padding:0 10px!important;font-size:13px!important}nav .nav-icon{width:18px!important;height:18px!important;flex-basis:18px!important}}
+@media(max-width:900px){nav .nav-inner{grid-template-columns:1fr auto!important}nav .links{display:none!important}}
+</style>
 </head>
 <body>
 
@@ -403,12 +426,12 @@ nav .links .nav-btn span:last-child{letter-spacing:.05px!important}
       <img src="settlem-academy-styled-button-logo.png" class="logo approved-logo" alt="Settlem Academy">
     </a>
     <div class="links" aria-label="Primary navigation">
-      <a class="nav-btn active" href="#home"><span class="nav-icon" aria-hidden="true">⌂</span><span>Home</span></a>
-      <a class="nav-btn" href="#courses"><span class="nav-icon" aria-hidden="true">▤</span><span>Courses</span></a>
-      <a class="nav-btn" href="about.html"><span class="nav-icon" aria-hidden="true">●</span><span>About</span></a>
-      <a class="nav-btn" href="study-materials.html"><span class="nav-icon" aria-hidden="true">▱</span><span>Free Resources</span></a>
-      <a class="nav-btn" href="student-zone.html"><span class="nav-icon" aria-hidden="true">◆</span><span>Student Zone</span></a>
-      <a class="nav-btn" href="contact.html"><span class="nav-icon" aria-hidden="true">☎</span><span>Contact</span></a>
+      <a class="nav-btn active" href="#home"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1z"/></svg></span><span>Home</span></a>
+      <a class="nav-btn" href="#courses"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4.5h5.2c1.5 0 2.8.6 3.8 1.7 1-1.1 2.3-1.7 3.8-1.7H20v14h-3.2c-1.6 0-2.9.6-3.8 1.6-1-1-2.2-1.6-3.8-1.6H4z"/><path d="M13 6.5v12"/></svg></span><span>Courses</span></a>
+      <a class="nav-btn" href="about.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3.5 19c.4-3.1 2.3-5 5.5-5s5.1 1.9 5.5 5M14 15c2.8-.1 5 1.3 5.5 4"/></svg></span><span>About</span></a>
+      <a class="nav-btn" href="study-materials.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3.5h10l4 4V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z"/><path d="M14 3.5V8h5M7 12h10M7 15.5h10"/></svg></span><span>Free Resources</span></a>
+      <a class="nav-btn" href="student-zone.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8.5 12 4l9 4.5-9 4.5z"/><path d="M6 10.5V16c2 1.5 4 2.2 6 2.2s4-.7 6-2.2v-5.5M21 8.5v6"/></svg></span><span>Student Zone</span></a>
+      <a class="nav-btn" href="contact.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5 10 3l2 4-2.5 2c1.2 2.2 2.8 3.8 5 5l2-2.5 4 2-1.5 3c-.5 1-1.5 1.5-2.6 1.3C9.7 16.8 6.2 13.3 5.2 6.6 5 5.5 5.5 5 7 4.5z"/></svg></span><span>Contact</span></a>
     </div>
     <div class="nav-actions"><span class="search">⌕</span><a class="enroll" href="course-enrollment.html">Enroll Now</a></div>
     <div class="menu">☰</div>
