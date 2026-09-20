@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Settlem Academy | Learn • Practice • Excel</title>
 <meta name="description" content="Settlem Academy - mathematics learning for School, Intermediate and B.Tech students.">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=GMU29MX4tIMKIR-i4cgACSUjTLDAHYwmyVsSeyExC_t5rDTFypjdCuxCGXEHgpjo26OWd_iLBA7_CGyjKVHdsyrFHWXKC-UXDmNNkMsuGaBmrHe7Gn5XfeMtpTiS51tc9648L59Tr9BsMOpeVlyzXynKFaEAc3MuPw6bV5xM6FQ9YnSfz_FXBTcIQAtr4dUqE60YrV3Xk_G62_l0vASoRYWGi2NmdViHpYkpgTmyci94grE0iRyKLkM71VgtWbqMzRPVSXsmcEE1UkaGIlZruxozoWCFAIH9s_IpWyVNtL17oGBdJKtb6I_y-bGhUJql" charset="UTF-8"></script><style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=H8RGE08aUEHMnWo1avi0O2EaGPOgmwE9jDvLMMt7U18ZSpA7L51aECE12l2llUwuNxulxehiolcca-rUF9ZT6yMJfGUVhjdxh3L3XXf3BZ1pKUas9akxKMHiX3mgWZMjzog06IRIdaSGtOozZud5pZeOFYH_IUp6A0zMHuethAM4weCahtHDkJXltTcoFoUe2nUzgliFMtqTEzSkEvzxXJec5r4te4faJb_AGnxPd1VuwiS5j_16ILyR-klyVFhtBtNQE-M0mDLScyq_3pUcWjifE8fGiOInJMA1O_N9pLXuTz-dTr_1FVPzDbS-n3av5EYJlg23PCanqGs4MPkdOg" charset="UTF-8"></script><style>
 :root{--blue:#075dcc;--blue2:#08439b;--navy:#08285e;--orange:#f47b12;--yellow:#ffd33d;--green:#18a66b;--ink:#092a5f;--muted:#5b7190;--bg:#f5faff;--line:#d7e5f4;--white:#fff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:linear-gradient(180deg,#f7fbff,#fff);line-height:1.45}a{text-decoration:none;color:inherit}.container{width:min(1660px,94%);margin:auto}
 /* TOP BAR */
@@ -25,6 +25,64 @@ footer{margin-top:12px;background:#061e45;color:#fff;padding:26px 0 16px}.footer
 @media(max-width:900px){.top-right{display:none}.nav-inner{display:flex;gap:10px}.logo-link{width:270px;height:52px;padding:0 8px}.logo-img{width:245px;height:48px}.nav-links,.nav-actions .search{display:none}.menu{display:block;margin-left:auto}.hero-inner{display:block;min-height:auto}.hero-copy{padding:30px 0 24px}.hero-art{height:350px;object-fit:cover;object-position:left center}.features{grid-template-columns:repeat(3,1fr);gap:6px}.feature:nth-child(3){border:0}.feature:nth-child(n+4){margin-top:8px}.courses{grid-template-columns:repeat(2,1fr)}.why-grid,.cta-row{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border:0}.stat:nth-child(n+3){margin-top:12px}}
 @media(max-width:560px){.container{width:calc(100% - 24px)}.topbar{display:none}nav{height:68px}.logo-link{width:245px;height:50px;padding:0 7px}.logo-link:after{right:10px;font-size:25px}.logo-img{width:220px;height:45px}.hero h1{font-size:37px;letter-spacing:-1px}.welcome{font-size:13px}.cap{width:33px;height:33px;font-size:18px}.subline{font-size:15px}.lead{font-size:13px}.actions{gap:10px;flex-wrap:wrap}.hero-btn{min-width:0;width:100%;height:52px}.hero-art{height:270px}.features{grid-template-columns:repeat(2,1fr)}.feature:nth-child(2){border:0}.feature:nth-child(3){border-right:1px solid #e9eff6}.courses,.why-items{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.section-title{display:block}.view-all{display:inline-block;margin-top:10px}.footer-top,.footer-bottom{display:block}.footer-links{margin:12px 0;flex-wrap:wrap}}
 </style>
+
+<style>
+/* MOBILE READABILITY: enlarge benefits and course cards only */
+@media (max-width: 900px){
+  .features{grid-template-columns:repeat(2,1fr);gap:0;padding:10px;border-radius:16px}
+  .feature{min-height:108px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .feature-icon{width:44px;height:44px;font-size:21px;margin-bottom:8px}
+  .feature strong{font-size:14px;line-height:1.2}
+  .feature small{font-size:11px;line-height:1.3;margin-top:3px}
+  .courses{grid-template-columns:1fr;gap:14px}
+  .course{min-height:190px;padding:20px;border-radius:14px}
+  .course .tag{font-size:14px}
+  .course h3{font-size:22px;line-height:1.12;margin:6px 0 8px}
+  .course p{font-size:13px;line-height:1.45;max-width:78%;margin-bottom:14px}
+  .course button{padding:10px 16px;font-size:12px;border-radius:8px}
+  .course-icon{right:18px;top:18px;font-size:32px}
+}
+@media (max-width: 560px){
+  .features{grid-template-columns:1fr 1fr;padding:8px;gap:0}
+  .feature{min-height:112px;padding:13px 7px}
+  .feature-icon{width:46px;height:46px;font-size:22px}
+  .feature strong{font-size:14px}
+  .feature small{font-size:10.5px}
+  .courses{gap:16px}
+  .course{min-height:205px;padding:20px}
+  .course h3{font-size:22px}
+  .course p{font-size:13px;max-width:82%}
+}
+</style>
+
+<style>
+/* FINAL SIZE POLISH — benefits and course cards larger on desktop and mobile */
+.features{padding:16px 10px;gap:0}
+.feature{min-height:125px;padding:12px 10px}
+.feature-icon{width:48px;height:48px;font-size:22px;margin-bottom:9px}
+.feature strong{font-size:15px;line-height:1.25}
+.feature small{font-size:11px;line-height:1.35;margin-top:4px}
+.courses{gap:18px}
+.course{min-height:185px;padding:21px;border-radius:14px}
+.course .tag{font-size:13px}
+.course h3{font-size:20px;line-height:1.1;margin:5px 0 7px}
+.course p{font-size:12px;line-height:1.4;max-width:250px;margin-bottom:12px}
+.course button{padding:9px 14px;font-size:11px;border-radius:8px}
+.course-icon{right:16px;top:16px;font-size:30px}
+@media(max-width:900px){
+  .features{padding:10px;gap:0}
+  .feature{min-height:120px;padding:14px 9px}
+  .feature-icon{width:48px;height:48px;font-size:22px}
+  .feature strong{font-size:15px}
+  .feature small{font-size:11px}
+  .courses{gap:16px}
+  .course{min-height:205px;padding:21px}
+  .course h3{font-size:22px}
+  .course p{font-size:13px;line-height:1.45;max-width:82%}
+  .course button{padding:10px 16px;font-size:12px}
+}
+</style>
+
 </head>
 <body>
 <div class="topbar"><div class="container"><div>Learn Today&nbsp; | &nbsp;Build Tomorrow</div><div class="top-right"><span>✉ settlemacademy@gmail.com</span><span>📱 +91 90009 99370</span><div class="social"><span>▶</span><span>◎</span><span>➤</span><span>◉</span></div></div></div></div>
