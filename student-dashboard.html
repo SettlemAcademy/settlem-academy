@@ -1,95 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Student Dashboard | Settlem Academy</title>
-<style>
-:root{--navy:#101a43;--blue:#2563eb;--violet:#7c3aed;--teal:#0f9f8f;--amber:#f59e0b;--pink:#ec4899;--bg:#f5f7ff;--card:#fff;--muted:#64748b;--line:#e2e8f0}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#18213d}.top{background:linear-gradient(135deg,var(--navy),#243b8f);color:#fff;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;gap:15px;position:sticky;top:0;z-index:5}.brand{font-weight:900;letter-spacing:.4px}.brand span{color:#8fe8ff}.top a{color:#fff;text-decoration:none;border:1px solid #ffffff55;padding:9px 13px;border-radius:10px}.wrap{max-width:1180px;margin:auto;padding:30px 20px}.welcome{background:linear-gradient(135deg,#fff,#eef2ff);border:1px solid #dbe3ff;border-radius:24px;padding:28px;box-shadow:0 15px 45px #17255412}.eyebrow{font-size:11px;color:var(--violet);font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.welcome h1{font-size:clamp(30px,5vw,45px);margin:7px 0}.welcome p{color:var(--muted);line-height:1.6}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}.stat,.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:19px;box-shadow:0 8px 25px #1725540a}.stat strong{font-size:28px}.stat small{display:block;color:var(--muted);margin-top:4px}.section{margin-top:25px}.section h2{margin-bottom:12px}.courses{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.course{padding:21px;border:1px solid var(--line);border-radius:17px;background:#fff}.course h3{margin:0 0 5px}.course p{color:var(--muted);font-size:14px}.progress{height:9px;background:#e2e8f0;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--violet),var(--pink))}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.btn{display:inline-block;text-decoration:none;border:0;border-radius:10px;padding:11px 14px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.secondary{background:#eef2ff;color:var(--blue)}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.activity{display:grid;gap:9px}.item{padding:13px;border-left:4px solid var(--blue);background:#f8faff;border-radius:8px}.empty{color:var(--muted);padding:20px;text-align:center;border:1px dashed #cbd5e1;border-radius:14px}.login{display:none}
-@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.courses{grid-template-columns:1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
-<div class="top"><div class="brand"><img src="settlem-academy-logo.png" alt="Settlem Academy logo" style="width:36px;height:36px;object-fit:contain;vertical-align:middle;margin-right:8px">SETTLEM <span>ACADEMY</span> · STUDENT</div><div><a href="index.html">Website</a> <a href="student-login.html" onclick="logout()">Logout</a></div></div>
-<div class="wrap">
-<section class="welcome"><div class="eyebrow">Student Dashboard</div><h1 id="hello">Welcome back 👋</h1><p>Continue your mathematics journey, track your progress and practise with confidence.</p><div class="actions"><a class="btn primary" href="learning-room.html">▶ Continue Learning</a><a class="btn secondary" href="practice-tests.html">Take a Test</a><a class="btn secondary" href="study-materials.html">Study Materials</a></div></section>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Student Dashboard | Settlem Academy</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=QIq3kZdlzJsBqk5-wPml2g5evSxyD1oZhSrXHgJJ6sk5MpXoBk4tid5tMorsRBMM1gJqd82cgPG8f8DEUYzV8rTFj9jzab0xSsslk4sya-YypaCs9o1sxUeDOBpJDUL-qTOtzwrZRNCMjHwjVutErrEsyWdlS9EcjTsYzVvpSZ285r2tvub94TnP45acLQId6Eegis5UxUgcwfP02Ueh1keLw587mSiU3pL4x0Zdvx1_s_VGpt3hkNr6Z75vyyl8STbZvg8QTwjoy4M4Z3171eX00SuR8Dg1k9RbJdmZ4JzkBPzrYmphVawo4WhTZ6K6KC81MZwFMIlSMQvPh3q8JQ" charset="UTF-8"></script><style>
+:root{--navy:#073b70;--navy2:#0b5d9b;--blue:#0d73d5;--blue2:#1769e8;--gold:#f5b82e;--ink:#102b55;--muted:#60749a;--line:#dce6f1;--bg:#f6f9fd;--card:#fff;--green:#16a36f;--purple:#6b3fd4}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}.topbar{height:36px;background:linear-gradient(90deg,#0a6aa8,#075087);color:#fff;font-size:11px}.topbar .bar-inner{max-width:1500px;width:94%;height:100%;margin:auto;display:flex;align-items:center;justify-content:space-between}.top-right{display:flex;gap:18px;align-items:center}.social{display:flex;gap:10px}.mainnav{height:78px;background:#fff;border-bottom:1px solid #e3eaf2;box-shadow:0 4px 16px rgba(20,55,100,.05);position:sticky;top:0;z-index:50}.nav-inner{width:min(1500px,94%);height:100%;margin:auto;display:flex;align-items:center;gap:16px}.logo-link{width:390px;flex:0 0 390px;display:block}.approved-logo{width:390px;height:73px;display:block}.nav-links{display:flex;align-items:center;gap:8px;flex:1;justify-content:center}.nav-btn{display:flex;align-items:center;gap:7px;padding:13px 16px;border:1px solid #d9e3ee;border-radius:12px;background:linear-gradient(#fff,#f8fbfe);font-size:13px;font-weight:800;color:#12345f;text-decoration:none;box-shadow:0 3px 10px rgba(30,70,110,.06)}.nav-btn.active{border-color:#65a9df;box-shadow:0 4px 12px rgba(18,88,155,.12),inset 0 -3px 0 #1173d1;color:#075fae}.nav-icon{width:17px;height:17px;display:inline-grid;place-items:center}.nav-icon svg{width:17px;height:17px;fill:none;stroke:#0866bd;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto}.search{font-size:20px;color:#123b70}.enroll,.logout{border:0;border-radius:12px;padding:13px 18px;font-weight:900;text-decoration:none}.enroll{background:#1378db;color:#fff;box-shadow:0 8px 18px rgba(19,120,219,.18)}.logout{background:#eef5ff;color:#1769d1;border:1px solid #cfe0f2;cursor:pointer}.wrap{width:min(1280px,94%);margin:auto}.dashboard{padding:36px 0 70px}.welcome{background:linear-gradient(135deg,#fff 0%,#f2f7ff 65%,#edf3ff 100%);border:1px solid #d6e3f2;border-radius:24px;padding:32px 34px;box-shadow:0 18px 45px rgba(20,55,100,.08)}.eyebrow{font-size:11px;color:#6b3fd4;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.welcome h1{font-size:clamp(32px,4vw,48px);line-height:1.1;margin:8px 0 10px;letter-spacing:-1.5px}.welcome p{color:var(--muted);margin:0;max-width:800px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:0;border-radius:11px;padding:13px 18px;font-weight:850;cursor:pointer;font-size:14px}.primary{background:linear-gradient(135deg,#1769e8,#6b3fd4);color:#fff;box-shadow:0 8px 18px rgba(60,80,200,.18)}.secondary{background:#edf4ff;color:#1267c6;border:1px solid #d7e5f5}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px}.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 10px 28px rgba(20,55,100,.05);position:relative;overflow:hidden}.stat:before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:linear-gradient(90deg,#1769e8,#f5b82e)}.stat strong{font-size:30px;display:block}.stat small{display:block;color:var(--muted);margin-top:5px;font-weight:650}.section{margin-top:34px}.section h2{font-size:27px;margin:0 0 15px}.row{display:flex;justify-content:space-between;gap:12px;align-items:center}.courses{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.course{padding:24px;border:1px solid var(--line);border-radius:19px;background:#fff;box-shadow:0 10px 28px rgba(20,55,100,.05)}.course h3{font-size:21px;margin:5px 0}.course p{color:var(--muted);font-size:14px}.progress{height:10px;background:#e6edf5;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,#1769e8,#6b3fd4,#e83f88)}.activity.card{background:#fff;border:1px solid var(--line);border-radius:19px;padding:20px;box-shadow:0 10px 28px rgba(20,55,100,.05);display:grid;gap:10px}.item{padding:14px 16px;border-left:4px solid #1769e8;background:#f7faff;border-radius:10px}.empty{color:var(--muted);padding:26px;text-align:center;border:1px dashed #cbd9e8;border-radius:14px;background:#fbfdff}@media(max-width:1250px){.logo-link{width:300px;flex-basis:300px}.approved-logo{width:300px;height:65px}.nav-btn{padding:11px 10px;font-size:12px}.nav-links{gap:5px}}@media(max-width:1000px){.nav-links{display:none}.logo-link{width:300px;flex-basis:300px}.nav-actions{margin-left:auto}.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.topbar{display:none}.mainnav{height:72px}.nav-inner{width:94%}.logo-link{width:240px;flex-basis:240px}.approved-logo{width:240px;height:56px}.nav-actions .enroll{display:none}.dashboard{padding:22px 0 45px}.welcome{padding:24px 20px}.welcome h1{font-size:32px}.grid{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:17px}.stat strong{font-size:25px}.courses{grid-template-columns:1fr}.row{align-items:flex-start;flex-direction:column}.row .btn{width:100%}}@media(max-width:430px){.logo-link{width:205px;flex-basis:205px}.approved-logo{width:205px;height:50px}.logout{padding:10px 12px}.grid{grid-template-columns:1fr}.actions .btn{width:100%}}</style></head><body><div class="topbar"><div class="bar-inner"><div>Learn Today&nbsp; | &nbsp;Build Tomorrow</div><div class="top-right"><span>✉ settlemacademy@gmail.com</span><span>📱 +91 90009 99370</span><div class="social"><span>▶</span><span>◎</span><span>➤</span><span>◉</span></div></div></div></div><header class="mainnav"><div class="nav-inner"><a class="logo-link" href="index.html" aria-label="Settlem Academy Home"><svg class="approved-logo" viewBox="0 0 620 116" role="img" aria-label="Settlem Academy logo" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="logoGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8c83f"/><stop offset="1" stop-color="#e4a30d"/></linearGradient><linearGradient id="logoBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3184ff"/><stop offset="1" stop-color="#1457c7"/></linearGradient><filter id="logoShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity=".12"/></filter></defs><rect x="1" y="1" width="618" height="114" rx="18" fill="#fff" stroke="#dce8f7"/><g filter="url(#logoShadow)"><circle cx="58" cy="58" r="43" fill="#f8fbff" stroke="#e7b32b" stroke-width="3"/><path d="M28 80 L47 28 L68 80 L57 80 L52 64 L43 64 L37 80 Z" fill="url(#logoGold)"/><path d="M57 28 L57 86 M42 51 L72 51" stroke="url(#logoBlue)" stroke-width="8" stroke-linecap="round"/><path d="M43 30 L57 17 L71 30" fill="url(#logoBlue)"/></g><text x="112" y="72" font-family="Arial,Helvetica,sans-serif" font-size="43" font-weight="900" letter-spacing="-1.2"><tspan fill="#e5aa17">SETTLEM</tspan><tspan fill="#2167db"> ACADEMY</tspan></text><rect x="112" y="84" width="365" height="2" rx="2" fill="url(#logoBlue)" opacity=".25"/></svg></a><nav class="nav-links" aria-label="Primary navigation"><a class="nav-btn" href="index.html"><span class="nav-icon">⌂</span>Home</a><a class="nav-btn" href="index.html#courses"><span class="nav-icon">▤</span>Courses</a><a class="nav-btn" href="about.html"><span class="nav-icon">♙</span>About</a><a class="nav-btn" href="study-materials.html"><span class="nav-icon">▧</span>Free Resources</a><a class="nav-btn" href="student-dashboard.html" style="color:#075fae;border-color:#65a9df"><span class="nav-icon">✥</span>Student Zone</a><a class="nav-btn" href="contact.html"><span class="nav-icon">⌕</span>Contact</a></nav><div class="nav-actions"><a class="enroll" href="index.html#courses">Enroll Now</a><a class="logout" href="student-login.html" onclick="logout()">Logout</a></div></div></header><main class="dashboard"><div class="wrap"><section class="welcome"><div class="eyebrow">Student Dashboard</div><h1 id="hello">Welcome back 👋</h1><p>Continue your mathematics journey, track your progress and practise with confidence.</p><div class="actions"><a class="btn primary" href="learning-room.html">▶ Continue Learning</a><a class="btn secondary" href="practice-tests.html">Take a Test</a><a class="btn secondary" href="study-materials.html">Study Materials</a></div></section>
 <div class="grid"><div class="stat"><strong id="courseCount">0</strong><small>Enrolled Courses</small></div><div class="stat"><strong id="avgProgress">0%</strong><small>Overall Progress</small></div><div class="stat"><strong id="testScore">—</strong><small>Latest Test Score</small></div><div class="stat"><strong id="lessons">0</strong><small>Lessons Completed</small></div></div>
 <section class="section"><div class="row"><h2>My Courses</h2><a class="btn secondary" href="index.html#courses">Explore Courses</a></div><div id="courses" class="courses"></div></section>
 <section class="section"><h2>Recent Activity</h2><div class="card activity" id="activity"></div></section>
-</div>
-<script>
-const API='https://settlem-academy-1.onrender.com/api';
-const COURSE_KEY='settlemEnrolledCourses', USER_KEY='settlemAcademyUser', TEST='settlemLatestTest';
-
-async function api(path){
-  const token=localStorage.getItem('settlemAuthToken');
-  if(!token){ window.location.href='student-login.html'; return null; }
-  const res=await fetch(API+path,{headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'}});
-  let data={}; try{data=await res.json()}catch(e){}
-  if(res.status===401){localStorage.removeItem('settlemAuthToken');window.location.href='student-login.html';return null;}
-  if(!res.ok) throw new Error(data.error||'Unable to load dashboard.');
-  return data;
+</div></div></main><script>
+const COURSE_KEY='settlemEnrolledCourses', USER_KEY='settlemAcademyUser', PROG='settlemAcademyLearningProgress', TEST='settlemLatestTest';
+const allCourses=['B.Tech Mathematics','Intermediate Mathematics','Class 10 Mathematics','Classes 5–7 Mathematics'];
+const defaults=[25,10,10,0];
+function get(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d}}
+let enrolled=get(COURSE_KEY,null); if(!Array.isArray(enrolled)||!enrolled.length) enrolled=[allCourses[0],allCourses[1]];
+const user=get(USER_KEY,null); if(user&&user.name) hello.textContent='Welcome back, '+user.name+' 👋';
+function progressFor(c){let p=get(PROG,{}),n=0;for(let i=0;i<4;i++)if(p[c+'|'+i])n++;return n*25}
+function enroll(c){if(!enrolled.includes(c)){enrolled.push(c);localStorage.setItem(COURSE_KEY,JSON.stringify(enrolled));render()}}
+function render(){
+ let total=0; courses.innerHTML=enrolled.map(c=>{let p=progressFor(c);total+=p;return `<article class="course"><div class="eyebrow">Course</div><h3>${c}</h3><p>${p?`You are ${p}% through this course.`:'Ready to start your first lesson.'}</p><div class="progress"><i style="width:${p}%"></i></div><div class="actions"><a class="btn primary" href="learning-room.html" onclick="localStorage.setItem('settlemCurrentCourse',${JSON.stringify(c)})">${p?'Continue':'Start Learning'}</a></div></article>`}).join('');
+ avgProgress.textContent=Math.round(total/(enrolled.length||1))+'%';courseCount.textContent=enrolled.length;
+ let p=get(PROG,{}),done=Object.keys(p).filter(k=>p[k]).length;lessons.textContent=done;
+ let t=get(TEST,null);testScore.textContent=t&&typeof t.score!=='undefined'?t.score+'%':'—';
+ activity.innerHTML=done?'<div class="item">✓ You have completed '+done+' learning module'+(done>1?'s':'')+'.</div><div class="item">📚 Keep going — your next lesson is waiting in the Learning Room.</div>':'<div class="empty">Your learning activity will appear here as you complete lessons.</div>';
 }
-
-function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
-
-async function render(){
-  try{
-    const data=await api('/dashboard');
-    if(!data)return;
-    const enrolled=Array.isArray(data.courses)?data.courses:[];
-    const completed=Array.isArray(data.completed)?data.completed:[];
-    const latest=data.latestTest||null;
-
-    if(data.user){
-      localStorage.setItem(USER_KEY,JSON.stringify(data.user));
-      hello.textContent='Welcome back, '+(data.user.name||'Student')+' 👋';
-    }
-
-    // Keep the existing localStorage course key in sync for the Learning Room.
-    localStorage.setItem(COURSE_KEY,JSON.stringify(enrolled));
-
-    const completedByCourse={};
-    completed.forEach(x=>{
-      const c=x.course;
-      if(!completedByCourse[c])completedByCourse[c]=new Set();
-      completedByCourse[c].add(Number(x.module_index));
-    });
-
-    courses.innerHTML=enrolled.length ? enrolled.map(c=>{
-      const done=completedByCourse[c]?.size||0;
-      const p=Math.min(100,done*25);
-      return `<article class="course">
-        <div class="eyebrow">Course</div>
-        <h3>${esc(c)}</h3>
-        <p>${p?`You are ${p}% through this course.`:'Ready to start your first lesson.'}</p>
-        <div class="progress"><i style="width:${p}%"></i></div>
-        <div class="actions"><a class="btn primary" href="learning-room.html" onclick="localStorage.setItem('settlemCurrentCourse',${JSON.stringify(c)})">${p?'Continue':'Start Learning'}</a></div>
-      </article>`;
-    }).join('') : '<div class="empty">No courses enrolled yet. Explore courses to get started.</div>';
-
-    const totalModules=enrolled.length*4;
-    const doneTotal=completed.length;
-    avgProgress.textContent=(totalModules?Math.min(100,Math.round(doneTotal/totalModules*100)):0)+'%';
-    courseCount.textContent=enrolled.length;
-    lessons.textContent=doneTotal;
-    testScore.textContent=latest&&typeof latest.score!=='undefined'?latest.score+'%':'—';
-
-    activity.innerHTML=doneTotal
-      ? `<div class="item">✓ You have completed ${doneTotal} learning module${doneTotal>1?'s':''}.</div><div class="item">📚 Keep going — your next lesson is waiting in the Learning Room.</div>`
-      : '<div class="empty">Your learning activity will appear here as you complete lessons.</div>';
-  }catch(error){
-    activity.innerHTML='<div class="empty">'+esc(error.message||'Unable to load your dashboard.')+'</div>';
-  }
-}
-
-function logout(){
-  localStorage.removeItem('settlemAuthToken');
-  localStorage.removeItem(USER_KEY);
-  localStorage.removeItem('settlemLoggedIn');
-}
-
+function logout(){localStorage.removeItem(USER_KEY)}
 render();
 </script>
-</body>
-</html>
+</body></html>
